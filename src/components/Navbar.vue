@@ -1,8 +1,8 @@
 <template>
-    <header :class="{ 'scrolled-nav': scrollPosition}">
+    <header :class="{ 'scrolled-nav': scrollNav}">
         <nav>
             <a href='#' class="logo">Logo</a>
-            <ul v-show="!mobile">
+            <ul v-show="!mobile" class="navigation">
                 <li><router-link to="/">Home</router-link> </li>
                 <li><router-link to="/about">About</router-link> </li>
                 <li><router-link to="/program">Program</router-link> </li>
@@ -13,7 +13,7 @@
                 <img @click="toggleMobileNav" v-show="mobile" class="align-justify" :class="{'icon-active':mobileNav}" src="../assets\icon\align-justify.png">
             </div>
             <transition name='mobile-nav'>
-                <ul v-show="mobileNav" class="dropndown-nav">
+                <ul v-show="mobileNav" class="dropdown-nav">
                     <li><router-link to="/">Home</router-link> </li>
                     <li><router-link to="/about">About</router-link> </li>
                     <li><router-link to="/program">Program</router-link> </li>
@@ -31,23 +31,42 @@ export default {
   name: 'Navbar',
   data() {
       return{
-          scrollPosition: null,
+          scrollNav: null,
           mobile: null,
           mobileNav: null,
           windowWidth: null,
       };
     },
+    created(){
+        window.addEventListener('resize', this.checkScreen);
+        this.checkScreen();
+    },
+    mounted(){
+        window.addEventListener('scroll', this.updateSroll);
+    },
     methods:{
         toggleMobileNav(){
             this.mobileNav = !this.mobileNav;
         },
+
+        updateSroll(){
+            const scrollPosition = window.scrollY;
+            if(scrollPosition > 50){
+                this.scrollNav = true;
+                return;
+            }
+            this.scrollNav = false;
+        },
         checkScreen(){
-            this.windowWidth=window.innerWidth;
-            if(this.windowWidth<=750){
+            this.windowWidth = window.innerWidth;
+            if(this.windowWidth <= 750){
                 this.mobile = true;
                 return
             }
-        }
+            this.mobile = false;
+            this.mobileNav = false;
+            return;
+        },
     },
 };
 
@@ -62,6 +81,7 @@ header{
     right: 0;
     display: flex;
     width: 100%;
+    height: 70px;
     justify-content: space-between;
     align-items: center;
     padding: 0px 60px 0 50px;
@@ -102,8 +122,8 @@ header{
 
                 a{
                     color:rgb(27, 138, 179);
-                    height:60px;
-                    line-height: 60px;
+                    height:50px;
+                    line-height: 50px;
                     display: inline-block;
                     text-decoration: none;
                     font-size: 1.2em;
@@ -120,6 +140,13 @@ header{
             }
         }
 
+        .navigation{
+            display:flex;
+            align-items: center;
+            flex:1;
+            justify-content: center;
+        }
+
         
         
         .list_icon{
@@ -131,28 +158,60 @@ header{
 
             .align-justify{
                 cursor:pointer;
-                height:50px;
-                width: 40px;
+                height:40px;
+                width: 35px;
                 transition: 0.8s ease all;
+                transform: rotate(0deg);
+            }
+
+            .icon-active{
                 transform: rotate(180deg);
             }
         }
+
+       
 
         .dropdown-nav{
             display:flex;
             flex-direction:column;
             position: fixed;
+            height: 100%;
             width:100%;
+            max-width: 250px;
             background: #fff;
             top:0;
             left:0;
 
             li{
-            margin-left: 0;
-            color:black;
-            }   
+                margin-left: 0;
+                .link{
+                    color:black;
+                }   
+            }
+        }
+        .mobile-nav-enter-active,
+        .mobile-nav-leave-active{
+            transition: 1s ease all;
+        }
+
+        .mobile-nav-enter-from,
+        .mobile-nav-leave-to{
+            transform: translateX(-250px);
+        }
+
+        .mobile-nav-enter-to{
+            transform: translateX(0);
         }
     }
 }
 
+.scrolled-nav{
+    background: azure;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.06);
+    height: 60px;
+
+    nav{
+        padding: 8px 0;
+    }
+}
 </style>
