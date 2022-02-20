@@ -4,9 +4,9 @@
             <div class="photo_bgright"></div>
             <div id="content">
                 <h1>Hi I'm<br><span>Kevin LIN</span></h1>
-                <p1>I wouldn't care success or failure, for I will only struggle ahead as long as I have been destined to the distance. 
+                <p>I wouldn't care success or failure, for I will only struggle ahead as long as I have been destined to the distance. 
                     I wouldn't care the difficulties around, for what I can leave on the earth is only their view of my back since 
-                    I have been marching toward the horizontal.</p1><br>
+                    I have been marching toward the horizontal.</p><br>
                 <a href="file:///D:/User/Desktop/Website%20STUDY/introduction.html" class='btn'>Read more</a>
             </div>
             <img src="../assets\Picture1.jpg">
@@ -19,8 +19,8 @@
                     <h1>My Coding Travel</h1>
                     <a href="file:///D:/User/Desktop/Website%20STUDY/program.html" class='btn'>Read more</a>
                 </div>
-                <p1>Any code of your own that you haven't looked at for six or more months might as well have been written by someone else.
-                    Why do we never have time to do it right, but always have time to do it over?</p1>
+                    <p>Any code of your own that you haven't looked at for six or more months might as well have been written by someone else.
+                        Why do we never have time to do it right, but always have time to do it over?</p>
                 <div class="box_container">
                     <div class="box">
                         <div class="percent">
@@ -178,12 +178,13 @@ export default {
     height: 80vh;
     width: 100%;
     display: flex;
-    margin: 0;
+    margin-top: 60px;
     overflow: hidden;
 
     #content{
         max-width: 550px;
         margin: 100px 50px 100px 100px;
+        text-align: left;
 
         h1{
             font-family: 'Source Sans Pro', sans-serif;
@@ -198,7 +199,7 @@ export default {
             font-size: 3em;
             }
         }
-        p1{
+        p{
             font-family: 'Source Sans Pro', sans-serif;
             color:white;
             font-size: 1.2em;
@@ -423,10 +424,11 @@ export default {
     display: flex;
     margin: 0;
     overflow: hidden;
-
+    
     #content{
         max-width: 550px;
         margin: 100px 50px 100px 100px;
+        text-align: left;
 
         h1{
             font-family: 'Rowdies', cursive;
