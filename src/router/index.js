@@ -24,12 +24,17 @@ const routes = [
     path:'/hobby',
     name:'Hobby',
     component:()=> import('../views/Hobby.vue')
-  }
+  },
+  {
+    path:'/#contact',
+    name: 'Contact',
+    component: Home
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 })
 
 export default router

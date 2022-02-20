@@ -7,7 +7,7 @@
                 <p>I wouldn't care success or failure, for I will only struggle ahead as long as I have been destined to the distance. 
                     I wouldn't care the difficulties around, for what I can leave on the earth is only their view of my back since 
                     I have been marching toward the horizontal.</p><br>
-                <a href="file:///D:/User/Desktop/Website%20STUDY/introduction.html" class='btn'>Read more</a>
+                <div @click= "jump('about')" class="btn">Read more</div>
             </div>
             <img src="../assets\Picture1.jpg">
         </div>
@@ -17,7 +17,7 @@
             <div id="content">
                 <div id ="container">
                     <h1>My Coding Travel</h1>
-                    <a href="file:///D:/User/Desktop/Website%20STUDY/program.html" class='btn'>Read more</a>
+                    <div v-on:click= "jump('program')" class="btn">Read more</div>
                 </div>
                     <p>Any code of your own that you haven't looked at for six or more months might as well have been written by someone else.
                         Why do we never have time to do it right, but always have time to do it over?</p>
@@ -72,7 +72,7 @@
                         In many kinds of video games, what my favorite is the one that makes me scary and nervous, 
                         such like DBD and Dark Deception, and arouse my curiosity to explore the mystery </p>
                 </div>
-                <a href="file:///D:/User/Desktop/Website%20STUDY/hobby.html" class="btn">Read more</a>
+                <div v-on:click= "jump('hobby')" class="btn">Read more</div>
             </div>
             <div class="card">
                 <div class="icon">
@@ -84,7 +84,7 @@
                         In many kinds of video games, what my favorite is the one that makes me scary and nervous, 
                         such like DBD and Dark Deception, and arouse my curiosity to explore the mystery </p>
                 </div>
-                <a href="file:///D:/User/Desktop/Website%20STUDY/hobby.html" class="btn">Read more</a>
+                <div v-on:click= "jump('hobby')" class="btn">Read more</div>
             </div>
             <div class="card">
                 <div class="icon">
@@ -96,7 +96,7 @@
                         In many kinds of video games, what my favorite is the one that makes me scary and nervous, 
                         such like DBD and Dark Deception, and arouse my curiosity to explore the mystery </p>
                 </div>
-                <a href="file:///D:/User/Desktop/Website%20STUDY/hobby.html" class="btn">Read more</a>
+                <div v-on:click= "jump('hobby')" class="btn">Read more</div>
             </div>
         </div>
         <section id="contact">
@@ -132,7 +132,13 @@ export default {
   name: 'Home',
   components: {
       Navbar
-  }
+  },
+
+  methods: {
+      jump:function(msg){
+          this.$router.push({path: msg})
+      },
+    }
 }
 </script>
 
@@ -150,6 +156,7 @@ export default {
 }
 
 .btn{
+    cursor:pointer;
     position: relative;
     display: inline-block;
     padding: 10px 20px;
