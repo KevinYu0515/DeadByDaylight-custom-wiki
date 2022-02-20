@@ -67,8 +67,8 @@
                     <img src="../assets\icon\icon1.png">
                 </div>
                 <div class="content">
-                    <h3 style="font-family:Secular One">Game Codex</h3>
-                    <p style="font-family: 'Space Grotesk'">Playing the gmae is one of my recreation,especially playing on PC. PC gmae can give me more exciting and surprised than mobile game during the playing time.
+                    <h3>Game Codex</h3>
+                    <p>Playing the gmae is one of my recreation,especially playing on PC. PC gmae can give me more exciting and surprised than mobile game during the playing time.
                         In many kinds of video games, what my favorite is the one that makes me scary and nervous, 
                         such like DBD and Dark Deception, and arouse my curiosity to explore the mystery </p>
                 </div>
@@ -79,10 +79,8 @@
                     <img src="../assets\icon\icon2.png">
                 </div>
                 <div class="content">
-                    <h3 style="font-family:Secular One">Virtual Art Development</h3>
-                    <p style="font-family: 'Space Grotesk'">Playing the gmae is one of my recreation,especially playing on PC. PC gmae can give me more exciting and surprised than mobile game during the playing time.
-                        In many kinds of video games, what my favorite is the one that makes me scary and nervous, 
-                        such like DBD and Dark Deception, and arouse my curiosity to explore the mystery </p>
+                    <h3>Virtual Art Development</h3>
+                    <p >:D </p>
                 </div>
                 <div v-on:click= "jump('hobby')" class="btn">Read more</div>
             </div>
@@ -91,10 +89,8 @@
                     <img src="../assets\icon\icon3.png">
                 </div>
                 <div class="content">
-                    <h3 style="font-family:Secular One">Outdoor Exercise</h3>
-                    <p style="font-family: 'Space Grotesk'">Playing the gmae is one of my recreation,especially playing on PC. PC gmae can give me more exciting and surprised than mobile game during the playing time.
-                        In many kinds of video games, what my favorite is the one that makes me scary and nervous, 
-                        such like DBD and Dark Deception, and arouse my curiosity to explore the mystery </p>
+                    <h3>Outdoor Exercise</h3>
+                    <p>:D </p>
                 </div>
                 <div v-on:click= "jump('hobby')" class="btn">Read more</div>
             </div>
@@ -146,6 +142,8 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&family=Space+Grotesk&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rowdies&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&family=Ubuntu&display=swap');
 
 *{
     margin: 0;
@@ -348,6 +346,7 @@ export default {
                 justify-content: center;
                 align-items: center;
                 color:#e2fdff;
+                cursor: pointer;
                 &:hover{
                     color:#c60af0;
                 }
@@ -411,11 +410,13 @@ export default {
             
             h3{
                 color:black;
+                font-family:'Ubuntu', sans-serif;
                 font-size: 2em;
                 font-weight: 600;
                 margin-bottom: 10px;
             }
             p{
+                font-family: 'Quicksand', sans-serif;
                 font-weight: 300;
                 color:#4361ee;
             }
