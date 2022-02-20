@@ -9,8 +9,8 @@
                 <li><router-link to="/hobby">Hobby</router-link> </li>
                 <li><router-link to="/">Contact</router-link> </li>
             </ul>
-            <div class="list_icon">
-                <img @click="toggleMobileNav" v-show="mobile" class="align-justify" :class="{'icon-active':mobileNav}" src="../assets\icon\align-justify.png">
+            <div class="navbar_icon">
+                <i @click="toggleMobileNav" v-show="mobile" class="fi fi-br-menu-burger" :class="{'icon-active':mobileNav}" ></i>
             </div>
             <transition name='mobile-nav'>
                 <ul v-show="mobileNav" class="dropdown-nav">
@@ -74,6 +74,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+@import url('https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css');
 
 header{
     position: fixed;
@@ -108,7 +109,7 @@ header{
             font-size: 2em;
             text-decoration: none;
             text-transform: uppercase;
-            margin: 10px 8px 0 0;
+            margin: 5px 8px 0 0;
             transition: 0.5s ease all;
         }
 
@@ -149,24 +150,22 @@ header{
 
         
         
-        .list_icon{
+        .navbar_icon{
             display: flex;
-            position:absolute;
-            align-items: center;
-            top:5px;
-            right:0;
-
-            .align-justify{
+            position: absolute;
+            top:7px;
+            right:24px;
+            height:75%;
+            
+            i{
                 cursor:pointer;
-                height:40px;
-                width: 35px;
+                font-size: 31.35px;
                 transition: 0.8s ease all;
-                transform: rotate(0deg);
             }
+        }
 
-            .icon-active{
-                transform: rotate(180deg);
-            }
+        .icon-active{
+            transform: rotate(180deg);
         }
 
        
@@ -210,8 +209,5 @@ header{
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.06);
     height: 60px;
 
-    nav{
-        padding: 8px 0;
-    }
 }
 </style>
