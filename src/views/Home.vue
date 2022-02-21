@@ -9,11 +9,11 @@
                     I have been marching toward the horizontal.</p>
                 <div @click= "jump('about')" class="btn">Read more</div>
             </div>
-            <img src="../assets\Picture1.jpg">
+            <img class="picture" src="../assets\Picture\Picture1.jpg">
         </div>
         <div class="home_secondparagh">
             <div class="photo_bgleft"></div>
-            <img src="../assets\Picture2.png">
+            <img class="picture" src="../assets\Picture\Picture2.png">
             <div id="content">
                 <div id ="container">
                     <h1>My Coding Travel</h1>
@@ -95,45 +95,52 @@
                 <div v-on:click= "jump('outdoors')" class="btn">Read more</div>
             </div>
         </div>
-        <section id="contact">
-            <div class="home_forthparagh">
-                <div class="photo_bgright"></div>
-                <div class="photo_bgleft"></div>
-                <div id="content">
-                    <h1>Contact Me</h1>
-                    <p>If you have intrest to know more about me, you can contact with me. Blew the information is about me. You can communicate
-                        with Facebook, email or calling the cellphone. Thanks for you browsing my website. See you in the future.</p>
-                    <a href="https://www.facebook.com/profile.php?id=100009946749327">
-                        <img class="facebook" src="../assets\icon\facebook1.png">
+        <div class="home_forthparagh">
+            <div class="photo_bgright"></div>
+            <div class="photo_bgleft"></div>
+            <div id="content">
+                <h1>Contact Me</h1>
+                <p>If you have intrest to know more about me, you can contact with me. Blew the information is about me. You can communicate
+                    with Facebook, email or calling the cellphone. Thanks for you browsing my website. See you in the future.</p>
+                <v-col col=4 v-for="(media_icon, index) in media_icons" :key="index">
+                    <a :href="media_icon.path">
+                        <img :src="media_icon.icon" class="media_icon">
                     </a>
-                    <img class="gmail" src="../assets\icon\email1.png">
-                    <img class="cellphone" src="../assets\icon\phone1.png">
-                    <a href="https://github.com/">
-                        <img class="github" src="../assets\icon\github1.png">
-                    </a>
-                </div>
-                <img src="../assets\Picture3.jpg">
+                </v-col>
             </div>
-        </section>
-            
+            <img class="picture" src="../assets\Picture\Picture3.jpg">
+        </div>
     </section>
 </template>
 
 <script>
 // @ is an alias to /src
-import Navbar from '@/components/Navbar.vue'
 
 export default {
-  name: 'Home',
-  components: {
-      Navbar
-  },
-
+  data:()=>({
+      media_icons:[{
+          icon: require("@/assets/icon/facebook1.png"),
+          path: "https://www.facebook.com/profile.php?id=100009946749327",
+      },
+      {
+          icon: require("@/assets/icon/email1.png"),
+          path: "",
+      },
+      {
+          icon: require("@/assets/icon/phone1.png"),
+          path: "",
+      },
+      {
+          icon: require("@/assets/icon/github1.png"),
+          path: "https://github.com/",
+      }
+      ]
+  }),
   methods: {
       jump:function(msg){
           this.$router.push({path: msg})
       },
-    }
+    },
 }
 </script>
 

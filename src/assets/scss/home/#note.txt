@@ -1,0 +1,5 @@
+這是用來存放主頁撰寫 "SCSS" 的資料夾，裡面包含:
+firstparagh(第一段落)
+secondparagh(第二段落)
+thirdparagh(第三段落)
+forthparagh(第四段落)
