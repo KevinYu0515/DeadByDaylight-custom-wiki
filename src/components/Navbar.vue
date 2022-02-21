@@ -1,9 +1,9 @@
 <template>
     <header :class="{ 'scrolled-nav': scrollNav}">
         <nav>
-            <a href='#' class="logo">Logo</a>
+            <router-link to='/' class="logo">Logo</router-link>
             <ul v-show="!mobile" class="navigation">
-                <li><router-link to="/">Home</router-link> </li>
+                <li><router-link to="/home">Home</router-link> </li>
                 <li><router-link to="/about">About</router-link> </li>
                 <li><router-link to="/program">Program</router-link> </li>
                 <li><router-link to="/game">Game</router-link> </li>
@@ -15,7 +15,7 @@
             </div>
             <transition name='mobile-nav'>
                 <ul v-show="mobileNav" class="dropdown-nav">
-                    <li><router-link to="/">Home</router-link> </li>
+                    <li><router-link to="/home">Home</router-link> </li>
                     <li><router-link to="/about">About</router-link> </li>
                     <li><router-link to="/program">Program</router-link> </li>
                     <li><router-link to="/game">Game</router-link> </li>
@@ -25,7 +25,6 @@
             </transition>
         </nav>
       </header>
-  <router-view/>
 </template>
 
 <script>
