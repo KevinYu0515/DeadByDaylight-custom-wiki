@@ -9,11 +9,11 @@
                     I have been marching toward the horizontal.</p>
                 <div @click= "jump('about')" class="btn">Read more</div>
             </div>
-            <img class="picture" src="../assets\Picture\Picture1.jpg">
+            <img class="picture" src="../assets\picture\Picture1.jpg">
         </div>
         <div class="home_secondparagh">
             <div class="photo_bgleft"></div>
-            <img class="picture" src="../assets\Picture\Picture2.png">
+            <img class="picture" src="../assets\picture\Picture2.png">
             <div id="content">
                 <div id ="container">
                     <h1>My Coding Travel</h1>
@@ -108,7 +108,7 @@
                     </a>
                 </v-col>
             </div>
-            <img class="picture" src="../assets\Picture\Picture3.jpg">
+            <img class="picture" src="../assets\picture\Picture3.jpg">
         </div>
     </section>
 </template>
@@ -152,3 +152,4 @@ export default {
 @import '@/assets/scss/element/btn.scss';
 @import '@/assets/scss/element/decoration.scss';
 </style>
+
