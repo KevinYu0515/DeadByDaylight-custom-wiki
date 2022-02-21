@@ -1,0 +1,71 @@
+
+.home_forthparagh{
+    position: relative;
+    background:linear-gradient(180deg,#466bee,#5c71f6,#47b1df,#5CC8F6);
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    margin: 0;
+    overflow: hidden;
+    
+    #content{
+        max-width: 550px;
+        margin: 100px 50px 100px 100px;
+        text-align: left;
+
+        h1{
+            font-family: 'Rowdies', cursive;
+            position: relative;
+            color:#002984;
+            font-size: 3em;
+            line-height: 2em;
+            letter-spacing: 1px;
+        }
+        p{
+            font-family: 'Source Sans Pro', sans-serif;
+            color:white;
+            position: relative;
+            font-size: 1.2em;
+            line-height: 1.5em;
+            word-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        .gmail{
+            position: relative;
+            margin:0px 30px 0px 0px;
+            width: 50px;
+            height: 50px;
+            border: none;
+        }
+        .cellphone{
+            position: relative;
+            margin:0px 30px 0px 0px;
+            width: 50px;
+            height: 50px;
+            border: none;
+        }
+        .github{
+            position: relative;
+            margin:0px 30px 0px 0px;
+            width: 50px;
+            height: 50px;
+            border: none;
+        }
+        .facebook{
+            position: relative;
+            margin:0px 30px 0px 0px;
+            width: 50px;
+            height: 50px;
+            border: none;
+        }
+    }
+
+    img{
+        width: 614px;
+        height: 436px;
+        margin: 80px 0 50px 110px;
+        border-color: rgb(251, 253, 255);
+        border-style: solid;
+        padding: 3px;
+    }
+}

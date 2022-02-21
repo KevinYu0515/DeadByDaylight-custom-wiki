@@ -1,0 +1,47 @@
+
+.home_firstparagh{
+    position: relative;
+    background: linear-gradient(90deg,#5CC8F6,#47b1df,#466bee,#5c71f6);
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    margin:0;
+    overflow: hidden;
+
+    #content{
+        max-width: 550px;
+        margin: 200px 50px 100px 100px;
+        text-align: left;
+
+        h1{
+            font-family: 'Source Sans Pro', sans-serif;
+            color:#002984;
+            line-height: 2.5em;
+            font-weight: bold;
+            letter-spacing: 1px;
+
+        span{
+            font-weight: 700;
+            color:#466bee;
+            font-size: 3em;
+            }
+        }
+        p{
+            font-family: 'Source Sans Pro', sans-serif;
+            color:white;
+            font-size: 1.2em;
+            line-height: 1.5em;
+            word-spacing: 2px;
+            margin-bottom: 5px;
+        }
+    }
+
+    img{
+        width:585px;
+        height:450px;
+        margin: 140px 0px 0px 110px;
+        border-color: rgb(251, 253, 255);
+        border-style: solid;
+        padding: 3px;
+    }
+}

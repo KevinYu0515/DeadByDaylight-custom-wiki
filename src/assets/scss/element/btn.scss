@@ -1,0 +1,23 @@
+.btn{
+    cursor:pointer;
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    background: #f72585;
+    color:#edf2fb;
+    font-weight: 500;
+    border-radius: 4px;
+    margin-top: 20px;
+    &:hover{
+        position: relative;
+        display: inline-block;
+        padding: 10px 20px;
+        text-decoration: none;
+        background: #530de9;
+        color:#edf2fb;
+        font-weight: 500;
+        border-radius: 4px;
+        margin-top: 20px;
+    }
+}
