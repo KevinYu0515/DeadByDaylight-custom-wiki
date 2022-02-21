@@ -61,7 +61,7 @@ export default {
         },
         checkScreen(){
             this.windowWidth = window.innerWidth;
-            if(this.windowWidth <= 750){
+            if(this.windowWidth <= 850){
                 this.mobile = true;
                 return
             }
@@ -84,7 +84,7 @@ header{
     right: 0;
     display: flex;
     width: 100%;
-    height: 70px;
+    height: 80px;
     justify-content: space-between;
     align-items: center;
     padding: 0px 60px 0 50px;

@@ -6,7 +6,7 @@
                 <h1>Hi I'm<br><span>Kevin LIN</span></h1>
                 <p>I wouldn't care success or failure, for I will only struggle ahead as long as I have been destined to the distance. 
                     I wouldn't care the difficulties around, for what I can leave on the earth is only their view of my back since 
-                    I have been marching toward the horizontal.</p><br>
+                    I have been marching toward the horizontal.</p>
                 <div @click= "jump('about')" class="btn">Read more</div>
             </div>
             <img src="../assets\Picture1.jpg">
@@ -180,15 +180,15 @@ export default {
 .home_firstparagh{
     position: relative;
     background: linear-gradient(90deg,#5CC8F6,#47b1df,#466bee,#5c71f6);
-    height: 80vh;
+    height: 90vh;
     width: 100%;
     display: flex;
-    margin-top: 60px;
+    margin:0;
     overflow: hidden;
 
     #content{
         max-width: 550px;
-        margin: 100px 50px 100px 100px;
+        margin: 200px 50px 100px 100px;
         text-align: left;
 
         h1{
@@ -210,14 +210,14 @@ export default {
             font-size: 1.2em;
             line-height: 1.5em;
             word-spacing: 2px;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
         }
     }
 
     img{
         width:585px;
         height:450px;
-        margin: 60px 0px 0px 110px;
+        margin: 140px 0px 0px 110px;
         border-color: rgb(251, 253, 255);
         border-style: solid;
         padding: 3px;
@@ -508,10 +508,10 @@ export default {
 
 .photo_bgright{
     position: absolute;
-    top:0%;
+    top:0;
     Left:80%;
     width:100%;
-    height:80vh;
+    height:90vh;
     transform:skewX(-5deg);
     background-color: #5CC8F6;
     opacity: 0.2;
