@@ -1,5 +1,5 @@
 <template>
   <div class="about">
-    <p class="deafult">Hobby</p>
+    <p class="deafult">Creativity</p>
   </div>
 </template>

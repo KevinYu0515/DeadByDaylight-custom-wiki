@@ -21,19 +21,24 @@ const routes = [
     component:()=> import('../views/Program.vue')
   },
   {
-    path:'/hobby',
-    name:'Hobby',
-    component:()=> import('../views/Hobby.vue')
+    path:'/game',
+    name:'Game',
+    component:()=> import('../views/Hobby/Game.vue')
   },
   {
-    path:'/#contact',
-    name: 'Contact',
-    component: Home
+    path:'/creativity',
+    name:'Creativity',
+    component:()=> import('../views/Hobby/Creativity.vue')
+  },
+  {
+    path:'/outdoors',
+    name:'Outdoors',
+    component:()=> import('../views/Hobby/Outdoors.vue')
   },
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes,
 })
 

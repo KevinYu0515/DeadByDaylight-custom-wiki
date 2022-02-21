@@ -6,8 +6,9 @@
                 <li><router-link to="/">Home</router-link> </li>
                 <li><router-link to="/about">About</router-link> </li>
                 <li><router-link to="/program">Program</router-link> </li>
-                <li><router-link to="/hobby">Hobby</router-link> </li>
-                <li><router-link to="/#contact">Contact</router-link> </li>
+                <li><router-link to="/game">Game</router-link> </li>
+                <li><router-link to="/creativity">Creativity</router-link> </li>
+                <li><router-link to="/outdoors">Outdoors</router-link> </li>
             </ul>
             <div class="navbar_icon">
                 <i @click="toggleMobileNav" v-show="mobile" class="fi fi-br-menu-burger" :class="{'icon-active':mobileNav}" ></i>
@@ -17,8 +18,9 @@
                     <li><router-link to="/">Home</router-link> </li>
                     <li><router-link to="/about">About</router-link> </li>
                     <li><router-link to="/program">Program</router-link> </li>
-                    <li><router-link to="/hobby">Hobby</router-link> </li>
-                    <li><router-link to="/#contact">Contact</router-link> </li>
+                    <li><router-link to="/game">Game</router-link> </li>
+                    <li><router-link to="/creativity">Creativity</router-link> </li>
+                    <li><router-link to="/outdoors">Outdoors</router-link> </li>
                 </ul>
             </transition>
         </nav>

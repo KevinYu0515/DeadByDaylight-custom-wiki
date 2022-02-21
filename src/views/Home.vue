@@ -72,7 +72,7 @@
                         In many kinds of video games, what my favorite is the one that makes me scary and nervous, 
                         such like DBD and Dark Deception, and arouse my curiosity to explore the mystery </p>
                 </div>
-                <div v-on:click= "jump('hobby')" class="btn">Read more</div>
+                <div v-on:click= "jump('game')" class="btn">Read more</div>
             </div>
             <div class="card">
                 <div class="icon">
@@ -82,7 +82,7 @@
                     <h3>Virtual Art Development</h3>
                     <p >:D </p>
                 </div>
-                <div v-on:click= "jump('hobby')" class="btn">Read more</div>
+                <div v-on:click= "jump('creativity')" class="btn">Read more</div>
             </div>
             <div class="card">
                 <div class="icon">
@@ -92,7 +92,7 @@
                     <h3>Outdoor Exercise</h3>
                     <p>:D </p>
                 </div>
-                <div v-on:click= "jump('hobby')" class="btn">Read more</div>
+                <div v-on:click= "jump('outdoors')" class="btn">Read more</div>
             </div>
         </div>
         <section id="contact">
