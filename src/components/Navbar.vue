@@ -1,7 +1,8 @@
 <template>
+
     <header :class="{ 'scrolled-nav': scrollNav}">
         <nav>
-            <router-link to='/' class="logo">Logo</router-link>
+            <router-link to="/" class="logo">Logo</router-link>
             <ul v-show="!mobile" class="navigation">
                 <li><router-link to="/home">Home</router-link> </li>
                 <li><router-link to="/about">About</router-link> </li>
@@ -9,7 +10,7 @@
                 <li><router-link to="/game">Game</router-link> </li>
                 <li><router-link to="/creativity">Creativity</router-link> </li>
                 <li><router-link to="/outdoors">Outdoors</router-link> </li>
-            </ul>
+           </ul>
             <div class="navbar_icon">
                 <i @click="toggleMobileNav" v-show="mobile" class="fi fi-br-menu-burger" :class="{'icon-active':mobileNav}" ></i>
             </div>
