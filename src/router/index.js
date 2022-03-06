@@ -27,9 +27,9 @@ const routes = [
     component:()=> import('../views/Program.vue')
   },
   {
-    path:'/game',
-    name:'Game',
-    component:()=> import('../views/Hobby/Game.vue')
+    path:'/entertain',
+    name:'Entertain',
+    component:()=> import('../views/Hobby/Entertain.vue')
   },
   {
     path:'/creativity',

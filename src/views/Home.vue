@@ -9,11 +9,11 @@
                     I have been marching toward the horizontal.</p>
                 <div @click= "jump('about')" class="btn">Read more</div>
             </div>
-            <img class="picture" src="../assets\picture\Picture1.jpg">
+            <img class="picture" src="../assets\picture\bg-1.jpg">
         </div>
         <div class="home_secondparagh">
             <div class="photo_bgleft"></div>
-            <img class="picture" src="../assets\picture\Picture2.png">
+            <img class="picture" src="../assets\picture\bg-2.jpg">
             <div id="content">
                 <div id ="container">
                     <h1>My Coding Travel</h1>
@@ -72,7 +72,7 @@
                         In many kinds of video games, what my favorite is the one that makes me scary and nervous, 
                         such like DBD and Dark Deception, and arouse my curiosity to explore the mystery </p>
                 </div>
-                <div v-on:click= "jump('game')" class="btn">Read more</div>
+                <div v-on:click= "jump('entertain')" class="btn">Read more</div>
             </div>
             <div class="card">
                 <div class="icon">
@@ -108,7 +108,7 @@
                     </a>
                 </v-col>
             </div>
-            <img class="picture" src="../assets\picture\Picture3.jpg">
+            <img class="picture" src="@/assets\picture\bg-3.jpg">
         </div>
     </section>
 </template>
