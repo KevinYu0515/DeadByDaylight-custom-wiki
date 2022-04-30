@@ -5,127 +5,72 @@
       "killer": "001",
       "style": "守屍型",
       "name": "陷阱殺手",
-      "sub_name": [
-        "夾子鬼"
-      ],
-      "skills": [
-        "恐慌降臨",
-        "所向無敵",
-        "欣喜若狂"
-      ],
-      "weapon": "砍肉刀",
-      "power": "捕獸夾"
+      "sub_name": ["夾子鬼"],
+      "skills": ["恐慌降臨", "所向無敵", "欣喜若狂"],
+      "attack": ["The Cleaver", "Bear Trap"]
     },
     {
       "id": 2,
       "killer": "002",
       "style": "追獵型",
       "name": "幽靈殺手",
-      "sub_name": [
-        "隱鬼",
-        "噹噹"
-      ],
-      "skills": [
-        "窮追不捨",
-        "血氣追蹤",
-        "暗夜之睛"
-      ],
-      "weapon": "碎顱者",
-      "power": "骷髏喪鐘"
+      "sub_name": ["隱鬼", "噹噹"],
+      "skills": ["窮追不捨", "血氣追蹤", "暗夜之睛"],
+      "attack": ["Azarov's Skull", "Wailing Bell"]
     },
     {
       "id": 3,
       "killer": "003",
       "name": "電鋸殺手",
       "style": "追獵型",
-      "sub_name": [
-        "比利"
-      ],
-      "skills": [
-        "耐力持久",
-        "光明之眼",
-        "工匠"
-      ],
-      "weapon": "兇殘牲畜宰殺錘",
-      "power": "電鋸"
+      "sub_name": ["比利"],
+      "skills": ["耐力持久", "光明之眼", "工匠"],
+      "attack": ["The Hammer", "The Chainsaw"]
     },
     {
       "id": 4,
       "killer": "004",
       "name": "護士",
       "style": "追獵型",
-      "sub_name": null,
-      "skills": [
-        "鳴喘",
-        "死亡恐懼",
-        "護士的呼喚"
-      ],
-      "weapon": "切骨鋸",
-      "power": "鬼影步"
+      "sub_name": [""],
+      "skills": ["鳴喘", "死亡恐懼", "護士的呼喚"],
+      "attack": ["The BoneSaw", "Spencer's Last Breath"]
     },
     {
       "id": 5,
       "killer": "005",
       "name": "邁克爾·邁爾斯",
       "style": "暗殺型",
-      "sub_name": [
-        "MM"
-      ],
-      "skills": [
-        "把最好的留在最後",
-        "不要玩食物",
-        "湮滅之光"
-      ],
-      "weapon": "菜刀",
-      "power": "惡魔附身"
+      "sub_name": ["MM"],
+      "skills": ["把最好的留在最後", "不要玩食物", "湮滅之光"],
+      "attack": ["Evil Within1", "Evil Within2", "Evil Within3"]
     },
     {
       "id": 6,
       "killer": "006",
       "name": "女獵手",
       "style": "追獵型",
-      "sub_name": [
-        "兔女"
-      ],
-      "skills": [
-        "嗜血兇獸",
-        "領地意識",
-        "厄咒-獵手搖籃曲"
-      ],
-      "weapon": "闊斧",
-      "power": "狩獵飛斧"
+      "sub_name": ["兔女"],
+      "skills": ["嗜血兇獸", "領地意識", "厄咒-獵手搖籃曲"],
+      "attack": ["Broad Axe", "Hunting Hatchets"]
     },
     {
       "id": 7,
       "killer": "007",
       "name": "食人魔",
       "style": "追獵型",
-      "sub_name": [
-        "皮臉"
-      ],
-      "skills": [
-        "擊倒出局",
-        "人肉燒烤",
-        "富蘭克林之死"
-      ],
-      "weapon": "大錘",
-      "power": "皮臉的電鋸"
+      "sub_name": ["皮臉"],
+      "skills": ["擊倒出局", "人肉燒烤", "富蘭克林之死"],
+      "attack": ["The Sledge", "Bubba's Chainsaw"]
     },
     {
       "id": 8,
       "killer": "008",
       "name": "夢魘",
       "style": "控場型",
-      "sub_name": [
-        "老弗"
-      ],
-      "skills": [
-        "怒火中燒",
-        "記憶猶新",
-        "血腥獄長"
-      ],
-      "weapon": "利爪手套",
-      "power": "夢魔"
+      "sub_name": ["老弗"],
+      "skills": ["怒火中燒", "記憶猶新", "血腥獄長"],
+      "attack": ["Clawed Glove", "Dream Demon"]
     },
     {
       "id": 9,
@@ -133,122 +78,71 @@
       "name": "怨靈",
       "style": "暗殺型",
       "sub_name": null,
-      "skills": [
-        "暴怒怨靈",
-        "厄咒-鬧鬼之地",
-        "怒氣衝天"
-      ],
-      "weapon": "破碎武士刀",
-      "power": "山岡作祟"
+      "skills": ["暴怒怨靈", "厄咒-鬧鬼之地", "怒氣衝天"],
+      "attack": ["Shattered Katana", "Yamaoka's Haunting"]
     },
     {
       "id": 10,
       "killer": "010",
       "name": "軍團",
       "style": "追獵型",
-      "sub_name": null,
-      "skills": [
-        "衝突",
-        "瘋狂勇氣",
-        "鐵處女"
-      ],
-      "weapon": "獵刀",
-      "power": "野性狂暴"
+      "sub_name": [""],
+      "skills": ["衝突", "瘋狂勇氣", "鐵處女"],
+      "attack": ["Hunting Knife", "Feral Frenzy"]
     },
     {
       "id": 11,
       "killer": "011",
       "name": "鬼武士",
       "style": "追獵型",
-      "sub_name": [
-        "Oni"
-      ],
-      "skills": [
-        "殘心",
-        "鮮血迴響",
-        "報應"
-      ],
-      "weapon": "山岡之刀",
-      "power": "山崗之怒"
+      "sub_name": ["Oni"],
+      "skills": ["殘心", "鮮血迴響", "報應"],
+      "attack": ["Yamaoka Blade", "Yamaoka's Wrath"]
     },
     {
       "id": 12,
       "killer": "012",
       "name": "死亡槍手",
       "style": "追獵型",
-      "sub_name": [
-        "槍爺"
-      ],
-      "skills": [
-        "機械腦",
-        "失效開關",
-        "厄咒-懲戒"
-      ],
-      "weapon": "貝索之死",
-      "power": "救贖者"
+      "sub_name": ["槍爺"],
+      "skills": ["機械腦", "失效開關", "厄咒-懲戒"],
+      "attack": ["Death to Bayshore", "The Redeemer"]
     },
     {
       "id": 13,
       "killer": "013",
       "name": "處刑者",
       "style": "追獵型",
-      "sub_name": [
-        "三角頭"
-      ],
-      "skills": [
-        "強制懺悔",
-        "折磨之路",
-        "死亡鎖鏈"
-      ],
-      "weapon": "大刀",
-      "power": "審判儀式"
+      "sub_name": ["三角頭"],
+      "skills": ["強制懺悔", "折磨之路", "死亡鎖鏈"],
+      "attack": ["Great Knife", "Rites of Judgement"]
     },
     {
       "id": 14,
       "killer": "014",
       "name": "Nemesis",
       "style": "控場型",
-      "sub_name": [
-        "追跡者",
-        "復仇邪神"
-      ],
-      "skills": [
-        "致命追蹤者",
-        "歇斯底里",
-        "爆發"
-      ],
-      "weapon": "雙拳",
-      "power": "T病毒"
+      "sub_name": ["追跡者", "復仇邪神"],
+      "skills": ["致命追蹤者", "歇斯底里", "爆發"],
+      "attack": ["Raw Fists", "T-Virus1", "T-Virus2", "T-Virus3"]
     },
     {
       "id": 15,
       "killer": "015",
       "name": "藝術家",
       "style": "控場型",
-      "sub_name": [
-        "鳥人"
-      ],
-      "skills": [
-        "死亡擁抱",
-        "災禍之鉤-痛苦共鳴",
-        "厄咒-修飾符"
-      ],
-      "weapon": "折磨鴉群",
-      "power": "鋒利調色刀"
+      "sub_name": ["鳥人", "鴉姊"],
+      "skills": ["死亡擁抱", "災禍之鉤-痛苦共鳴", "厄咒-修飾符"],
+      "attack": ["Sharp Palette Blade", "Birds of Torment"]
     },
     {
       "id": 16,
       "killer": "016",
       "name": "貞子",
       "style": "控場型",
-      "sub_name": null,
-      "skills": [
-        "災禍之鉤-狂怒之潮",
-        "海之喚",
-        "無情風暴"
-      ],
-      "weapon": "狂怒指環",
-      "power": "恐懼洪流"
+      "sub_name": [""],
+      "skills": ["災禍之鉤-狂怒之潮", "海之喚", "無情風暴"],
+      "attack": ["Ring of Fury", "Deluge of Fear"]
     }
   ]
 }

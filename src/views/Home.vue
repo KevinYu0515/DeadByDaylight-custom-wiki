@@ -94,7 +94,7 @@
             and Dark Deception, and arouse my curiosity to explore the mystery
           </p>
         </div>
-        <button type="button" @click="jump('entertain')" class="btn btn-info">Read more</button>
+        <button type="button" @click="jump('personal')" class="btn btn-info">Read more</button>
       </div>
       <div class="card">
         <div class="icon">

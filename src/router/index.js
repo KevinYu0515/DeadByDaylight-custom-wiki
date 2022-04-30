@@ -28,9 +28,9 @@ const routes = [
     component:()=> import('../views/Program.vue')
   },
   {
-    path:'/entertain',
-    name:'Entertain',
-    component:()=> import('../views/Hobby/Entertain.vue')
+    path:'/personal',
+    name:'Personal',
+    component:()=> import('../views/Hobby/Personal.vue')
   },
   {
     path:'/creativity',

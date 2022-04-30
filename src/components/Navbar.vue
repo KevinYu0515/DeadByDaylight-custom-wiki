@@ -6,7 +6,7 @@
         <li><router-link to="/home">Home</router-link></li>
         <li><router-link to="/about">About</router-link></li>
         <li><router-link to="/program">Program</router-link></li>
-        <li><router-link to="/entertain">Entertain</router-link></li>
+        <li><router-link to="/personal">Personal</router-link></li>
         <li><router-link to="/creativity">Creativity</router-link></li>
         <li><router-link to="/outdoors">Outdoors</router-link></li>
       </ul>
@@ -23,7 +23,7 @@
           <li><router-link to="/home">Home</router-link></li>
           <li><router-link to="/about">About</router-link></li>
           <li><router-link to="/program">Program</router-link></li>
-          <li><router-link to="/entertain">Entertain</router-link></li>
+          <li><router-link to="/personal">Personal</router-link></li>
           <li><router-link to="/creativity">Creativity</router-link></li>
           <li><router-link to="/outdoors">Outdoors</router-link></li>
         </ul>
