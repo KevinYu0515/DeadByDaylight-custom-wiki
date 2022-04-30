@@ -1,13 +1,13 @@
 <template>
-    <div class="footer"></div>
+  <div class="footer">20220428</div>
 </template>
 
 <script>
 export default {
-   name:'Footer',
-}
+  name: "Footer",
+};
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/footer.scss'
+@import "@/assets/scss/footer.scss";
 </style>

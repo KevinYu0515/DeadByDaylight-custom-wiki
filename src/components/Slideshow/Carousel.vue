@@ -35,11 +35,15 @@ export default {
     const autoPlayEnabled = ref(
       props.startAutoPlay === undefined ? true : props.startAutoPlay
     );
-    const timeoutDuration = ref(props.timeout === undefined ? 5000 : props.timeout);
+    const timeoutDuration = ref(
+      props.timeout === undefined ? 5000 : props.timeout
+    );
     const pagintationEnabled = ref(
       props.pagination === undefined ? true : props.pagination
     );
-    const navEnabled = ref(props.navigation === undefined ? true : props.navigation);
+    const navEnabled = ref(
+      props.navigation === undefined ? true : props.navigation
+    );
 
     // next slide
     const nextSlide = () => {
@@ -92,8 +96,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css');
-@import url('https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css');
+@import url("https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css");
+@import url("https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css");
 .navigate {
   padding: 0 16px;
   height: 100%;
@@ -110,6 +114,9 @@ export default {
 
   .right {
     justify-content: flex-end;
+  }
+  .left {
+    justify-content: flex-start;
   }
 
   i {

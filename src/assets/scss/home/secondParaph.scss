@@ -1,5 +1,5 @@
 
-.home_secondparagh{
+.home_secondParaph{
     position: relative;
     background-color: #5CE1E6;
     height: 80vh;
@@ -96,16 +96,16 @@
                 }
 
                 #circle1 circle:nth-child(2){
-                    stroke-dashoffset: calc(380 - (380 * 33)/100);
+                    stroke-dashoffset: calc(380 - (380 * 30)/100);
                     stroke:#788bff;
                 }
 
                 #circle2 circle:nth-child(2){
-                    stroke-dashoffset: calc(380 - (380 * 20)/100);
+                    stroke-dashoffset: calc(380 - (380 * 35)/100);
                     stroke:#788bff;
                 }
                 #circle3 circle:nth-child(2){
-                    stroke-dashoffset: calc(380 - (380 * 47)/100);
+                    stroke-dashoffset: calc(380 - (380 * 35)/100);
                     stroke:#788bff;
                 }
             }
@@ -138,6 +138,7 @@
                 font-family:'Fredoka One', cursive;
                 padding: 10px 0 0;
                 color:#5465ff;
+                font-size: 27px;
                 font-weight: 700;
                 letter-spacing: 1px;
             }

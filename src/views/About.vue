@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <p class="deafult">About</p>
+    <p class="default">About</p>
   </div>
 </template>
 <!--待續-->

@@ -1,0 +1,68 @@
+.entertain{
+    position: relative;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: darkslategrey;
+    margin-top: 100px;
+    overflow: hidden;
+    .container{
+        .selectStyle{
+            padding: 5px;
+            margin-left: 20px;
+        }
+        .inputKiller{
+            margin: 20px;
+            width: 300px;
+            
+        }
+        .DBD-card{
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            grid-template-columns: 200px 180px 100px;
+            grid-template-rows: 60px 100px 40px 40px;
+            padding: 20px 50px 20px 0;
+            background-color:rgb(68, 61, 61);
+            color:rgb(251, 248, 248);
+            border-radius: 30px;
+            margin: 20px;
+            .main{
+                grid-area: 1/1/5/2;
+                .killer{
+                    transform: scale(0.6) translateX(-40px);
+                }
+            }
+            .name{
+                grid-area: 1/2/1/2;
+                font-size: 25px;
+                margin: 5px;
+            }
+            .delete{
+                grid-area: 1/3/1/3;
+                transform: scale(0.7);
+            }
+            .skills{
+                grid-area: 2/2/2/4;
+                .skills-icon{
+                    width: 85px;
+                    height: auto;
+                }
+            }
+            .weapon{
+                grid-area: 3/2/3/3;
+                font-size: 15px;
+            }
+            .power{
+                grid-area: 4/2/4/3;
+                font-size: 15px;
+            }
+        }
+    }
+}
+
+
+
