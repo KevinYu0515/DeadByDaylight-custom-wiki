@@ -41,40 +41,40 @@ export default {
       mobile: null,
       mobileNav: null,
       windowWidth: null,
-    };
+    }
   },
   created() {
-    window.addEventListener("resize", this.checkScreen);
-    this.checkScreen();
+    window.addEventListener("resize", this.checkScreen)
+    this.checkScreen()
   },
   mounted() {
-    window.addEventListener("scroll", this.updateScroll);
+    window.addEventListener("scroll", this.updateScroll)
   },
   methods: {
     toggleMobileNav() {
-      this.mobileNav = !this.mobileNav;
+      this.mobileNav = !this.mobileNav
     },
 
     updateScroll() {
-      const scrollPosition = window.scrollY;
+      const scrollPosition = window.scrollY
       if (scrollPosition > 50) {
-        this.scrollNav = true;
-        return;
+        this.scrollNav = true
+        return
       }
-      this.scrollNav = false;
+      this.scrollNav = false
     },
     checkScreen() {
-      this.windowWidth = window.innerWidth;
+      this.windowWidth = window.innerWidth
       if (this.windowWidth <= 850) {
-        this.mobile = true;
-        return;
+        this.mobile = true
+        return
       }
-      this.mobile = false;
-      this.mobileNav = false;
-      return;
+      this.mobile = false
+      this.mobileNav = false
+      return
     },
   },
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

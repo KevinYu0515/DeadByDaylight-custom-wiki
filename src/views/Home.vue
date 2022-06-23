@@ -10,13 +10,12 @@
           difficulties around, for what I can leave on the earth is only their
           view of my back since I have been marching toward the horizontal.
         </p>
-        <button
-          type="button"
+        <Button
           @click="jump('about')"
-          class="btn btn-outline-primary"
+          class="p-button-infor"
         >
           Read more
-        </button>
+        </Button>
       </div>
       <img class="picture" src="../assets\picture\bg-1.jpg" />
     </div>
@@ -26,13 +25,12 @@
       <div id="content">
         <div id="container">
           <h1>My Coding Travel</h1>
-          <button
-            type="button"
+          <Button
             @click="jump('program')"
-            class="btn btn-outline-primary"
+            class="p-button-infor"
           >
             Read more
-          </button>
+          </Button>
         </div>
         <p>
           Any code of your own that you haven't looked at for six or more months
@@ -85,26 +83,35 @@
           <img src="../assets\icon\icon1.png" />
         </div>
         <div class="content">
-          <h3>Game Codex</h3>
+          <h3>Personal</h3>
           <p>
-            Playing the game is one of my recreation,especially playing on PC.
-            PC game can give me more exciting and surprised than mobile game
-            during the playing time. In many kinds of video games, what my
-            favorite is the one that makes me scary and nervous, such like DBD
-            and Dark Deception, and arouse my curiosity to explore the mystery
+            Key Crybaby slow guy maze dots Power Pellets flash Midway chaser 
+            Pinky cherry Puck Man ghosts. I think I will buy the red car, 
+            or I will lease the blue one. Clyde blue enemies flash dots 
+            wonks maze monsters ghosts red chaser. Ambusher maze wonks wonks fruit 
+            Pac-Man Fever arcade Galatian Boss power up intermission. 
+            Fluffy pink unicorns are a popular status symbol among macho men. 
+            He found his art never progressed when he literally used his sweat and tears.
           </p>
         </div>
-        <button type="button" @click="jump('personal')" class="btn btn-info">Read more</button>
+        <Button @click="jump('personal')" class="p-button-infor">Read more</Button>
       </div>
       <div class="card">
         <div class="icon">
           <img src="../assets\icon\icon2.png" />
         </div>
         <div class="content">
-          <h3>Virtual Art Development</h3>
-          <p>:D</p>
+          <h3>CSS Testing</h3>
+          <p>Key Crybaby slow guy maze dots Power Pellets flash Midway chaser 
+            Pinky cherry Puck Man ghosts. I think I will buy the red car, 
+            or I will lease the blue one. Clyde blue enemies flash dots 
+            wonks maze monsters ghosts red chaser. Ambusher maze wonks wonks fruit 
+            Pac-Man Fever arcade Galatian Boss power up intermission. 
+            Fluffy pink unicorns are a popular status symbol among macho men. 
+            He found his art never progressed when he literally used his sweat and tears.
+          </p>
         </div>
-        <button type="button" @click="jump('creativity')" class="btn btn-info">Read more</button>
+        <Button @click="jump('creativity')" class="p-button-infor">Read more</Button>
       </div>
       <div class="card">
         <div class="icon">
@@ -112,9 +119,16 @@
         </div>
         <div class="content">
           <h3>Outdoor Exercise</h3>
-          <p>:D</p>
+          <p>Key Crybaby slow guy maze dots Power Pellets flash Midway chaser 
+            Pinky cherry Puck Man ghosts. I think I will buy the red car, 
+            or I will lease the blue one. Clyde blue enemies flash dots 
+            wonks maze monsters ghosts red chaser. Ambusher maze wonks wonks fruit 
+            Pac-Man Fever arcade Galatian Boss power up intermission. 
+            Fluffy pink unicorns are a popular status symbol among macho men. 
+            He found his art never progressed when he literally used his sweat and tears.
+          </p>
         </div>
-        <button type="button" @click="jump('outdoors')" class="btn btn-info">Read more</button>
+        <Button @click="jump('outdoors')" class="p-button-infor">Read more</Button>
       </div>
     </div>
     <div class="home_forthParaph">
@@ -165,10 +179,10 @@ export default {
   }),
   methods: {
     jump: function (msg) {
-      this.$router.push({ path: msg });
+      this.$router.push({ path: msg })
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

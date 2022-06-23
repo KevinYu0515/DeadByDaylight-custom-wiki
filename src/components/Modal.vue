@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted } from "vue"
 export default {
   props: {
     open: {
@@ -24,20 +24,20 @@ export default {
   },
   setup(_, { emit }) {
     const close = () => {
-      emit("close");
-    };
+      emit("close")
+    }
     const handleKeyup = (event) => {
       if (event.keyCode === 27) {
-        close();
+        close()
       }
-    };
+    }
 
-    onMounted(() => document.addEventListener("keyup", handleKeyup));
-    onUnmounted(() => document.removeEventListener("keyup", handleKeyup));
+    onMounted(() => document.addEventListener("keyup", handleKeyup))
+    onUnmounted(() => document.removeEventListener("keyup", handleKeyup))
 
-    return { close };
+    return { close }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -18,16 +18,16 @@
 </template>
 
 <script>
-import Carousel from "../../components/Slideshow/Carousel.vue";
-import Slide from "../../components/Slideshow/Slide.vue";
+import Carousel from "../../components/Slideshow/Carousel.vue"
+import Slide from "../../components/Slideshow/Slide.vue"
 
 export default {
   components: { Carousel, Slide },
   setup() {
-    const carouselSlides = ["bg-1", "bg-2", "bg-3"];
-    return { carouselSlides };
+    const carouselSlides = ["bg-1", "bg-2", "bg-3"]
+    return { carouselSlides }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
