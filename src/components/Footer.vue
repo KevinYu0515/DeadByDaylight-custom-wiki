@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">20220428</div>
+  <div class="footer text-white">20220624</div>
 </template>
 
 <script>

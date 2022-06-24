@@ -94,7 +94,7 @@
             He found his art never progressed when he literally used his sweat and tears.
           </p>
         </div>
-        <Button @click="jump('personal')" class="p-button-infor">Read more</Button>
+        <Button @click="jump('login')" class="p-button-infor">Read more</Button>
       </div>
       <div class="card">
         <div class="icon">

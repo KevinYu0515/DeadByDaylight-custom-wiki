@@ -18,5 +18,5 @@
 <!--待續-->
 
 <style scoped lang="scss">
-@import "@/assets/scss/hobby/creativity.scss";
+@import "@/assets/scss/others/creativity.scss";
 </style>

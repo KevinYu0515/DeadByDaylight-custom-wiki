@@ -1,5 +1,5 @@
 <template>
-  <div class="entertain">
+  <div class="personal">
     <div class="container01 grid w-5">
       <Dropdown
         v-model="input.style"
@@ -75,6 +75,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import { Swiper, SwiperSlide } from "vue-awesome-swiper"
@@ -172,6 +173,6 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "@/assets/scss/hobby/personal.scss";
+@import "@/assets/scss/others/personal/personal.scss";
 @import url("https://cdn-uicons.flaticon.com/uicons-bold-straight/css/uicons-bold-straight.css");
 </style>

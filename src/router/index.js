@@ -25,22 +25,32 @@ const routes = [
   {
     path:"/program",
     name:"Program",
-    component:()=> import(/* webpackChunkName: "about" */ "../views/Program.vue")
+    component:()=> import(/* webpackChunkName: "program" */ "../views/Program.vue")
+  },
+  {
+    path:"/login",
+    name:"Login",
+    component:()=>import(/* webpackChunkName: "login" */"../views/Others/Personal/Login.vue")
+  },
+  {
+    path:"/register",
+    name:"Register",
+    component:()=>import(/* webpackChunkName: "login" */"../views/Others/Personal/Register.vue")
   },
   {
     path:"/personal",
     name:"Personal",
-    component:()=> import("../views/Hobby/Personal.vue")
+    component:()=> import(/* webpackChunkName: "personal" */"../views/Others/Personal/Personal.vue")
   },
   {
     path:"/creativity",
     name:"Creativity",
-    component:()=> import("../views/Hobby/Creativity.vue")
+    component:()=> import(/* webpackChunkName: "creativity" */"../views/Others/Creativity.vue")
   },
   {
     path:"/outdoors",
     name:"Outdoors",
-    component:()=> import("../views/Hobby/Outdoors.vue")
+    component:()=> import(/* webpackChunkName: "outdoors" */"../views/Others/Outdoors.vue")
   },
 ]
 

@@ -1,24 +1,32 @@
 <template>
   <div class="program">
-    <p class="default">Program</p>
-    <!-- <vue-star-rate
-      :rateRange="3"
-      :maxIcon="5"
-      :iconHeight="22"
-      :iconWidth="22"
-      :hasCounter="true"
-      iconColor="#FFFF99"
-      iconColorHover="#FFFF99"
-      iconShape="star"
-    ></vue-star-rate> -->
+    <Carousel
+      :navigation="false"
+      :pagination="true"
+      :startAutoPlay="false"
+      :timeout="2000"
+      class="carousel"
+      v-slot="{ currentSlide }"
+    >
+      <Slide v-for="(slide, index) in carouselSlides" :key="index">
+        <div v-show="currentSlide === index + 1" class="slide-info">
+          <img :src="require(`@/assets/picture/${slide}.jpg`)" alt="" />
+        </div>
+      </Slide>
+    </Carousel>
   </div>
 </template>
 
 <script>
-// import vueStarRate from "vue-js-star-rating"
+import Carousel from "../components/Slideshow/Carousel.vue"
+import Slide from "../components/Slideshow/Slide.vue"
 
 export default {
-
+components: { Carousel, Slide },
+  setup() {
+    const carouselSlides = ["bg-1", "bg-2", "bg-3"]
+    return { carouselSlides }
+  },
 }
 </script>
 
