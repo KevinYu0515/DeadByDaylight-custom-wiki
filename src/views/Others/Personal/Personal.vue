@@ -1,8 +1,9 @@
 <template>
   <div class="personal">
-    <div class="container01 grid w-5">
+    <h3>{{ message }}</h3>
+    <div class="container01 grid w-8 flex justify-content-center align-items-center">
       <Dropdown
-        v-model="input.style"
+        v-model="selectedStyle"
         :options="styleOptions"
         optionLabel="style"
         optionValue="style"
@@ -20,13 +21,45 @@
         </div>
       </div>
       <Button 
-        class="p-button-danger mx-2"
-         v-for="button in 2"
-         :key="button"
-        @click="button == 1 ? submitHandler() : cancelHandler()"
+        label="Add"  
+        class="p-button-danger mx-2 col-fixed"
+        style="max-width:100%"
+        @click="ModalStatue" 
+      />
+      <Dialog 
+        header="Append New Role" 
+        v-model:visible="displayModal" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+        :style="{width: '50vw'}" :modal="true"
       >
-        {{ buttons[button - 1] }}
-      </Button>      
+        <div class="grid my-2">
+          <select type="text" class="mx-2 h-2rem col-2" v-model="input.style" v-tooltip.top="'Choose your style'">
+            <option v-for="item in styleOptions" :key="item">
+              {{ item.style }}
+            </option>
+          </select>
+          <input type="text" class="h-2rem col-3" placeholder="KillerName" v-tooltip.top="'Enter your killerName'" />
+          <input type="text" class="h-2rem mx-2 col-4" placeholder="KillerSubName" v-tooltip.top="'Enter your subName'" />
+        </div>
+        <div class="grid my-2 mx-2">
+          <p class="col-2">First Skill</p>
+          <input type="file" class="col-10" @change="onFileSelected" v-tooltip.left="'Upload your first skill'"/>
+          <p class="col-2">Second Skill</p>
+          <input type="file" class="col-10" @change="onFileSelected" v-tooltip.left="'Upload your second skill'"/>
+          <p class="col-2">Third Skill</p>
+          <input type="file" class="col-10" @change="onFileSelected" v-tooltip.left="'Upload your third skill'"/>
+        </div>
+        <div class="grid my-2 mx-2">
+          <p class="col-2">Weapon</p>
+          <input type="file" class="col-10" @change="onFileSelected" v-tooltip.left="'Upload your weapon'"/>
+          <p class="col-2">Ability</p>
+          <input type="file" class="col-10" @change="onFileSelected" v-tooltip.left="'Upload your ability'"/>
+        </div>
+        <template #footer>
+            <Button label="No" icon="pi pi-times" @click="ModalStatue" class="p-button-text"/>
+            <Button label="Yes" icon="pi pi-check" @click="ModalStatue" autofocus />
+        </template>
+      </Dialog>
+      <Button href="javascript:void(0)" class="p-button-success mx-2" @click="logout">Logout</Button>
     </div>
     <div class="container02">
       <swiper
@@ -80,17 +113,38 @@
 <script>
 import { Swiper, SwiperSlide } from "vue-awesome-swiper"
 import SwiperCore, { Pagination,  EffectCoverflow } from "swiper"
+import axios from "axios"
+import { useRouter } from "vue-router"
+import { onMounted, ref } from "vue"
 import "swiper/swiper-bundle.css"
 
 SwiperCore.use([Pagination,  EffectCoverflow])
 
 export default {
+  setup(){
+    const router = useRouter()
+    const message = ref("")
+    const logout = async() => {
+      await axios.post("logout", {}, { withCredentials:true })
+      axios.defaults.headers.common["Authorization"] = ""
+      await router.push("/login")
+    }
+    onMounted( async() => {
+      const{ data } = await axios.get("user")
+      message.value = `Hi ${data.name}`
+    })
+
+    return{ message, logout }
+
+  },
   components: {
     Swiper, SwiperSlide 
   },
 
   data() {
     return {
+      displayModal: false,
+      selectedStyle:"全部",
       input: {
         style: "全部",
         name: "",
@@ -106,9 +160,9 @@ export default {
   },
   computed: {
     styleGroup() {
-      if (this.input.style !== "全部") {
+      if (this.selectedStyle !== "全部") {
         return this.killerGroup.filter((item) => {
-          return item.style == this.input.style
+          return item.style == this.selectedStyle
         })
       } else {
         return this.killerGroup
@@ -138,10 +192,13 @@ export default {
   },
   methods: {
     submitHandler() {
-      let { style, name } = this.input
-      if (!style || !name) return
+      const fd = new FormData()
+      fd.append("image", this.input.skills[0], this.input.skills[0].name)
+      fd.append("style", this.input.style)
+      fd.append("name", this.input.name)
+      if (!this.input.style || !this.input.name) return
       this.axios
-        .post("http://localhost:1020/killerGroup", this.input)
+        .post("http://localhost:1020/killerGroup", fd)
         .then((res) => {
           this.killerGroup.push(res.data)
           this.cancelHandler()
@@ -166,6 +223,12 @@ export default {
             console.log(err)
           })
       }
+    },
+    onFileSelected(event){
+      console.log(event)
+    },
+    ModalStatue() {
+      this.displayModal = this.displayModal ? false : true
     },
   },
 }

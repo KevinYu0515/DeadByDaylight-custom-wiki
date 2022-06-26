@@ -4,11 +4,11 @@
       <div class="container">
         <div class="login-form">
           <h1>Register</h1>
-          <form>
-            <input type="text" name="" placeholder="Username"/>
-            <input type="password" name="" placeholder="Password"/>
-            <input type="submit" name="" value="Confirm"/>
-            <input type="Button" name="" value="Back" @click="jump('login')"/>
+          <form @submit.prevent="submit">
+            <input type="email" name="email" placeholder="example@example.com"/>
+            <input type="password" name="password" placeholder="Password"/>
+            <input type="submit" value="Confirm"/>
+            <input type="button" value="Back" @click="jump('login')"/>
           </form>
         </div>
       </div>
@@ -17,7 +17,20 @@
 </template>
 
 <script>
+import axios from "axios"
+import { useRouter } from "vue-router"
+
 export default {
+  setup(){
+    const router = useRouter()
+    const submit = async e =>{
+      const form = new FormData(e.target)
+      const inputs = Object.fromEntries(form.entries())
+      await axios.post("register", inputs)
+      await router.push("/login")
+    }
+    return{ submit }
+  },
 methods: {
     jump(msg){
       this.$router.push({ path: msg })

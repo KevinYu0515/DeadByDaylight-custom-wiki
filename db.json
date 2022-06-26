@@ -291,6 +291,24 @@
         "Ring of Fury",
         "Deluge of Fear"
       ]
+    },
+    {
+      "style": "追獵型",
+      "name": "小丑",
+      "killer": "001",
+      "sub_name": [
+        ""
+      ],
+      "skills": [
+        "未知",
+        "未知",
+        "未知"
+      ],
+      "attack": [
+        "UnKnown",
+        "UnKnown"
+      ],
+      "id": 17
     }
   ]
 }
