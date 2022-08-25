@@ -4,9 +4,10 @@
     justify-content: center;
     align-items: center;
     background: darkslategrey;
-    margin-top: 40px;
+    margin-top: 70px;
     min-height: 800px;
     height:auto;
+    padding-bottom: 100px;
 
     .container{
         width: 1320px;
@@ -15,28 +16,34 @@
         justify-content: center;
         align-items: center;
         flex-wrap: wrap;
-        padding: 50px;
+        padding-top: 40px;
         .card{
+            cursor:pointer;
             position: relative; 
-            width: 240px;
-            height: 315px;
+            width: 192px;
+            height: 252px;
             margin: 15px;
             overflow: hidden;
+            opacity: .5;
+            transition: .2s;
+            &:hover{
+                opacity: .95;
+            }
             span{
                 position: absolute;
                 display: block;
                 width: 0px;
                 height: 0px;
-                border-radius: 50%;
                 opacity: .95;
-                background-color: firebrick;
                 z-index: 1;
                 transform: translate(-50%, -50%);
-                transition: width .5s, height .5s;
+                transition: width .3s, height .3s;
             }
             &:hover span{
-                width: 2000px;
-                height: 2000px;
+                background:url(~@/assets/picture/splash.png);
+                background-size: cover;
+                width: 500px;
+                height: 500px;
             }
             .imgBox{
                 position: absolute;
@@ -70,6 +77,10 @@
                     opacity: 0;
                     transform: translateY(50px);
                     transition: .2s;
+                    p{ 
+                        font-size: small;
+                        line-height: 2px;
+                    }
                 }
             }
             &:hover .content div{

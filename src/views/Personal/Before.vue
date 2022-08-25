@@ -233,6 +233,6 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "@/assets/scss/others/personal/before.scss";
+@import "@/assets/scss/personal/before.scss";
 @import url("https://cdn-uicons.flaticon.com/uicons-bold-straight/css/uicons-bold-straight.css");
 </style>

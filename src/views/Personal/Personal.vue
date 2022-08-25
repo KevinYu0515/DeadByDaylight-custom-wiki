@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-v-on-native-modifier -->
 <template>
   <div class="personal">
     <div class="container">
@@ -6,19 +7,22 @@
           :options="levelOptions"
           optionLabel="level"
           optionValue="level"
-          placeholder="None"
+          placeholder="ALL"
           class="mx-3 col-3"
         />
       <InputText 
         placeholder="KillerName"
         v-model.trim="searchName"
-        @keyup.enter="inputHandler"
       />
       <InputText 
         placeholder="AddKiller"
         class="mx-3"
         v-model.trim="newKillerName"
-        @keyup.enter="inputHandler"
+      />
+      <InputText 
+        placeholder="AddCover"
+        class="mx-3"
+        v-model.trim="newKillerCover"
       />
       <Button 
         label="Add"  
@@ -28,23 +32,28 @@
       />
     </div>
     <div class="container">
-      <div 
-        class="card"
-        v-for="killer in nameGroup"
-        :key="killer"
-      >
-        <span></span>
-        <div class="imgBox"><img :src="require(`@/assets/picture/killer/${killer.index}.png`)" alt="killer"/></div>
-        <div class="content">
-          <div>
-            <h2 style="padding-bottom:20px">{{killer.name}}</h2>
-            <p style="margin:.5px">move： {{killer.move}} m/s</p>
-            <br>
-            <p style="margin:.5px">terror： {{killer.terror}} m</p>
-            <br>
-            <p style="margin:.5px">height： {{killer.height}}</p>
+        <div 
+          class="card"
+          v-for="killer in nameGroup"
+          :key="killer"
+        >
+
+        <a @click="passDataToRecords(killer)">
+          <span></span>
+          <div class="imgBox">
+              <img :src="require(`@/assets/picture/killer/${killer.index}.png`)" alt="killer"/>
           </div>
-        </div>
+          <div class="content">
+            <div>
+              <h3 style="padding-bottom:20px">{{killer.name}}</h3>
+              <p>move： {{killer.move}} m/s</p>
+              <br>
+              <p>terror： {{killer.terror}} m</p>
+              <br>
+              <p>height： {{killer.height}}</p>
+            </div>
+          </div>
+        </a>
       </div>
     </div>
   </div>
@@ -80,6 +89,22 @@ export default {
           return this.levelGroup
         }
       },
+    },
+    methods:{
+      passDataToRecords(killer){
+        this.$router.push({
+          path:"/records",
+          name:"Records",
+          query:{
+            killerIndex: killer.index,
+            killerName: killer.name,
+            killerMove: killer.move,
+            killerTerror: killer.terror,
+            killerHeight: killer.height
+          }
+        }),
+        console.log("pass")
+      }
     }
 }
 </script>
@@ -129,11 +154,12 @@ onUpdated(() => {
 })
 
 const newKillerName = ref("")
+const newKillerCover = ref("")
 const newKillerLevel = ref("")
 
 const addKiller = () => {
   addDoc(collection(db, "killers"), {
-    index: "005",
+    index: newKillerCover.value,
     name: newKillerName.value,
     level: newKillerLevel.value,
     move: 4.6,
@@ -141,9 +167,11 @@ const addKiller = () => {
     height: "tall"
   })
   newKillerName.value = ""
+  newKillerCover.value = ""
+  newKillerLevel.value = ""
 }
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/others/personal/personal.scss";
+@import "@/assets/scss/personal/personal.scss";
 </style>

@@ -48,5 +48,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/others/personal/register.scss";
+@import "@/assets/scss/personal/register.scss";
 </style>
