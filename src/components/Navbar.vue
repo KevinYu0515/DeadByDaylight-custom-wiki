@@ -4,11 +4,7 @@
       <router-link to="/" class="logo">Logo</router-link>
       <ul v-show="!mobile" class="navigation">
         <li><router-link to="/home">Home</router-link></li>
-        <li><router-link to="/about">About</router-link></li>
-        <li><router-link to="/program">Program</router-link></li>
         <li><router-link to="/login">Personal</router-link></li>
-        <li><router-link to="/creativity">Creativity</router-link></li>
-        <li><router-link to="/outdoors">Outdoors</router-link></li>
       </ul>
       <div class="navbar_icon">
         <i
@@ -21,11 +17,7 @@
       <transition name="mobile-nav">
         <ul v-show="mobileNav" class="dropdown-nav">
           <li><router-link to="/home">Home</router-link></li>
-          <li><router-link to="/about">About</router-link></li>
-          <li><router-link to="/program">Program</router-link></li>
           <li><router-link to="/login">Personal</router-link></li>
-          <li><router-link to="/creativity">Creativity</router-link></li>
-          <li><router-link to="/outdoors">Outdoors</router-link></li>
         </ul>
       </transition>
     </nav>

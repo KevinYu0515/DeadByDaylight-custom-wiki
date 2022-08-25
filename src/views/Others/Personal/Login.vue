@@ -32,12 +32,8 @@ export default {
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`
       await router.push("/personal")
     }
-    return{ submit }
-  },
-  methods: {
-    jump(msg){
-      this.$router.push({ path: msg })
-    },
+    const jump = (msg) => { router.push(msg) }
+    return{ submit, jump }
   },
 }
 </script>

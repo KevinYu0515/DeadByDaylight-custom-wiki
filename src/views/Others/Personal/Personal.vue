@@ -1,241 +1,149 @@
 <template>
   <div class="personal">
-    <h3>{{ message }}</h3>
-    <div class="container01 grid w-8 flex justify-content-center align-items-center">
+    <div class="container">
       <Dropdown
-        v-model="selectedStyle"
-        :options="styleOptions"
-        optionLabel="style"
-        optionValue="style"
-        placeholder="全部"
-        class="mx-3 col-3"
+          v-model="selectedLevel"
+          :options="levelOptions"
+          optionLabel="level"
+          optionValue="level"
+          placeholder="None"
+          class="mx-3 col-3"
+        />
+      <InputText 
+        placeholder="KillerName"
+        v-model.trim="searchName"
+        @keyup.enter="inputHandler"
       />
-      <div class="col-6 md:col-4">
-        <div class="p-inputgroup">
-            <InputText 
-              placeholder="KillerName" 
-              v-model.trim="input.name" 
-              @keyup.enter="inputHandler"
-            />
-            <Button icon="pi pi-search" class="p-button-warning"/>
-        </div>
-      </div>
+      <InputText 
+        placeholder="AddKiller"
+        class="mx-3"
+        v-model.trim="newKillerName"
+        @keyup.enter="inputHandler"
+      />
       <Button 
         label="Add"  
-        class="p-button-danger mx-2 col-fixed"
+        class="p-button-danger mx-3 col-fixed"
         style="max-width:100%"
-        @click="ModalStatue" 
+        @click="addKiller" 
       />
-      <Dialog 
-        header="Append New Role" 
-        v-model:visible="displayModal" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-        :style="{width: '50vw'}" :modal="true"
-      >
-        <div class="grid my-2">
-          <select type="text" class="mx-2 h-2rem col-2" v-model="input.style" v-tooltip.top="'Choose your style'">
-            <option v-for="item in styleOptions" :key="item">
-              {{ item.style }}
-            </option>
-          </select>
-          <input type="text" class="h-2rem col-3" placeholder="KillerName" v-tooltip.top="'Enter your killerName'" />
-          <input type="text" class="h-2rem mx-2 col-4" placeholder="KillerSubName" v-tooltip.top="'Enter your subName'" />
-        </div>
-        <div class="grid my-2 mx-2">
-          <p class="col-2">First Skill</p>
-          <input type="file" class="col-10" @change="onFileSelected" v-tooltip.left="'Upload your first skill'"/>
-          <p class="col-2">Second Skill</p>
-          <input type="file" class="col-10" @change="onFileSelected" v-tooltip.left="'Upload your second skill'"/>
-          <p class="col-2">Third Skill</p>
-          <input type="file" class="col-10" @change="onFileSelected" v-tooltip.left="'Upload your third skill'"/>
-        </div>
-        <div class="grid my-2 mx-2">
-          <p class="col-2">Weapon</p>
-          <input type="file" class="col-10" @change="onFileSelected" v-tooltip.left="'Upload your weapon'"/>
-          <p class="col-2">Ability</p>
-          <input type="file" class="col-10" @change="onFileSelected" v-tooltip.left="'Upload your ability'"/>
-        </div>
-        <template #footer>
-            <Button label="No" icon="pi pi-times" @click="ModalStatue" class="p-button-text"/>
-            <Button label="Yes" icon="pi pi-check" @click="ModalStatue" autofocus />
-        </template>
-      </Dialog>
-      <Button href="javascript:void(0)" class="p-button-success mx-2" @click="logout">Logout</Button>
     </div>
-    <div class="container02">
-      <swiper
-        :effect="'coverflow'"
-        :grabCursor="true"
-        :centeredSlides="true"
-        :slidesPerView="'auto'"
-        :coverflowEffect="{
-          rotate: 0,
-          stretch: 60,
-          depth: 200,
-          modifier: 2,
-          slideShadows: false,
-        }"
-        :pagination="{ clickable: true, dynamicBullets: false }"
-        class="mySwiper"
+    <div class="container">
+      <div 
+        class="card"
+        v-for="killer in nameGroup"
+        :key="killer"
       >
-        <swiper-slide
-          class="card"
-          v-for="(item, index) in nameGroup"
-          :key="index"
-        >
-          <div class="circle"></div>
-          <div class="content grid">
-            <div class="title col-12 text-4xl">
-              {{item.name}}<span class="text-sm" v-if="item.sub_name != null">{{item.sub_name.join("、")}}</span>
-            </div>
-            <div 
-              class="skill col-4"
-              v-for="(skill, index2) in item.skills"
-              :key="index2"
-            >
-              <img :src="require(`@/assets/icon/skills/${skill}.png`)" alt="none" :title="`${skill}`">
-            </div>
-            <div 
-              class="attack col-3 mx-2"
-              v-for="(attack, index3) in item.attack"
-              :key="index3"
-            >
-              <img :src="require(`@/assets/icon/attack/${attack}.png`)" alt="none" :title="`${attack}`">
-            </div>
+        <span></span>
+        <div class="imgBox"><img :src="require(`@/assets/picture/killer/${killer.index}.png`)" alt="killer"/></div>
+        <div class="content">
+          <div>
+            <h2 style="padding-bottom:20px">{{killer.name}}</h2>
+            <p style="margin:.5px">move： {{killer.move}} m/s</p>
+            <br>
+            <p style="margin:.5px">terror： {{killer.terror}} m</p>
+            <br>
+            <p style="margin:.5px">height： {{killer.height}}</p>
           </div>
-          <img :src="require(`@/assets/picture/killer/${item.killer}.png`)" alt="killer001">
-        </swiper-slide>
-      </swiper>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-
 <script>
-import { Swiper, SwiperSlide } from "vue-awesome-swiper"
-import SwiperCore, { Pagination,  EffectCoverflow } from "swiper"
-import axios from "axios"
-import { useRouter } from "vue-router"
-import { onMounted, ref } from "vue"
-import "swiper/swiper-bundle.css"
-
-SwiperCore.use([Pagination,  EffectCoverflow])
-
 export default {
-  setup(){
-    const router = useRouter()
-    const message = ref("")
-    const logout = async() => {
-      await axios.post("logout", {}, { withCredentials:true })
-      axios.defaults.headers.common["Authorization"] = ""
-      await router.push("/login")
+  data(){
+    return{
+      searchName:"",
+      selectedLevel: "ALL",
+      levelOptions: ([ {level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}])
     }
-    onMounted( async() => {
-      const{ data } = await axios.get("user")
-      message.value = `Hi ${data.name}`
-    })
-
-    return{ message, logout }
-
   },
-  components: {
-    Swiper, SwiperSlide 
-  },
-
-  data() {
-    return {
-      displayModal: false,
-      selectedStyle:"全部",
-      input: {
-        style: "全部",
-        name: "",
-        killer: "001",
-        sub_name: [""],
-        skills: ["未知", "未知", "未知"],
-        attack: ["UnKnown", "UnKnown"],
+  computed:{
+    levelGroup() {
+        if (this.selectedLevel !== "ALL") {
+          return this.killers.filter((item) => {
+            return item.level == this.selectedLevel
+          })
+        } else {
+          return this.killers
+        }
       },
-      killerGroup: [],
-      buttons: ["Add", "Cancel", "Delete"],
-      styleOptions: ([ {style:"全部"}, {style:"追獵型"}, {style:"守屍型"}, {style:"暗殺型"}, {style:"控場型"}])
+      nameGroup() {
+        if (this.searchName) {
+          return this.killers.filter((item) => {
+            let name = item.name.toLowerCase()
+            let keyword = this.searchName.toLowerCase()
+            return name.indexOf(keyword) !== -1
+          })
+        } else {
+          return this.levelGroup
+        }
+      },
     }
-  },
-  computed: {
-    styleGroup() {
-      if (this.selectedStyle !== "全部") {
-        return this.killerGroup.filter((item) => {
-          return item.style == this.selectedStyle
-        })
-      } else {
-        return this.killerGroup
-      }
-    },
-    nameGroup() {
-      if (this.input.name) {
-        return this.killerGroup.filter((item) => {
-          let name = item.name.toLowerCase()
-          let keyword = this.input.name.toLowerCase()
-          return name.indexOf(keyword) !== -1
-        })
-      } else {
-        return this.styleGroup
-      }
-    },
-  },
-  mounted() {
-    this.axios
-      .get("http://localhost:1020/killerGroup")
-      .then((res) => {
-        this.killerGroup = res.data
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  },
-  methods: {
-    submitHandler() {
-      const fd = new FormData()
-      fd.append("image", this.input.skills[0], this.input.skills[0].name)
-      fd.append("style", this.input.style)
-      fd.append("name", this.input.name)
-      if (!this.input.style || !this.input.name) return
-      this.axios
-        .post("http://localhost:1020/killerGroup", fd)
-        .then((res) => {
-          this.killerGroup.push(res.data)
-          this.cancelHandler()
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    },
-    cancelHandler() {
-      this.input.name = ""
-    },
-    deleteHandler(item) {
-      let target = item
-      if (confirm(`Do you want to remove ${target.name} ?`)) {
-        this.axios
-          .delete("http://localhost:1020/killerGroup/" + target.id)
-          .then((res) => {
-            this.killerGroup.splice(target.id - 1, 1)
-            console.log(res)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      }
-    },
-    onFileSelected(event){
-      console.log(event)
-    },
-    ModalStatue() {
-      this.displayModal = this.displayModal ? false : true
-    },
-  },
 }
 </script>
 
+<script setup>
+import { ref, onMounted, onUpdated } from "vue"
+import { db } from "@/firebase"
+import { collection, onSnapshot,addDoc } from "firebase/firestore"
+import $ from "jquery"
+const killers = ref([])
+
+onMounted(() => {
+  onSnapshot(collection(db,"killers"), (querySnapshot) => {
+    let fbkillers = []
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data())
+      const killer = {
+        id: doc.id,
+        index: doc.data().index,
+        name: doc.data().name,
+        move: doc.data().move,
+        terror: doc.data().terror,
+        height: doc.data().height,
+        level: doc.data().level
+      }
+      fbkillers.push(killer)
+    })
+    killers.value = fbkillers
+  })
+}),
+
+onUpdated(() => {
+  $(document).ready(function(){
+    $(".card").on("mousein", function(e){
+      var x = e.pageX - $(this).offset().left
+      var y = e.pageY - $(this).offset().top
+      $(this).find("span").css({top:y, left:x})
+      console.log("x:",x,"y:",y)
+    })
+    $(".card").on("mouseout", function(e){
+      var x = e.pageX - $(this).offset().left
+      var y = e.pageY - $(this).offset().top
+      $(this).find("span").css({top:y, left:x})
+      console.log("x:",x,"y:",y)
+    })
+  })
+})
+
+const newKillerName = ref("")
+const newKillerLevel = ref("")
+
+const addKiller = () => {
+  addDoc(collection(db, "killers"), {
+    index: "005",
+    name: newKillerName.value,
+    level: newKillerLevel.value,
+    move: 4.6,
+    terror: 32,
+    height: "tall"
+  })
+  newKillerName.value = ""
+}
+</script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/others/personal/personal.scss";
-@import url("https://cdn-uicons.flaticon.com/uicons-bold-straight/css/uicons-bold-straight.css");
 </style>

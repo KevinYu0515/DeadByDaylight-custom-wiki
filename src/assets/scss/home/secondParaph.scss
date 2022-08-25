@@ -8,48 +8,6 @@
     margin: 0px;
     overflow: hidden;
 
-    img{
-        width:614px;
-        height:436px;
-        display: flex;
-        margin:80px 0 50px 80px;
-        border-color: rgb(255, 255, 255);
-        border-style: solid;
-        padding: 3px;
-    }
-
-    #content{
-        max-width: 650px;
-        margin: 80px 0px 50px 100px;
-        text-align: left;
-
-        #container{
-            width: 650px;
-            display: flex;
-            flex-direction: row;
-            height: 60px;
-            margin-bottom: 30px;
-        }
-
-        h1{
-            font-family:'Fredoka One', cursive;
-            color:#002984;
-            letter-spacing: 1px;
-            font-size: 3.5em;
-            line-height: 1.5em;
-            font-weight: 700;
-            margin-right: 25px;
-        }
-
-        p{
-            font-family: 'Source Sans Pro', sans-serif;
-            color:white;
-            font-size: 18px;
-            word-spacing: 1px;
-            line-height: 1.5em;
-        }
-    }
-
     .box_container{
         margin-top: 40px;
         display: flex;

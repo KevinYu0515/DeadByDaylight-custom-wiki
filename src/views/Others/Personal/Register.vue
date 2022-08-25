@@ -5,11 +5,11 @@
         <div class="login-form">
           <h1>Register</h1>
           <form @submit.prevent="submit">
-            <input type="email" name="email" placeholder="example@example.com"/>
-            <input type="password" name="password" placeholder="Password"/>
-            <input type="submit" value="Confirm"/>
-            <input type="button" value="Back" @click="jump('login')"/>
+            <input type="email" name="email" v-model="email" placeholder="example@example.com"/>
+            <input type="password" name="password" v-model="password" placeholder="Password"/>
+            <input type="submit" name="submit" value="Confirm"/>
           </form>
+          <input type="button" value="Back" @click="back('login')"/>
         </div>
       </div>
     </section>
@@ -23,19 +23,27 @@ import { useRouter } from "vue-router"
 export default {
   setup(){
     const router = useRouter()
-    const submit = async e =>{
-      const form = new FormData(e.target)
-      const inputs = Object.fromEntries(form.entries())
-      await axios.post("register", inputs)
-      await router.push("/login")
+    const back = (msg) => {  router.push(msg) }
+    return { back }
+  },
+
+  data() {
+    return{ 
+      email:"",
+      password:""
     }
-    return{ submit }
   },
-methods: {
-    jump(msg){
-      this.$router.push({ path: msg })
+
+  methods:{
+    async submit(){
+      const response = await axios.post("register", {
+        email: this.email,
+        password: this.password
+      })
+      console.log(response)
+      this.$router.push("/login")
     },
-  },
+  }
 }
 </script>
 
