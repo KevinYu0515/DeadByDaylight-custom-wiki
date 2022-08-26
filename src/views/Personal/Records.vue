@@ -3,7 +3,7 @@
     <div class="leftBg">
       <div class="card">
         <div class="imgBox">
-          <img :src="require(`@/assets/picture/killer/${killerIndex}.png`)" alt="killer"/>
+          <img :src="killerCover" alt="killer"/>
         </div>
       </div>
       <div class="content">
@@ -17,13 +17,18 @@
             </div>
         </div>
     </div>
+    <div class="container">
+      <div class="skills">
+        
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
     props:{
-        killerIndex:{type: String},
+        killerCover:{type: String},
         killerName:{type: String},
         killerMove:{type: String},
         killerTerror:{type: String},

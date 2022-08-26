@@ -1,8 +1,7 @@
 .records{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+    justify-content: flex-start;
+    align-items: center;
     background: darkslategrey;
     height:auto;
     margin-top: 70px;
@@ -55,6 +54,26 @@
                     font-size:large;
                     line-height: 5px;
                 }
+            }
+        }
+    }
+    .container{
+        width: auto;
+        height: 700px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px 0px 0px 50px;
+        .skills{
+            position: relative;
+            transform: scale(50%);
+            width: auto;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img{
+                transform: scale(120%);
             }
         }
     }
