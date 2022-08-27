@@ -1,4 +1,5 @@
 <template>
+  <Navbar></Navbar>
   <div class="login">
     <section>
         <div class="container">
@@ -21,8 +22,10 @@
 <script>
 import axios from "axios"
 import { useRouter } from "vue-router"
+import Navbar from "../../components/Navbar.vue"
 
 export default {
+  components: { Navbar },
   setup(){
     const router = useRouter()
     const submit = async e =>{

@@ -34,6 +34,11 @@ const routes = [
     component:()=> import(/* webpackChunkName: "records" */"../views/Personal/Records.vue"),
     props: (route) => route.query
   },
+  {
+    path:"/skills",
+    name:"Skills",
+    component:()=> import(/* webpackChunkName: "records" */"../views/Personal/Skills.vue"),
+  },
 ]
 
 const router = createRouter({

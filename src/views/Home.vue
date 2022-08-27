@@ -1,4 +1,5 @@
 <template>
+  <Navbar></Navbar>
   <section id="home">
     <div class="home_firstParaph">
       <div class="photo_bgRight"></div>
@@ -23,9 +24,9 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
+import Navbar from "../components/Navbar.vue"
 export default {
+  components:{ Navbar },
   data: () => ({
     media_icons: [
       {
