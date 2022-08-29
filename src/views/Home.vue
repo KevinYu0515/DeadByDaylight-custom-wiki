@@ -21,12 +21,14 @@
       <img class="picture" src="../assets\picture\bg-1.jpg" />
     </div>
   </section>
+  <Footer></Footer>
 </template>
 
 <script>
 import Navbar from "../components/Navbar.vue"
+import Footer from "../components/Footer.vue"
 export default {
-  components:{ Navbar },
+  components:{ Navbar, Footer },
   data: () => ({
     media_icons: [
       {

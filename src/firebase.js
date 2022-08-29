@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app"
+import firebase from "firebase/compat/app"
 import { getFirestore } from "firebase/firestore"
 import { getStorage } from "firebase/storage"
 /* code from our Firebase console */
@@ -13,7 +13,7 @@ const firebaseConfig = {
 }
 // Initialize Firebase
 
-const firebaseApp = initializeApp(firebaseConfig)
+const firebaseApp = firebase.initializeApp(firebaseConfig)
 var db = getFirestore(firebaseApp)
 const storage = getStorage(firebaseApp)
 

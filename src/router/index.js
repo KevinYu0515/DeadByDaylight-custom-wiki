@@ -1,6 +1,8 @@
-
 import { createRouter, createWebHistory } from "vue-router"
 import Home from "../views/Home.vue"
+import firebase from "firebase/compat/app"
+import "@/firebase"
+import "firebase/compat/auth"
 
 
 const routes = [
@@ -26,7 +28,8 @@ const routes = [
   {
     path:"/personal",
     name:"Personal",
-    component:()=> import(/* webpackChunkName: "personal" */"../views/Personal/Personal.vue")
+    component:()=> import(/* webpackChunkName: "personal" */"../views/Personal/Personal.vue"),
+    meta:{ "requiresAuth": true }
   },
   {
     path:"/records",
@@ -44,6 +47,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+})
+
+router.beforeEach((to, from, next) =>{
+  const requiresAuth = to.matched.some( record => record.meta.requiresAuth)
+  const isAuthenticated = firebase.auth().currentUser
+  if(requiresAuth && !isAuthenticated){
+    next("/login")
+  }else{
+    next()
+  }
 })
 
 export default router

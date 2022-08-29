@@ -44,30 +44,6 @@
             required
           />
           <br/>
-          <InputText 
-            placeholder="Move Speed(m/s)"
-            class="mx-1 my-1"
-            style="width:20%"
-            v-model.trim="newKillerMove"
-            required
-          />
-          <InputText 
-            placeholder="Terror Radius(m)"
-            class="mx-1 my-1"
-            style="width:20%"
-            v-model.trim="newKillerTerror"
-            required
-          />
-          <Dropdown
-            v-model="newKillerHeight"
-            :options="heightOptions"
-            optionLabel="hei"
-            optionValue="hei"
-            placeholder="Height"
-            class="mx-1 my-1"
-            style="width:20%"
-          />
-          <br/>
           <Button 
             label="Upload Cover"  
             class="p-button-warning mx-3 my-2 col-fixed"
@@ -92,7 +68,6 @@
           v-for="killer in nameGroup"
           :key="killer"
         >
-          <div class="delete"><i class="fi fi-br-angry"></i></div>
           <a @click="passDataToRecords(killer)">
             <span></span>
             <div class="imgBox">
@@ -101,7 +76,7 @@
             <div class="content">
               <div>
                 <h3 style="padding-bottom:20px">{{killer.name}}</h3>
-                <p>move： {{killer.move}} m/s</p>
+                <p>move： {{filltermove(killer)}} m/s</p>
                 <br>
                 <p>terror： {{killer.terror}} m</p>
                 <br>
@@ -156,17 +131,27 @@ export default {
           name:"Records",
           query:{
             killerID: killer.id,
+            killerBackground: killer.background,
             killerCover: killer.cover,
             killerName: killer.name,
             killerMove: killer.move,
+            killerAltMove: killer.altMove,
             killerTerror: killer.terror,
             killerHeight: killer.height,
-            killerSkill_1: killer.skill_1,
-            killerSkill_2: killer.skill_2,
-            killerSkill_3: killer.skill_3,
+            killerSkills: killer.skills,
+            reSkills: killer.reSkills,
+            killerWeapon: killer.weapon,
+            killerPower: killer.power,
+            killerRealName: killer.realName
           }
         }),
         console.log("pass")
+      },
+      filltermove(killer){
+        if(!killer.move) return killer.move
+        if(killer.move.length > 11 ){
+          return killer.move.slice(7, 11)
+        }else return killer.move
       },
       previewImage(event){
         const files = event.target.files
@@ -217,16 +202,19 @@ onMounted(() => {
       console.log(doc.id, "=>", doc.data())
       const killer = {
         id: doc.id,
-        index: doc.data().index,
+        background: doc.data().background,
         name: doc.data().name,
-        move: doc.data().move,
-        terror: doc.data().terror,
+        move: doc.data().movementSpeed,
+        altMove: doc.data().altnativeMoveSpeed,
+        terror: doc.data().terrorRadius,
         height: doc.data().height,
+        weapon: doc.data().weapon,
+        power: doc.data().power,
         level: doc.data().level,
         cover: doc.data().cover,
-        skill_1: doc.data().skill_1,
-        skill_2: doc.data().skill_2,
-        skill_3: doc.data().skill_3
+        skills: doc.data().skills,
+        reSkills: doc.data().recommandSkills,
+        realName: doc.data().realName
       }
       fbkillers.push(killer)
     })
@@ -254,25 +242,16 @@ onUpdated(() => {
 const newKillerName = ref("")
 const newKillerCover = ref("")
 const newKillerLevel = ref("")
-const newKillerMove = ref("")
-const newKillerTerror = ref("")
-const newKillerHeight = ref("")
 
 const addKiller = () => {
   addDoc(collection(db, "killers"), {
     name: newKillerName.value,
     level: newKillerLevel.value,
-    move: newKillerMove.value,
-    terror: newKillerTerror.value,
-    height: newKillerHeight.value,
     cover: imageUrl.value
   })
   newKillerName.value = ""
   newKillerCover.value = ""
   newKillerLevel.value = ""
-  newKillerMove.value = ""
-  newKillerTerror.value = ""
-  newKillerHeight.value = ""
   imageUrl.value = ""
   image.value = null
   displayModal.value = false

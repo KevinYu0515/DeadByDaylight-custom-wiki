@@ -1,15 +1,14 @@
 <template>
   <div class="app">
     <router-view />
-    <Footer></Footer>
   </div>
 </template>
 
 <script>
-import Footer from "./components/Footer.vue"
+
 export default {
   name: "App",
-  components: { Footer },
+  components: {},
 }
 </script>
 
@@ -19,6 +18,10 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Rowdies&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Quicksand&family=Ubuntu&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Amaranth:ital,wght@1,700&family=Carter+One&family=Permanent+Marker&family=Rubik+Dirt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Carter+One&family=Permanent+Marker&family=Rubik+Dirt&display=swap');
+@import url('https://fonts.googleapis.com/earlyaccess/notosanstc.css');
+@import url('https://fonts.googleapis.com/css2?family=Amaranth:ital,wght@1,700&family=Carter+One&family=Permanent+Marker&family=Rubik+Dirt&family=Rubik+Wet+Paint&display=swap');
 
 * {
   margin: 0;

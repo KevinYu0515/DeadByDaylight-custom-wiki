@@ -2,21 +2,30 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    background: darkslategrey;
     height:auto;
+    padding-right: 160px;
+    background-color: darkslategrey;
+    .bg {
+        position: fixed;
+        left:70px;
+        height:180vh;
+        opacity: .1;
+        width:100%;
+    }
     .leftBg{
-        width:220px;
-        height:700px;
+        width: 220px;
+        height: 180vh;
         background-color: darkolivegreen;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        z-index:2;
         .card{
             position: relative; 
             width: 192px;
             height: 252px;
-            margin: 15px;
+            margin: 40px 15px 15px 15px;
             overflow: hidden;
             left:100px;
             .imgBox{
@@ -40,7 +49,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            left: 100px;
+            left: 200px;
             div{
                 color:aliceblue;
                 visibility:  visible;
@@ -49,8 +58,9 @@
                     letter-spacing: 2px;
                 }
                 p{ 
-                    font-size:large;
-                    line-height: 5px;
+                    font-size: large;
+                    width:400px;
+                    line-height:5px;
                 }
             }
         }
@@ -64,95 +74,167 @@
         }
     }
     .container{
-        width: auto;
+        width: 100%;
         height: auto;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
         padding: 0px 0px 0px 200px;
+        z-index:2;
+        hr{ 
+            width: 100%;
+            height: 2px;
+            background-color:black;
+            border:none;
+            margin:0px 0px 20px 0px;
+        }
+        .killerbg{
+            width: 100%;
+            h1{
+                letter-spacing: 2px;
+                color:darkgoldenrod;
+                font-family: 'Carter One';
+            }
+            p{
+                word-spacing: 3px;
+                font-family: 'Amaranth';
+                font-size: 1em;
+                color:beige
+            }
+            margin-bottom: 40px;
+        }
         .skills{
             position: relative;
-            transform: scale(50%) translateX(-250px);
-            width: auto;
+            width: 100%;
             height: auto;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            img{
-                transform: scale(100%);
+            align-items: flex-start;
+            h1{
+                letter-spacing: 2px;
+                color:darkgoldenrod;
+                font-family: 'Carter One';
+                span a{
+                    margin:0 20px;
+                    font-size: large;
+                    font-style: italic;
+                    color: rgb(224, 173, 43);
+                    letter-spacing: 0;
+                    text-decoration: none;
+                }
             }
+            h3{
+                word-spacing: 3px;
+                font-family: 'Amaranth';
+                font-size: 1.2em;
+                color:beige
+            }
+            img{
+                transform: scale(80%);
+            }
+            margin-bottom: 40px;
+        }
+        .infor{
+            width: 100%;
+            h1{
+                letter-spacing: 2px;
+                color:darkgoldenrod;
+                font-family: 'Carter One';
+            }
+            p{
+                word-spacing: 3px;
+                font-family: 'Amaranth';
+                font-size: 1.2em;
+                color:beige;
+                span{
+                    font-family: 'Amaranth';
+                }
+                
+            }
+            margin-bottom: 40px;
         }
         .video{
-            width:auto;
+            width: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            .videoBox{
-                width: 300px;
-                height: 180px;
-                box-sizing: border-box;
-                padding: 0 10px;
-                figure{
-                    position: relative;
-                    margin: 0;
-                    padding: 0;
-                    overflow:hidden;
-                    img{
-                        width:100%;
-                        height:100%;
-                    }
-                    figcaption{
-                        position: absolute;
-                        top:20px;
-                        left:20px;
-                        right:20px;
-                        bottom: 20px;
-                        background: #fff;
-                        text-align: center;
-                        padding: 20px;
-                        opacity: 0;
-                        transition: .8s;
-                        transition-delay: .2s;
-                        transform: translateY(20px);
-                        z-index: 1;
-                        h1{
-                            margin: 0;
-                            padding: 0;
-                            font-size: 22px;
+            align-items: flex-start;
+            h1{
+                letter-spacing: 2px;
+                color:darkgoldenrod;
+                font-family: 'Carter One';
+            }
+            .videos{
+                display: flex;
+                .videoBox{
+                    width: 300px;
+                    height: 180px;
+                    box-sizing: border-box;
+                    padding: 0 10px;
+                    figure{
+                        position: relative;
+                        margin: 0;
+                        padding: 0;
+                        overflow:hidden;
+                        img{
+                            width:100%;
+                            height:100%;
                         }
-                        p{
-                            margin: 10px 0 0;
-                            padding: 0;
-                            font-size: 16px;
+                        figcaption{
+                            position: absolute;
+                            top:20px;
+                            left:20px;
+                            right:20px;
+                            bottom: 20px;
+                            background: #fff;
+                            text-align: center;
+                            padding: 20px;
+                            opacity: 0;
+                            transition: .8s;
+                            transition-delay: .2s;
+                            transform: translateY(20px);
+                            z-index: 1;
+                            h1{
+                                margin: 0;
+                                padding: 0;
+                                color:black;
+                                font-size: 22px;
+                            }
+                            p{
+                                margin: 10px 0 0;
+                                padding: 0;
+                                font-size: 16px;
+                            }
                         }
+                        &:hover figcaption{
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                        &::before, &::after{
+                            content: "";
+                            position: absolute;
+                            top: 0;
+                            height: 100%;
+                            width: 50%;
+                            background-color:dimgray;
+                            opacity:.8;
+                            transition: .5s;
+                        }
+                        &::before{
+                            left:-50%;
+                        }   
+                        &::after{
+                            right:-50%;
+                        }  
                     }
-                    &:hover figcaption{
-                        opacity: 1;
-                        transform: translateY(0);
+                    &:hover figure::before{
+                        left:0;
                     }
-                    &::before, &::after{
-                        content: "";
-                        position: absolute;
-                        top: 0;
-                        height: 100%;
-                        width: 50%;
-                        background-color:dimgray;
-                        opacity:.8;
-                        transition: .5s;
+                    &:hover figure::after{
+                        right:0;
                     }
-                    &::before{
-                        left:-50%;
-                    }   
-                    &::after{
-                        right:-50%;
-                    }  
-                }
-                &:hover figure::before{
-                    left:0;
-                }
-                &:hover figure::after{
-                    right:0;
                 }
             }
         }

@@ -6,40 +6,54 @@
           <div class="login-form">
             <h1>Sign in</h1>
             <form @submit.prevent="submit">
-              <input type="email" name="email" placeholder="Example@example.com"/>
-              <input type="password" name="password" placeholder="Password"/>
+              <input type="email" name="email" v-model="email" placeholder="Example@example.com"/>
+              <input type="password" name="password" v-model="password" placeholder="Password"/>
               <input type="submit" value="Login"/>
               <input type="button" value="Sign up" @click="jump('register')" />
-              <input type="button" value="Default" @click="jump('personal')" />
             </form>
             <a href="#">Forget Password</a>
           </div>
         </div>
       </section>
   </div>
+  <Footer></Footer>
 </template>
 
 <script>
-import axios from "axios"
 import { useRouter } from "vue-router"
 import Navbar from "../../components/Navbar.vue"
+import Footer from "../../components/Footer.vue"
+import "@/firebase"
+import firebase from "firebase/compat/app"
+import "firebase/compat/auth"
 
 export default {
-  components: { Navbar },
+  components: { Navbar, Footer },
   setup(){
     const router = useRouter()
-    const submit = async e =>{
-      const form = new FormData(e.target)
-      const inputs = Object.fromEntries(form.entries())
-      const {data} = await axios.post("login", inputs, { withCredentials: true })
-      axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`
-      await router.push("/personal")
-    }
     const jump = (msg) => { router.push(msg) }
-    return{ submit, jump }
+    return{ jump }
   },
+  data() {
+    return{ 
+      email:"",
+      password:""
+    }
+  },
+  methods:{
+    async submit(){
+      try{
+        const val = await firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+        console.log(val)
+        this.$router.push("/personal")
+      }catch(err){
+        console.log(err)
+      }
+    }
+  }
 }
 </script>
+
 
 <style lang="scss" scoped>
 @import "@/assets/scss/personal/login.scss";
