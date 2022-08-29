@@ -1,6 +1,8 @@
-
 import { createRouter, createWebHistory } from "vue-router"
 import Home from "../views/Home.vue"
+import firebase from "firebase/compat/app"
+import "@/firebase"
+import "firebase/compat/auth"
 
 
 const routes = [
@@ -14,49 +16,47 @@ const routes = [
     component:Home
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "../views/About.vue"),
-    meta: { title:"關於"}
-  },
-  {
-    path:"/program",
-    name:"Program",
-    component:()=> import(/* webpackChunkName: "program" */ "../views/Program.vue")
-  },
-  {
     path:"/login",
     name:"Login",
-    component:()=>import(/* webpackChunkName: "login" */"../views/Others/Personal/Login.vue")
+    component:()=>import(/* webpackChunkName: "login" */"../views/Authorization/Login.vue")
   },
   {
     path:"/register",
     name:"Register",
-    component:()=>import(/* webpackChunkName: "login" */"../views/Others/Personal/Register.vue")
+    component:()=>import(/* webpackChunkName: "login" */"../views/Authorization/Register.vue")
   },
   {
     path:"/personal",
     name:"Personal",
-    component:()=> import(/* webpackChunkName: "personal" */"../views/Others/Personal/Personal.vue")
+    component:()=> import(/* webpackChunkName: "personal" */"../views/Personal/Personal.vue"),
+    meta:{ "requiresAuth": true }
   },
   {
-    path:"/creativity",
-    name:"Creativity",
-    component:()=> import(/* webpackChunkName: "creativity" */"../views/Others/Creativity.vue")
+    path:"/records",
+    name:"Records",
+    component:()=> import(/* webpackChunkName: "records" */"../views/Personal/Records.vue"),
+    props: (route) => route.query
   },
   {
-    path:"/outdoors",
-    name:"Outdoors",
-    component:()=> import(/* webpackChunkName: "outdoors" */"../views/Others/Outdoors.vue")
+    path:"/skills",
+    name:"Skills",
+    component:()=> import(/* webpackChunkName: "records" */"../views/Personal/Skills.vue"),
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+})
+
+router.beforeEach((to, from, next) =>{
+  const requiresAuth = to.matched.some( record => record.meta.requiresAuth)
+  const isAuthenticated = firebase.auth().currentUser
+  if(requiresAuth && !isAuthenticated){
+    next("/login")
+  }else{
+    next()
+  }
 })
 
 export default router

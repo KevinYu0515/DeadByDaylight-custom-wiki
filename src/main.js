@@ -1,23 +1,24 @@
 import { createApp } from "vue"
 import App from "./App.vue"
 import router from "./router"
-import axios from "axios"
-import VueAxios from "vue-axios"
+import primevue from "./primevue"
+import "./interceptors/axios"
 import PrimeVue from "primevue/config"
-import Dropdown from "primevue/dropdown"
-import InputText from "primevue/inputtext"
-import Button from "primevue/button"
+import Tooltip from "primevue/tooltip"
+
+import "primevue/resources/themes/saga-blue/theme.css"
+import "primevue/resources/primevue.min.css"                                                                                    
+import "primeicons/primeicons.css"  
+
+const app = createApp(App)
 
 
-import "primevue/resources/themes/saga-blue/theme.css"       //theme
-import "primevue/resources/primevue.min.css"               //core css
-import "primeicons/primeicons.css"   
+app.use(router).use(PrimeVue)
 
-createApp(App)
-.use(router)
-.use(VueAxios, axios)
-.use(PrimeVue)
-.component("Dropdown",Dropdown)
-.component("InputText",InputText)
-.component("Button", Button)
-.mount("#app")
+primevue.components.forEach(component => {
+    app.component( component.name, component)
+})
+
+app.directive("Tooltip", Tooltip)
+
+app.mount("#app")
