@@ -11,12 +11,6 @@
           difficulties around, for what I can leave on the earth is only their
           view of my back since I have been marching toward the horizontal.
         </p>
-        <Button
-          @click="jump('about')"
-          class="p-button-infor"
-        >
-          Read more
-        </Button>
       </div>
       <img class="picture" src="../assets\picture\bg-1.jpg" />
     </div>
