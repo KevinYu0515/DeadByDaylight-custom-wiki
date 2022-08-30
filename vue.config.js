@@ -1,13 +1,15 @@
+/* eslint-disable quotes */
 module.exports = {
-    /*eslint-disable-next-line quotes*/
-    publicPath: process.env.NODE_ENV === 'production'?'/website-1.0/':'/',
-
-    "transpileDependencies": [
-        "vuetify"
-        ],
-
+    // publicPath: process.env.NODE_ENV === 'production'?'/website-1.0/':'/',
+    productionSourceMap: false,
+    publicPath: './',
+    outputDir: 'dist',
+    assetsDir: 'assets',
     devServer: {
-        https:true
-    }
-    
+        port: 8090,
+        host: '0.0.0.0',
+        https: true,
+        open: true
+    },
+
 }

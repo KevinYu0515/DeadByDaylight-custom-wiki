@@ -48,7 +48,7 @@
             label="Upload Cover"  
             class="p-button-warning mx-3 my-2 col-fixed"
             style="max-width:100%"
-            @click="input1" 
+            @click="clickInput1" 
           />
           <input type="file" name="file" ref="input1" style="display:none" @change="previewImage" accept="image/*" required/>
           <div v-if="image!=null">                     
@@ -96,93 +96,50 @@ export default {
   components:{ DBDNavbar },
   data(){
     return{
-      searchName: "",
-      selectedLevel: "ALL",
-      levelOptions: ([ {level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}]),
+      levelOptions: ([{level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}]),
       heightOptions: ([{hei:"Tall"}, {hei:"Average"}, {hei:"Short"}]),
     }
   },
-  computed:{
-    levelGroup() {
-        if (this.selectedLevel !== "ALL") {
-          return this.killers.filter((item) => {
-            return item.level == this.selectedLevel
-          })
-        } else {
-          return this.killers
+  methods:{
+    passDataToRecords(killer){
+      this.$router.push({
+        path:"/records",
+        name:"Records",
+        query:{
+          killerID: killer.id,
+          killerBackground: killer.background,
+          killerCover: killer.cover,
+          killerName: killer.name,
+          killerMove: killer.move,
+          killerAltMove: killer.altMove,
+          killerTerror: killer.terror,
+          killerHeight: killer.height,
+          killerSkills: killer.skills,
+          reSkills: killer.reSkills,
+          killerWeapon: killer.weapon,
+          killerPower: killer.power,
+          killerRealName: killer.realName
         }
-      },
-      nameGroup() {
-        if (this.searchName) {
-          return this.killers.filter((item) => {
-            let name = item.name.toLowerCase()
-            let keyword = this.searchName.toLowerCase()
-            return name.indexOf(keyword) !== -1
-          })
-        } else {
-          return this.levelGroup
-        }
-      },
+      }),
+      console.log("pass")
     },
-    methods:{
-      passDataToRecords(killer){
-        this.$router.push({
-          path:"/records",
-          name:"Records",
-          query:{
-            killerID: killer.id,
-            killerBackground: killer.background,
-            killerCover: killer.cover,
-            killerName: killer.name,
-            killerMove: killer.move,
-            killerAltMove: killer.altMove,
-            killerTerror: killer.terror,
-            killerHeight: killer.height,
-            killerSkills: killer.skills,
-            reSkills: killer.reSkills,
-            killerWeapon: killer.weapon,
-            killerPower: killer.power,
-            killerRealName: killer.realName
-          }
-        }),
-        console.log("pass")
-      },
-      filltermove(killer){
-        if(!killer.move) return killer.move
-        if(killer.move.length > 11 ){
-          return killer.move.slice(7, 11)
-        }else return killer.move
-      },
-      previewImage(event){
-        const files = event.target.files
-        let filename = files[0].name
-        if (filename.lastIndexOf(".") <= 0){
-          return alert("Please add a valid file!")
-        }
-        const fileReader = new FileReader()
-        fileReader.addEventListener("load",()=>{
-          this.imageUrl = fileReader.result
-        })
-        fileReader.readAsDataURL(files[0])
-        this.image = files[0]
-        this.onUpload()
-      },
-      onUpload(){
-        const storageRef = r(storage, `killersCover/${this.image.name}`)
-        uploadBytes(storageRef, this.image).then((snapshot) => {
-          console.log("Uploaded a blob or file!")
-          console.log(snapshot)
-        })
-      },
-      input1() {
-        this.$refs.input1.click()   
-      },
+    filltermove(killer){
+      if(!killer.move) return killer.move
+      if(killer.move.length > 11 ){
+        return killer.move.slice(7, 11)
+      }else return killer.move
+    },
+    clickInput1(){
+      this.$nextTick(()=>{
+        this.$refs.input1.click()
+      })
     }
+  }
 }
 </script>
 
 <script setup>
-import { ref, onMounted, onUpdated } from "vue"
+import { ref, onMounted, onUpdated, computed } from "vue"
 import axios from "axios"
 import { useRouter } from "vue-router"
 import { db, storage } from "@/firebase"
@@ -194,12 +151,14 @@ const killers = ref([])
 const imageUrl = ref("")
 const image = ref(null)
 const displayModal = ref(false)
+const selectedLevel = ref("ALL")
+const searchName = ref("")
+const input1 = ref(null)
 
 onMounted(() => {
   onSnapshot(collection(db,"killers"), (querySnapshot) => {
     let fbkillers = []
     querySnapshot.forEach((doc) => {
-      console.log(doc.id, "=>", doc.data())
       const killer = {
         id: doc.id,
         background: doc.data().background,
@@ -255,6 +214,50 @@ const addKiller = () => {
   imageUrl.value = ""
   image.value = null
   displayModal.value = false
+}
+
+const levelGroup = computed(() =>{
+    if (selectedLevel.value !== "ALL") {
+      return killers.value.filter((item) => {
+        return item.level == selectedLevel.value
+      })
+    } else {
+      return killers.value
+    }
+  })
+  
+const nameGroup = computed(() => {
+    if (searchName.value) {
+        return killers.value.filter((item) => {
+          let name = item.name.toLowerCase()
+          let keyword = searchName.value.toLowerCase()
+          return name.indexOf(keyword) !== -1
+        })
+      } else {
+        return levelGroup.value
+      }
+})
+
+const previewImage = event => {
+  const files = event.target.files
+  let filename = files[0].name
+  if (filename.lastIndexOf(".") <= 0){
+    return alert("Please add a valid file!")
+  }
+  const fileReader = new FileReader()
+  fileReader.addEventListener("load",()=>{
+    imageUrl.value = fileReader.result
+  })
+  fileReader.readAsDataURL(files[0])
+  image.value = files[0]
+  onUpload()
+}
+const onUpload = () => {
+  const storageRef = r(storage, `killersCover/${image.value.name}`)
+  uploadBytes(storageRef, image.value).then((snapshot) => {
+    console.log("Uploaded a blob or file!")
+    console.log(snapshot)
+  })
 }
 
 const modalStatue = () => {

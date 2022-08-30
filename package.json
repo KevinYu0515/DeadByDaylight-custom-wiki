@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "json": "json-server --watch db.json --port 1020",
-    "lintfix": "eslint --fix \"{,!(node_modules)/**/}*.{js,vue}\""
+    "lintfix": "eslint --fix \"{,!(node_modules)/**/}*.{js,vue}\"",
+    "deploy": "firebase deploy"
   },
   "dependencies": {
     "axios": "^0.27.2",

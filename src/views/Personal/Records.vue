@@ -42,19 +42,19 @@
       >
         <h3>Real Name</h3>
         <div class="flex align-items-center my-2">
-          <InputText placeholder="Real Name" :modelValue="killerRealName" v-model.trim="realName" />
+          <InputText placeholder="Real Name" v-model="realName" />
         </div>
         <h3>Background</h3>
-        <Textarea class="my-2" placeholder="Background" :modelValue="killerBackground" v-model.trim="background" :autoResize="true" rows="5" cols="80" />
+        <Textarea class="my-2" placeholder="Background" v-model="background" :autoResize="true" rows="5" cols="80" />
         <h3>Movement Speed</h3>
         <div class="flex align-items-center my-2">
-          <InputText placeholder="Movement Speed" :modelValue="killerMove" v-model.trim="move" />
+          <InputText placeholder="Movement Speed" v-model="move" />
           <p class="mx-2">m/s</p>
         </div>
         <h3>Altnative Movement Speed</h3>
-        <Textarea class="my-2" placeholder="Altnative Movement Speed" :modelValue="killerAltMove" v-model.trim="altmove" :autoResize="true" rows="5" cols="30" />
+        <Textarea class="my-2" placeholder="Altnative Movement Speed" v-model="altmove" :autoResize="true" rows="5" cols="30" />
         <h3>Terror Radius</h3>
-        <Textarea class="my-2" placeholder="Terror Radius" :modelValue="killerTerror" v-model.trim="terror" :autoResize="true" rows="5" cols="30" />
+        <Textarea class="my-2" placeholder="Terror Radius" v-model="terror" :autoResize="true" rows="5" cols="30" />
         <h3>Height</h3>
         <Dropdown
             v-model.trim="height"
@@ -67,15 +67,15 @@
           />
         <h3>Weapon And Power</h3>
         <div class="flex align-items-center my-2">
-          <InputText placeholder="Weapon" :modelValue="killerWeapon" v-model.trim="weapon" />
-          <InputText placeholder="Power" class="mx-2" :modelValue="killerPower" v-model.trim="power" />
+          <InputText placeholder="Weapon" v-model="weapon" />
+          <InputText placeholder="Power" class="mx-2" v-model="power" />
         </div>
         <h3>Skills</h3>
         <Button 
           label="Skills Upload"  
           class="p-button-warning my-2"
           style="max-width:100%"
-          @click="input1" 
+          @click="clickInput1" 
         />
         <div class="flex">
           <div class="col-3" v-for="(skill, index) in sData" :key="index">
@@ -89,7 +89,7 @@
           label="Recommand Skills Upload"
           class="p-button-warning my-2"
           style="max-width:100%"
-          @click="input2" 
+          @click="clickInput2" 
         /> 
         <div class="flex">
           <div class="col-2" v-for="(skill, index) in rsData" :key="index">
@@ -110,7 +110,7 @@
       <div class="killerbg" v-if="killerBackground!=null">
         <h1>Background</h1>
         <hr>
-        <p>{{killerBackground}}</p>
+        <p>{{fillterbg(killerBackground)}}</p>
       </div>
       <div class="skills" v-if=" killerSkills!=null">
         <h1>Skills<span><router-link to="/skills">(Read More)</router-link></span></h1>
@@ -191,46 +191,14 @@ export default {
       reSkills:{type: Array},
   },
   methods:{
-    previewS(event){
-      const files = event.target.files
-      for(let i = 0;i<files.length;i++){
-        const filename = files[i].name
-        if (filename.lastIndexOf(".") <= 0){
-          return alert("Please add a valid file!")
-        }
-        const fileReader = new FileReader()
-        fileReader.addEventListener("load",()=>{
-          this.sUrl[i] = fileReader.result
-        })
-        fileReader.readAsDataURL(files[i])
-        this.sData[i] = files[i]
-        this.onUpload(files[i])
-      }
+    fillterbg(background){
+      if(!background) return background
+      if(background.length > 1000 ){
+        return background.slice(0, 1000) + "..."
+      }else return background
     },
-    previewRS(event){
-      const files = event.target.files
-      for(let i = 0;i<files.length;i++){
-        const filename = files[i].name
-        if (filename.lastIndexOf(".") <= 0){
-          return alert("Please add a valid file!")
-        }
-        const fileReader = new FileReader()
-        fileReader.addEventListener("load",()=>{
-          this.rsUrl[i] = fileReader.result
-        })
-        fileReader.readAsDataURL(files[i])
-        this.rsData[i] = files[i]
-        this.onUpload(files[i])
-      }
-    },
-    onUpload(img){
-      const storageRef = r(storage, `killersSkills/${img.name}`)
-      uploadBytes(storageRef, img).then((snapshot) => {
-        console.log("Uploaded a blob or file!", snapshot)
-      })
-    },
-    input1() { this.$refs.input1.click() },
-    input2() { this.$refs.input2.click() },
+    clickInput1() { this.$refs.input1.click() },
+    clickInput2() { this.$refs.input2.click() },
   }
 }
 </script>
@@ -242,7 +210,6 @@ import { collection, doc, updateDoc, deleteDoc } from "firebase/firestore"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
-const displayModal = ref(false)
 const sUrl = ref([])
 const sData = ref([])
 const rsUrl = ref([])
@@ -255,10 +222,10 @@ const weapon = ref("")
 const power = ref("")
 const background = ref("")
 const realName = ref("")
+const input1 = ref(null)
+const input2 = ref(null)
+const displayModal = ref(false)
 
-const modalStatue = () => {
-  displayModal.value = displayModal.value ? false : true
-}
 const deleteKiller = id => {
   router.push("/personal")
   deleteDoc(doc(collection(db, "killers"), id))
@@ -285,9 +252,54 @@ const updateSettings = id => {
   router.push("/personal")
 }
 
+const previewS = event => {
+  const files = event.target.files
+  for(let i = 0;i<files.length;i++){
+    const filename = files[i].name
+    if (filename.lastIndexOf(".") <= 0){
+      return alert("Please add a valid file!")
+    }
+    const fileReader = new FileReader()
+    fileReader.addEventListener("load",()=>{
+      sUrl.value[i] = fileReader.result
+    })
+    fileReader.readAsDataURL(files[i])
+    sData.value[i] = files[i]
+    onUpload(files[i])
+  }
+}
+const previewRS = event => {
+  const files = event.target.files
+  for(let i = 0;i<files.length;i++){
+    const filename = files[i].name
+    if (filename.lastIndexOf(".") <= 0){
+      return alert("Please add a valid file!")
+    }
+    const fileReader = new FileReader()
+    fileReader.addEventListener("load",()=>{
+      rsUrl.value[i] = fileReader.result
+    })
+    fileReader.readAsDataURL(files[i])
+    rsData.value[i] = files[i]
+    onUpload(files[i])
+  }
+}
+
+const onUpload = img =>{
+  const storageRef = r(storage, `killersSkills/${img.name}`)
+  uploadBytes(storageRef, img).then((snapshot) => {
+    console.log("Uploaded a blob or file!", snapshot)
+  })
+}
+
 const back = () => {
   router.push("/personal")
 }
+
+const modalStatue = () => {
+  displayModal.value = displayModal.value ? false : true
+}
+
 </script>
 
 <style lang="scss" scoped>

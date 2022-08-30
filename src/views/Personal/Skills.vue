@@ -28,7 +28,7 @@
             <InputText 
               placeholder="New Skill Name"
               class="mx-1 my-1"
-              v-model.trim="newSkillName"
+              v-model="newSkillName"
               required
             />
             </div>
@@ -37,7 +37,7 @@
             label="Upload Skill Image"  
             class="p-button-warning my-2 col-fixed"
             style="max-width:100%"
-            @click="input1" 
+            @click="clickInput1" 
           />
           <input type="file" name="file" ref="input1" style="display:none" @change="previewImage" accept="gif/*" required/>
           <div v-if="sData!=null">            
@@ -45,7 +45,7 @@
           </div>
           <hr class="inDialog">
           <h3>Description</h3>
-          <Textarea class="my-2" placeholder="Description" modelValue="" v-model.trim="newSkillInfor" :autoResize="true" rows="5" cols="80" />
+          <Textarea class="my-2" placeholder="Description" v-model="newSkillInfor" :autoResize="true" rows="5" cols="80" />
           <template #footer>
               <Button label="No" icon="pi pi-times" @click="modalStatue" class="p-button-text"/>
               <Button label="Yes" icon="pi pi-check" @click="addskill" autofocus />
@@ -76,7 +76,6 @@
             <h3>Skill Name：</h3>
             <InputText
               placeholder="Skill Name"
-              :modelValue="skill.name"
               class="mx-1 my-1"
               v-model.trim="newSkillName"
               required
@@ -94,10 +93,10 @@
           />
           <hr class="inDialog">
           <h3>Description</h3>
-          <Textarea class="my-2" placeholder="Description" :modelValue="skill.illustrate" v-model.trim="newSkillInfor" :autoResize="true" rows="5" cols="80" />
+          <Textarea class="my-2" placeholder="Description" v-model.trim="newSkillInfor" :autoResize="true" rows="5" cols="80" />
           <template #footer>
               <Button label="No" icon="pi pi-times" @click="editStatue(index)" class="p-button-text"/>
-              <Button label="Yes" icon="pi pi-check" @click="updateSkill(skill.id)" autofocus />
+              <Button label="Yes" icon="pi pi-check" @click="updateSkill(skill.id, index)" autofocus />
           </template>
         </Dialog>
       </div>
@@ -108,67 +107,48 @@
 <script>
 import DBDNavbar from "../../components/DBDNavbar.vue"
 export default {
-    components:{ DBDNavbar },
-    data(){
-      return{
-        usefulOptions: ([ {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}, {level:"T4"}]),
+  components:{ DBDNavbar },
+  data(){
+    return{
+      skillsClick: [],
+      isclick : [false],
+      usefulOptions: ([{level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}, {level:"T4"}]),
+    }
+  },
+  methods:{
+    topcalc(i){
+      let index
+      if(i<=7){
+        index = (i%2)*55
+      }else{
+        index = (i%2)*55+(2*Math.floor(i/8))*55
       }
+      index = index.toString()+"%"
+      return index
     },
-    methods:{
-      topcalc(i){
-        let index
-        if(i<=7){
-          index = (i%2)*55
-        }else{
-          index = (i%2)*55+(2*Math.floor(i/8))*55
-        }
-        index = index.toString()+"%"
-        console.log(index)
-        return index
-      },
-      leftcalc(i){
-        let index = i%8*13
-        index = index.toString()+"%"
-        return index
-      },
-      clickSkill(e, n){
-        this.isclick[n] = this.isclick[n] ? false : true
-        console.log(this.isclick)
-        if(this.isclick[n]){
-          this.skillsClick.unshift(e)
-        }else{
-          for(let i=0; i<this.skillsClick.length;i++){
-            if(this.skillsClick[i] == e){
-              this.skillsClick.splice(i,1)
-            }
+    leftcalc(i){
+      let index = i%8*13
+      index = index.toString()+"%"
+      return index
+    },
+    clickSkill(e, n){
+      this.isclick[n] = this.isclick[n] ? false : true
+      if(this.isclick[n]){
+        this.skillsClick.unshift(e)
+      }else{
+        for(let i=0; i<this.skillsClick.length;i++){
+          if(this.skillsClick[i] == e){
+            this.skillsClick.splice(i,1)
           }
         }
-      },
-      previewImage(event){
-        const files = event.target.files
-        let filename = files[0].name
-        if (filename.lastIndexOf(".") <= 0){
-          return alert("Please add a valid file!")
-        }
-        const fileReader = new FileReader()
-        fileReader.addEventListener("load",()=>{
-          this.sUrl = fileReader.result
-        })
-        fileReader.readAsDataURL(files[0])
-        this.sData = files[0]
-        this.onUpload()
-      },
-      onUpload(){
-        const storageRef = r(storage, `killersSkills/${this.sData.name}`)
-        uploadBytes(storageRef, this.sData).then((snapshot) => {
-          console.log("Uploaded a blob or file!")
-          console.log(snapshot)
-        })
-      },
-      input1() {
-        this.$refs.input1.click()   
-      },
+      }
+    },
+    clickInput1(){
+      this.$nextTick(()=>{
+        this.$refs.input1.click()
+      })
     }
+  }
 }
 </script>
 
@@ -177,20 +157,20 @@ import { ref, onMounted } from "vue"
 import { db, storage } from "@/firebase"
 import { collection, onSnapshot, addDoc, updateDoc, doc} from "firebase/firestore"
 import { ref as r, uploadBytes } from "firebase/storage"
-const skillsClick = ref([])
 const skills = ref([])
-const isclick = ref([false, false])
+const newSkillName = ref("")
+const newSkillInfor = ref("")
+const newSkillUseful = ref("")
 const sUrl = ref("")
 const sData = ref(null)
-const displayModal = ref(false)
 const displayEdit = ref([false])
-
+const displayModal = ref(false)
 
 onMounted(() => {
+  console.log("sucess setup7")
   onSnapshot(collection(db,"skills"), (querySnapshot) => {
     let fbskills = []
     querySnapshot.forEach((doc) => {
-      console.log(doc.id, "=>", doc.data())
       const skill = {
         id: doc.id,
         name: doc.data().name,
@@ -203,10 +183,6 @@ onMounted(() => {
     skills.value = fbskills
   })
 })
-
-const newSkillName = ref("")
-const newSkillInfor = ref("")
-const newSkillUseful = ref("")
 
 const addskill = () => {
   addDoc(collection(db, "skills"), {
@@ -223,7 +199,7 @@ const addskill = () => {
   displayModal.value = false
 }
 
-const updateSkill = id => {
+const updateSkill = (id, i) => {
   updateDoc(doc(collection(db, "skills"), id), {
     name: newSkillName.value,
     usefulness: newSkillUseful.value,
@@ -232,16 +208,39 @@ const updateSkill = id => {
   newSkillName.value = "",
   newSkillInfor.value = "",
   newSkillUseful.value = "",
-  displayEdit.value = false
+  console.log("updateSkill")
+  displayEdit.value[i] = false
+}
+
+const previewImage = event => {
+  const files = event.target.files
+  let filename = files[0].name
+  if (filename.lastIndexOf(".") <= 0){
+    return alert("Please add a valid file!")
+  }
+  const fileReader = new FileReader()
+  fileReader.addEventListener("load",()=>{
+    sUrl.value = fileReader.result
+  })
+  fileReader.readAsDataURL(files[0])
+  sData.value = files[0]
+  onUpload()
+}
+const onUpload = () => {
+  const storageRef = r(storage, `killersSkills/${sData.value.name}`)
+  uploadBytes(storageRef, sData.value).then((snapshot) => {
+    console.log("Uploaded a blob or file!")
+    console.log(snapshot)
+  })
+}
+
+const editStatue = i => {
+  displayEdit.value[i] = displayEdit.value[i] ? false : true
 }
 
 const modalStatue = () => {
   displayModal.value = displayModal.value ? false : true
 }
-const editStatue = i => {
-  displayEdit.value[i] = displayEdit.value[i] ? false : true
-}
-
 </script>
 
 <style lang="scss" scoped>
