@@ -1,5 +1,6 @@
 <template>
   <DBDNavbar></DBDNavbar>
+  <ConfirmDialog></ConfirmDialog>
   <div class="skills">
     <div class="illustrated">
       <ul>
@@ -18,49 +19,87 @@
             <img :src="require('@/assets/icon/IconHelp.png')" alt=""/>
           </div>
         </li>
-        <Dialog 
+        <Dialog
           header="Append New Skill" 
           v-model:visible="displayModal" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
           :style="{width: '50vw'}" :modal="true"
         >
-          <div class="flex align-items-center">
-            <h3>Skill Name：</h3>
-            <InputText 
-              placeholder="New Skill Name"
-              class="mx-1 my-1"
-              v-model="newSkillName"
-              required
-            />
+          <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
+            <div class="flex align-items-center">
+              <h3>Skill Name：</h3>
+              <InputText 
+                placeholder="New Skill Name"
+                class="mx-1 my-1"
+                name="skillName"
+                id="skillName"
+                v-model="v$.newSkillName.$model" :class="{'p-invalid':v$.newSkillName.$invalid && submitted}"
+              />
+              <small v-if="(v$.newSkillName.$invalid && submitted) || v$.newSkillName.$pending.$response" class="p-error">
+                {{v$.newSkillName.required.$message.replace('Value', 'Name')}}
+              </small>
             </div>
-          <hr class="inDialog">
-          <Button 
-            label="Upload Skill Image"  
-            class="p-button-warning my-2 col-fixed"
-            style="max-width:100%"
-            @click="clickInput1" 
-          />
-          <input type="file" name="file" ref="input1" style="display:none" @change="previewImage" accept="gif/*" required/>
-          <div v-if="sData!=null">            
-            <img class="preview" height="110" width="110" :src="sUrl">
-          </div>
-          <hr class="inDialog">
-          <h3>Description</h3>
-          <Textarea class="my-2" placeholder="Description" v-model="newSkillInfor" :autoResize="true" rows="5" cols="80" />
-          <template #footer>
-              <Button label="No" icon="pi pi-times" @click="modalStatue" class="p-button-text"/>
-              <Button label="Yes" icon="pi pi-check" @click="addskill" autofocus />
-          </template>
+            <hr class="inDialog">
+            <Dropdown
+              v-model="v$.newSkillUseful.$model" :class="{'p-invalid':v$.newSkillUseful.$invalid && submitted}"
+              :options="usefulOptions"
+              optionLabel="level"
+              optionValue="level"
+              placeholder="UseFulness"
+              class="mx-1 my-1"
+              id="newSkillUseful"
+              style="width:200px"
+            />
+            <small v-if="(v$.newSkillUseful.$invalid && submitted) || v$.newSkillUseful.$pending.$response" class="p-error">
+              {{v$.newSkillUseful.required.$message.replace('Value', 'Usefulness')}}
+            </small>
+            <hr class="inDialog">
+            <Button 
+              label="Upload Skill Image"  
+              class="p-button-warning my-2 col-fixed"
+              style="max-width:100%"
+              @click="clickInput1" 
+            />
+            <input type="file" name="file" ref="input1" style="display:none" @change="previewImage" accept="gif/*" required/>
+            <div v-if="sData!=null">            
+              <img class="preview" height="110" width="110" :src="sUrl">
+            </div>
+            <hr class="inDialog">
+            <h3>Description</h3>
+            <Textarea 
+              class="my-2" 
+              placeholder="Description" 
+              id = "newSkillInfor"
+              v-model="v$.newSkillInfor.$model" :class="{'p-invalid':v$.newSkillInfor.$invalid && submitted}"
+              :autoResize="true" 
+              rows="5" 
+              cols="80" 
+            />
+            <small v-if="(v$.newSkillInfor.$invalid && submitted) || v$.newSkillInfor.$pending.$response" class="p-error">
+              {{v$.newSkillInfor.required.$message.replace('Value', 'Description')}}
+            </small>
+            <Button  label="Submit" class="mt-2" />
+          </form>
+            <template #footer>
+                <Button label="No" icon="pi pi-times" @click="modalStatue" class="p-button-text"/>
+            </template>
         </Dialog>
       </ul>
     </div>
     <div class="infor">
       <h1>SKILLS INFORMATION</h1>
       <hr class="outDialog">
+      <div v-if="skillsClick.length > 0" class="my-2">
+        <Button :label="skillsClick.length" icon="pi pi-database" @click="clearSkillsClick" class="p-button-success mx-2"/>
+        <Button label="Clear" icon="pi pi-times" @click="clearSkillsClick" class="p-button-infor mx-2"/>
+      </div>
       <div class="noneSkills" v-if="skillsClick.length == 0">Please Click Skills Above</div>
       <div class="inforBox" v-else v-for="(skill, index) in skillsClick" :key="index">
         <h1>{{skill.usefulness}}</h1>
         <img :src="skill.icon" alt="">
-        <p> {{skill.illustrate}} </p>
+        <div class="text">
+          <h2>{{skill.name}}</h2>
+          <p> {{skill.illustrate}} </p>
+        </div>
         <Button 
           label="Edit"  
           class="p-button-warning bs"
@@ -78,7 +117,7 @@
               placeholder="Skill Name"
               class="mx-1 my-1"
               v-model.trim="newSkillName"
-              required
+              prop="skillName"
             />
             </div>
           <hr class="inDialog">
@@ -90,10 +129,11 @@
             placeholder="UseFulness"
             class="mx-1 my-1"
             style="width:200px"
+            prop="skillUseful"
           />
           <hr class="inDialog">
           <h3>Description</h3>
-          <Textarea class="my-2" placeholder="Description" v-model.trim="newSkillInfor" :autoResize="true" rows="5" cols="80" />
+          <Textarea class="my-2" placeholder="Description" prop="skillDsp" v-model.trim="newSkillInfor" :autoResize="true" rows="5" cols="80" />
           <template #footer>
               <Button label="No" icon="pi pi-times" @click="editStatue(index)" class="p-button-text"/>
               <Button label="Yes" icon="pi pi-check" @click="updateSkill(skill.id, index)" autofocus />
@@ -121,13 +161,13 @@ export default {
       if(i<=7){
         index = (i%2)*55
       }else{
-        index = (i%2)*55+(2*Math.floor(i/8))*55
+        index = (i%2)*55+(2*Math.floor(i/10))*55
       }
       index = index.toString()+"%"
       return index
     },
     leftcalc(i){
-      let index = i%8*13
+      let index = i%10*13
       index = index.toString()+"%"
       return index
     },
@@ -143,6 +183,10 @@ export default {
         }
       }
     },
+    clearSkillsClick(){
+      this.isclick = [false]
+      this.skillsClick = []
+    },
     clickInput1(){
       this.$nextTick(()=>{
         this.$refs.input1.click()
@@ -153,18 +197,18 @@ export default {
 </script>
 
 <script setup>
-import { ref, onMounted } from "vue"
+import { reactive, ref, onMounted } from "vue"
 import { db, storage } from "@/firebase"
-import { collection, onSnapshot, addDoc, updateDoc, doc} from "firebase/firestore"
+import { collection, onSnapshot, addDoc, updateDoc, doc } from "firebase/firestore"
 import { ref as r, uploadBytes } from "firebase/storage"
+import useVuelidate from "@vuelidate/core"
+import { required } from "@vuelidate/validators"
 const skills = ref([])
-const newSkillName = ref("")
-const newSkillInfor = ref("")
-const newSkillUseful = ref("")
 const sUrl = ref("")
-const sData = ref(null)
 const displayEdit = ref([false])
 const displayModal = ref(false)
+const submitted = ref(false)
+const sData = ref(null)
 
 onMounted(() => {
   console.log("sucess setup7")
@@ -184,30 +228,48 @@ onMounted(() => {
   })
 })
 
+const state = reactive({
+    newSkillName: "",
+    newSkillInfor: "",
+    newSkillUseful: ""
+})
+const rules = {
+  newSkillName: { required },
+  newSkillInfor: { required },
+  newSkillUseful: { required }
+}
+const v$ = useVuelidate(rules, state)
+
+const handleSubmit = (isFormValid) => {
+    submitted.value = true
+    if (!isFormValid) { return }
+    addskill()
+}
+
 const addskill = () => {
   addDoc(collection(db, "skills"), {
-    name: newSkillName.value,
-    usefulness: newSkillUseful.value,
+    name: state.newSkillName,
+    usefulness: state.newSkillUseful,
     icon: sUrl.value,
-    illustrate: newSkillInfor.value
+    illustrate: state.newSkillInfor
   })
   sUrl.value = "",
   sData.value = null,
-  newSkillName.value = "",
-  newSkillInfor.value = "",
-  newSkillUseful.value = "",
+  state.newSkillName = "",
+  state.newSkillInfor = "",
+  state.newSkillUseful = "",
   displayModal.value = false
 }
 
 const updateSkill = (id, i) => {
   updateDoc(doc(collection(db, "skills"), id), {
-    name: newSkillName.value,
-    usefulness: newSkillUseful.value,
-    illustrate: newSkillInfor.value
+    name: state.newSkillName,
+    usefulness: state.newSkillUseful,
+    illustrate: state.newSkillInfor
   })
-  newSkillName.value = "",
-  newSkillInfor.value = "",
-  newSkillUseful.value = "",
+  state.newSkillName = "",
+  state.newSkillInfor = "",
+  state.newSkillUseful = "",
   console.log("updateSkill")
   displayEdit.value[i] = false
 }
@@ -234,12 +296,21 @@ const onUpload = () => {
   })
 }
 
+const clearData = () => {
+  state.newSkillName = "",
+  state.newSkillInfor = "",
+  state.newSkillUseful = "",
+  sUrl.value = "",
+  sData.value = null
+}
+
 const editStatue = i => {
   displayEdit.value[i] = displayEdit.value[i] ? false : true
 }
 
 const modalStatue = () => {
-  displayModal.value = displayModal.value ? false : true
+  displayModal.value = !displayModal.value
+  clearData()
 }
 </script>
 
