@@ -1,6 +1,5 @@
 <template>
   <DBDNavbar></DBDNavbar>
-  <ConfirmDialog></ConfirmDialog>
   <div class="skills">
     <div class="illustrated">
       <ul>
@@ -15,16 +14,16 @@
           </div>
         </li>
         <li :style="{'top': topcalc(skills.length), 'left': leftcalc(skills.length)}">
-          <div class="bg" @click="modalStatue" title="Add New Skills">
+          <div class="bg" @click="modalStatue(0)" title="Add New Skills">
             <img :src="require('@/assets/icon/IconHelp.png')" alt=""/>
           </div>
         </li>
         <Dialog
           header="Append New Skill" 
-          v-model:visible="displayModal" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+          v-model:visible="displayModal[0]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
           :style="{width: '50vw'}" :modal="true"
         >
-          <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
+          <form @submit.prevent="handleSubmit(!v$.$invalid)">
             <div class="flex align-items-center">
               <h3>Skill Name：</h3>
               <InputText 
@@ -77,11 +76,23 @@
             <small v-if="(v$.newSkillInfor.$invalid && submitted) || v$.newSkillInfor.$pending.$response" class="p-error">
               {{v$.newSkillInfor.required.$message.replace('Value', 'Description')}}
             </small>
-            <Button  label="Submit" class="mt-2" />
+            <br>
+            <Button type="submit"  label="Submit" class="mt-2" />
           </form>
             <template #footer>
-                <Button label="No" icon="pi pi-times" @click="modalStatue" class="p-button-text"/>
+                <Button label="Discard" icon="pi pi-trash" @click="modalStatue(1)" class="p-button-text"/>
             </template>
+        </Dialog>
+        <Dialog 
+          header="Warning" 
+          v-model:visible="displayModal[1]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+          :style="{width: '30vw'}" :modal="true"
+        >
+        <p>你所作的紀錄將不會儲存，確定要退出?</p>
+          <template #footer>
+            <Button label="Yes" icon="pi pi-check" @click="modalStatue(1); modalStatue(0); clearData()" class="p-button-text"/>
+            <Button label="No" icon="pi pi-times" @click="modalStatue(1)" class="p-button-text"/>
+          </template>
         </Dialog>
       </ul>
     </div>
@@ -206,7 +217,7 @@ import { required } from "@vuelidate/validators"
 const skills = ref([])
 const sUrl = ref("")
 const displayEdit = ref([false])
-const displayModal = ref(false)
+const displayModal = ref([false])
 const submitted = ref(false)
 const sData = ref(null)
 
@@ -259,6 +270,7 @@ const addskill = () => {
   state.newSkillInfor = "",
   state.newSkillUseful = "",
   displayModal.value = false
+  submitted.value = false
 }
 
 const updateSkill = (id, i) => {
@@ -308,9 +320,9 @@ const editStatue = i => {
   displayEdit.value[i] = displayEdit.value[i] ? false : true
 }
 
-const modalStatue = () => {
-  displayModal.value = !displayModal.value
-  clearData()
+const modalStatue = i => {
+  displayModal.value[i] = !displayModal.value[i]
+  submitted.value = false
 }
 </script>
 

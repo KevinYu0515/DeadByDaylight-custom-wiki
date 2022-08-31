@@ -27,7 +27,7 @@
         label="Settings"  
         class="p-button-warning bs"
         style="max-width:100%"
-        @click="modalStatue" 
+        @click="modalStatue(0)" 
       /> 
       <Button 
         label="Back"  
@@ -37,7 +37,7 @@
       /> 
       <Dialog 
         :header="`${killerName} Settings`"
-        v-model:visible="displayModal" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+        v-model:visible="displayModal[0]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
         :style="{width: '50vw'}" :modal="true"
       >
         <h3>Real Name</h3>
@@ -100,15 +100,36 @@
         </div>
         <input type="file" name="file" ref="input2" style="display:none" @change="previewRS" accept="image/*" multiple/>
         <template #footer>
-            <Button label="No" icon="pi pi-times" @click="modalStatue" class="p-button-text"/>
+            <Button label="No" icon="pi pi-times" @click="modalStatue(1)" class="p-button-text"/>
             <Button label="Yes" icon="pi pi-check" @click="updateSettings(killerID)" autofocus />
         </template>
       </Dialog>
+      <Dialog 
+          header="Warning" 
+          v-model:visible="displayModal[1]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+          :style="{width: '30vw'}" :modal="true"
+        >
+        <p>你所作的紀錄將不會儲存，確定要退出?</p>
+          <template #footer>
+            <Button label="Yes" icon="pi pi-check" @click="modalStatue(1); modalStatue(0);" class="p-button-text"/>
+            <Button label="No" icon="pi pi-times" @click="modalStatue(1)" class="p-button-text"/>
+          </template>
+        </Dialog>
     </div>
 
     <div class="container">
       <div class="killerbg" v-if="killerBackground!=null">
-        <h1>Background</h1>
+        <h1>Background<span class="bgAll" @click="modalStatue(2)">(Read More)</span></h1>
+        <Dialog 
+          :header="`${killerName} Background`" 
+          v-model:visible="displayModal[2]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+          :style="{width: '60vw'}" :modal="true"
+        >
+        <p>{{killerBackground}}</p>
+          <template #footer>
+            <Button label="No" icon="pi pi-times" @click="modalStatue(2)" class="p-button-text"/>
+          </template>
+        </Dialog>
         <hr>
         <p>{{fillterbg(killerBackground)}}</p>
       </div>
@@ -224,7 +245,7 @@ const background = ref("")
 const realName = ref("")
 const input1 = ref(null)
 const input2 = ref(null)
-const displayModal = ref(false)
+const displayModal = ref([false])
 
 const deleteKiller = id => {
   router.push("/personal")
@@ -296,8 +317,8 @@ const back = () => {
   router.push("/personal")
 }
 
-const modalStatue = () => {
-  displayModal.value = displayModal.value ? false : true
+const modalStatue = i => {
+  displayModal.value[i] = !displayModal.value[i]
 }
 
 </script>

@@ -107,3 +107,15 @@
         }
     }
 }
+
+.inDialog{ 
+    width: 90%;
+    height: 2px;
+    background-color:rgb(161, 156, 156);
+    opacity: .2;
+    margin: 20px 0;
+    border:none;
+}
+.p-dialog-titlebar-icon{
+    visibility: hidden;
+}

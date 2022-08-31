@@ -21,43 +21,63 @@
           label="Create"  
           class="p-button-infor mx-3 col-fixed"
           style="max-width:100%"
-          @click="modalStatue" 
+          @click="modalStatue(0)" 
         />
         <Dialog 
           header="Append New Role" 
-          v-model:visible="displayModal" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+          v-model:visible="displayModal[0]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
           :style="{width: '50vw'}" :modal="true"
         >
-        <Dropdown
-            v-model="newKillerLevel"
-            :options="levelOptions"
-            optionLabel="level"
-            optionValue="level"
-            placeholder="ALL"
-            class="mx-1 my-1"
-            style="width:200px"
-          />
-          <InputText 
-            placeholder="KillerName"
-            class="mx-1 my-1"
-            v-model.trim="newKillerName"
-            required
-          />
-          <br/>
-          <Button 
-            label="Upload Cover"  
-            class="p-button-warning mx-3 my-2 col-fixed"
-            style="max-width:100%"
-            @click="clickInput1" 
-          />
-          <input type="file" name="file" ref="input1" style="display:none" @change="previewImage" accept="image/*" required/>
-          <div v-if="image!=null">                     
-            <img class="preview" height="252" width="192" :src="imageUrl">
-          <br>
-          </div>
+        <form @submit.prevent="handleSubmit(!v$.$invalid)">
+          <Dropdown
+              v-model="v$.newKillerLevel.$model" :class="{'p-invalid':v$.newKillerLevel.$invalid && submitted}"
+              :options="levelOptions"
+              optionLabel="level"
+              optionValue="level"
+              placeholder="ALL"
+              class="mx-1 my-1"
+              style="width:200px"
+            />
+            <small v-if="(v$.newKillerLevel.$invalid && submitted) || v$.newKillerLevel.$pending.$response" class="p-error">
+              {{v$.newKillerLevel.required.$message.replace('Value', 'Level')}}
+            </small>
+            <InputText 
+              placeholder="KillerName"
+              class="mx-1 my-1"
+              v-model="v$.newKillerName.$model" :class="{'p-invalid':v$.newKillerName.$invalid && submitted}"
+              required
+            />
+            <small v-if="(v$.newKillerName.$invalid && submitted) || v$.newKillerName.$pending.$response" class="p-error">
+              {{v$.newKillerName.required.$message.replace('Value', 'Name')}}
+            </small>
+            <br/>
+            <hr class="inDialog">
+            <Button 
+              label="Upload Cover"  
+              class="p-button-warning my-2 col-fixed"
+              style="max-width:100%; margin-right:30px;"
+              @click="clickInput1" 
+            />
+            <input type="file" name="file" ref="input1" style="display:none" @change="previewImage" accept="image/*" required/>
+            <Button type="submit" label="Submit" class="my-2" />
+            <div v-if="image!=null">                     
+              <img class="preview" height="252" width="192" :src="imageUrl">
+            <br>
+            </div>
+          </form>
           <template #footer>
-              <Button label="No" icon="pi pi-times" @click="modalStatue" class="p-button-text"/>
-              <Button label="Yes" icon="pi pi-check" @click="addKiller" autofocus />
+              <Button label="Discard" icon="pi pi-trash" @click="modalStatue(1)" class="p-button-text"/>
+          </template>
+        </Dialog>
+        <Dialog 
+          header="Warning" 
+          v-model:visible="displayModal[1]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+          :style="{width: '30vw'}" :modal="true"
+        >
+        <p>你所作的紀錄將不會儲存，確定要退出?</p>
+          <template #footer>
+            <Button label="Yes" icon="pi pi-check" @click="modalStatue(1); modalStatue(0); clearData()" class="p-button-text"/>
+            <Button label="No" icon="pi pi-times" @click="modalStatue(1)" class="p-button-text"/>
           </template>
         </Dialog>
         <Button href="javascript:void(0)" class="p-button-success mx-2" @click="logout">Logout</Button>   
@@ -139,21 +159,24 @@ export default {
 </script>
 
 <script setup>
-import { ref, onMounted, onUpdated, computed } from "vue"
+import { reactive, ref, onMounted, onUpdated, computed } from "vue"
 import axios from "axios"
 import { useRouter } from "vue-router"
 import { db, storage } from "@/firebase"
 import { ref as r, uploadBytes } from "firebase/storage"
 import { collection, onSnapshot, addDoc } from "firebase/firestore"
+import useVuelidate from "@vuelidate/core"
+import { required } from "@vuelidate/validators"
 import $ from "jquery"
 const router = useRouter()
 const killers = ref([])
 const imageUrl = ref("")
 const image = ref(null)
-const displayModal = ref(false)
+const displayModal = ref([false])
 const selectedLevel = ref("ALL")
 const searchName = ref("")
 const input1 = ref(null)
+const submitted = ref(false)
 
 onMounted(() => {
   onSnapshot(collection(db,"killers"), (querySnapshot) => {
@@ -198,22 +221,36 @@ onUpdated(() => {
   })
 })
 
-const newKillerName = ref("")
-const newKillerCover = ref("")
-const newKillerLevel = ref("")
+const state = reactive({
+  newKillerName : "",
+  newKillerLevel : ""
+})
+
+const rules = {
+  newKillerLevel: { required },
+  newKillerName: { required }
+}
+
+const v$ = useVuelidate(rules, state)
+
+const handleSubmit = (isFormValid) => {
+    submitted.value = true
+    if (!isFormValid) { return }
+    addKiller()
+}
 
 const addKiller = () => {
   addDoc(collection(db, "killers"), {
-    name: newKillerName.value,
-    level: newKillerLevel.value,
+    name: state.newKillerName,
+    level: state.newKillerLevel,
     cover: imageUrl.value
   })
-  newKillerName.value = ""
-  newKillerCover.value = ""
-  newKillerLevel.value = ""
+  state.newKillerName = ""
+  state.newKillerLevel = ""
   imageUrl.value = ""
   image.value = null
   displayModal.value = false
+  submitted.value = false
 }
 
 const levelGroup = computed(() =>{
@@ -260,8 +297,16 @@ const onUpload = () => {
   })
 }
 
-const modalStatue = () => {
-  displayModal.value = displayModal.value ? false : true
+const clearData = () => {
+  state.newKillerLevel = ""
+  state.newKillerName = ""
+  image.value = null
+  imageUrl.value = ""
+  submitted.value = false
+}
+
+const modalStatue = i => {
+  displayModal.value[i] = !displayModal.value[i]
 }
 
 const logout = async() => {
