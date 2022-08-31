@@ -100,7 +100,7 @@
       <h1>SKILLS INFORMATION</h1>
       <hr class="outDialog">
       <div v-if="skillsClick.length > 0" class="my-2">
-        <Button :label="skillsClick.length" icon="pi pi-database" @click="clearSkillsClick" class="p-button-success mx-2"/>
+        <Button @click="clearSkillsClick" class="p-button-success mx-2">已選：{{skillsClick.length}}</Button>
         <Button label="Clear" icon="pi pi-times" @click="clearSkillsClick" class="p-button-infor mx-2"/>
       </div>
       <div class="noneSkills" v-if="skillsClick.length == 0">Please Click Skills Above</div>
@@ -127,29 +127,41 @@
             <InputText
               placeholder="Skill Name"
               class="mx-1 my-1"
-              v-model.trim="newSkillName"
-              prop="skillName"
+              v-model="v$.newSkillName.$model"
             />
-            </div>
+            <Button label="Confirm" class="mx-2" :disabled="disable[0]" @click="updateSkill(skill.id, 'name', index)" autofocus />
+          </div>
           <hr class="inDialog">
           <Dropdown
-            v-model="newSkillUseful"
+            v-model="v$.newSkillUseful.$model"
             :options="usefulOptions"
             optionLabel="level"
             optionValue="level"
             placeholder="UseFulness"
-            class="mx-1 my-1"
+            class="mx-1"
             style="width:200px"
-            prop="skillUseful"
           />
+          <Button label="Confirm" class="mx-2" :disabled="disable[1]" @click="updateSkill(skill.id, 'usefulness', index)" autofocus />
           <hr class="inDialog">
           <h3>Description</h3>
-          <Textarea class="my-2" placeholder="Description" prop="skillDsp" v-model.trim="newSkillInfor" :autoResize="true" rows="5" cols="80" />
+          <Textarea class="my-2" placeholder="Description" :modelValue="skill.illustrate" v-model="v$.newSkillInfor.$model" :autoResize="true" rows="5" cols="80" />
+          <br>
+          <Button label="Confirm" class="mx-2"  :disabled="disable[2]" @click="updateSkill(skill.id, 'description', index)" autofocus />
           <template #footer>
-              <Button label="No" icon="pi pi-times" @click="editStatue(index)" class="p-button-text"/>
-              <Button label="Yes" icon="pi pi-check" @click="updateSkill(skill.id, index)" autofocus />
+              <Button label="Complete" icon="pi pi-check" @click="complete(index); replaceSkill(skill, skills)" class="p-button-text"/>
           </template>
         </Dialog>
+        <Dialog 
+          header="Warning" 
+          v-model:visible="displayModal[2]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+          :style="{width: '20vw'}" :modal="true"
+          >
+          <p>該資料不可為空</p>
+          <template #footer>
+            <Button label="OK" icon="pi pi-time" @click="modalStatue(2)" class="p-button-text"/>
+          </template>
+        </Dialog>
+        >
       </div>
     </div>
   </div>
@@ -162,6 +174,7 @@ export default {
   data(){
     return{
       skillsClick: [],
+      clickIndex: [],
       isclick : [false],
       usefulOptions: ([{level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}, {level:"T4"}]),
     }
@@ -183,16 +196,28 @@ export default {
       return index
     },
     clickSkill(e, n){
-      this.isclick[n] = this.isclick[n] ? false : true
+      console.log(e.name, e)
+      this.isclick[n] = !this.isclick[n]
       if(this.isclick[n]){
         this.skillsClick.unshift(e)
+        this.clickIndex.unshift(n)
       }else{
         for(let i=0; i<this.skillsClick.length;i++){
-          if(this.skillsClick[i] == e){
+          if(this.skillsClick[i].name == e.name){
             this.skillsClick.splice(i,1)
+            this.clickIndex.splice(i,1)
+          }else{
+            console.log("false")
           }
         }
       }
+    },
+    replaceSkill(e, skills){
+      for(let i=0; i<this.skillsClick.length;i++){
+          if(this.skillsClick[i] == e){
+            this.skillsClick.splice(i,1,skills[this.clickIndex[i]])
+          }
+        }
     },
     clearSkillsClick(){
       this.isclick = [false]
@@ -220,6 +245,7 @@ const displayEdit = ref([false])
 const displayModal = ref([false])
 const submitted = ref(false)
 const sData = ref(null)
+const disable = ref([false])
 
 onMounted(() => {
   console.log("sucess setup7")
@@ -269,21 +295,28 @@ const addskill = () => {
   state.newSkillName = "",
   state.newSkillInfor = "",
   state.newSkillUseful = "",
-  displayModal.value = false
+  displayModal.value[0] = false
   submitted.value = false
 }
 
-const updateSkill = (id, i) => {
-  updateDoc(doc(collection(db, "skills"), id), {
-    name: state.newSkillName,
-    usefulness: state.newSkillUseful,
-    illustrate: state.newSkillInfor
-  })
-  state.newSkillName = "",
-  state.newSkillInfor = "",
-  state.newSkillUseful = "",
+const updateSkill = (id, options, dia) => {
+  if(options == "name"){
+    if(isNone(state.newSkillName)){
+      updateDoc(doc(collection(db, "skills"), id), { name: state.newSkillName })
+      disable.value[0] = true
+    }
+  }else if(options == "usefulness"){
+    if(isNone(state.newSkillUseful)){
+      updateDoc(doc(collection(db, "skills"), id), { usefulness: state.newSkillUseful })
+      disable.value[1] = true
+    }
+  }else if(options == "description"){
+    if(isNone(state.newSkillInfor)){
+      updateDoc(doc(collection(db, "skills"), id), { illustrate: state.newSkillInfor })
+      disable.value[2] = true
+    }
   console.log("updateSkill")
-  displayEdit.value[i] = false
+  }
 }
 
 const previewImage = event => {
@@ -300,6 +333,7 @@ const previewImage = event => {
   sData.value = files[0]
   onUpload()
 }
+
 const onUpload = () => {
   const storageRef = r(storage, `killersSkills/${sData.value.name}`)
   uploadBytes(storageRef, sData.value).then((snapshot) => {
@@ -316,14 +350,32 @@ const clearData = () => {
   sData.value = null
 }
 
+const complete = i => {
+  state.newSkillName = ""
+  state.newSkillUseful = ""
+  state.newSkillInfor = ""
+  editStatue(i)
+}
+
+const isNone = options => {
+  if(!options){
+    displayModal.value[2] = true
+    return false
+  }else{
+    return true
+  }
+}
+
 const editStatue = i => {
   displayEdit.value[i] = displayEdit.value[i] ? false : true
+  disable.value = [false]
 }
 
 const modalStatue = i => {
   displayModal.value[i] = !displayModal.value[i]
   submitted.value = false
 }
+
 </script>
 
 <style lang="scss" scoped>

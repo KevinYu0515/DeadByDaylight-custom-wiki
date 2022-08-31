@@ -249,7 +249,7 @@ const addKiller = () => {
   state.newKillerLevel = ""
   imageUrl.value = ""
   image.value = null
-  displayModal.value = false
+  displayModal.value[0] = false
   submitted.value = false
 }
 

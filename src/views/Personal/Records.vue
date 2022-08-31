@@ -269,7 +269,7 @@ const updateSettings = id => {
   sData.value = []
   rsUrl.value = []
   rsData.value = []
-  displayModal.value = false
+  displayModal.value[0] = false
   router.push("/personal")
 }
 
