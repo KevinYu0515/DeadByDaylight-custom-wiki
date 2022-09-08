@@ -186,7 +186,7 @@
                 <video :src="require('@/assets/video/defaultAnimation.mp4')" alt="video"/>
                 <figcaption>
                   <h1>VIDEO 1</h1>
-                  <p>test....</p>
+                  <p>{{killerName}} Demo</p>
                 </figcaption>
               </figure>
           </div>
@@ -195,7 +195,7 @@
               <video :src="require('@/assets/video/defaultAnimation.mp4')" alt="video"/>
               <figcaption>
                 <h1>VIDEO 2</h1>
-                <p>test....</p>
+                <p>Game Record 1</p>
               </figcaption>
             </figure>
           </div>
@@ -204,7 +204,7 @@
               <video :src="require('@/assets/video/defaultAnimation.mp4')" alt="video"/>
               <figcaption>
                 <h1>VIDEO 3</h1>
-                <p>test....</p>
+                <p>Game Record 2</p>
               </figcaption>
             </figure>
           </div>
