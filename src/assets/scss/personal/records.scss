@@ -3,14 +3,14 @@
     justify-content: flex-start;
     align-items: center;
     height:auto;
-    padding-right: 160px;
+    padding-right: 10vw;
     background-color: darkslategrey;
+    overflow: hidden;
     .bg {
         position: fixed;
-        left:70px;
-        height:180vh;
+        height: 180vh;
         opacity: .1;
-        width:100%;
+        max-width: 100%;
     }
     .leftBg{
         width: 220px;
@@ -21,6 +21,9 @@
         justify-content: center;
         align-items: center;
         z-index:2;
+        @media screen and (max-width: 1024px){
+            height: 200vh;
+        }
         .card{
             position: relative; 
             width: 192px;
@@ -74,23 +77,19 @@
         }
     }
     .container{
-        width: 100%;
+        width: 120vw;
         height: auto;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
-        padding: 0px 0px 0px 200px;
+        padding-left: 10vw;
         z-index:2;
-        hr{ 
-            width: 100%;
-            height: 2px;
-            background-color:black;
-            border:none;
-            margin:0px 0px 20px 0px;
-        }
         .killerbg{
-            width: 100%;
+            max-width: 100%;
+            @media screen and (max-width: 1024px){
+                max-width: 70%;
+            }
             h1{
                 letter-spacing: 2px;
                 color:darkgoldenrod;
@@ -177,17 +176,21 @@
             }
             .videos{
                 display: flex;
+                @media screen and (max-width: 1024px){
+                    flex-direction: column;
+                }
                 .videoBox{
                     width: 300px;
                     height: 180px;
                     box-sizing: border-box;
                     padding: 0 10px;
+                    cursor: pointer;
                     figure{
                         position: relative;
                         margin: 0;
                         padding: 0;
                         overflow:hidden;
-                        img{
+                        video{
                             width:100%;
                             height:100%;
                         }
@@ -249,3 +252,12 @@
         }
     }
 }
+
+hr{ 
+    max-width: 100vw;
+    height: 2px;
+    background-color:black;
+    border:none;
+    margin:0px 0px 20px 0px;
+}
+

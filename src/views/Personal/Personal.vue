@@ -138,7 +138,8 @@ export default {
           reSkills: killer.reSkills,
           killerWeapon: killer.weapon,
           killerPower: killer.power,
-          killerRealName: killer.realName
+          killerRealName: killer.realName,
+          killerVideos: killer.videos
         }
       }),
       console.log("pass")
@@ -196,7 +197,8 @@ onMounted(() => {
         cover: doc.data().cover,
         skills: doc.data().skills,
         reSkills: doc.data().recommandSkills,
-        realName: doc.data().realName
+        realName: doc.data().realName,
+        videos: doc.data().videos
       }
       fbkillers.push(killer)
     })
@@ -218,6 +220,14 @@ onUpdated(() => {
       $(this).find("span").css({top:y, left:x})
       console.log("x:",x,"y:",y)
     })
+  })
+})
+
+onUpdated(() => {
+  let background = document.querySelector(".bg")
+  window.addEventListener("scroll", () => {
+    let value = 1 + window.scrollY / -600
+    background.style.opacity = value
   })
 })
 

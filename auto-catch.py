@@ -72,19 +72,24 @@ if __name__  == "__main__":
         # 抓取殺手技能名稱
         skills_table =  browser.find_element(By.CLASS_NAME,"wikitable")
         lnks = skills_table.find_elements(By.XPATH,"//a[contains(@href, '.gif')]")
-        skill_1 = lnks[0].get_attribute("href")
-        skill_1_name = lnks[0].get_attribute("title")
-        skill_2 = lnks[1].get_attribute("href")
-        skill_2_name = lnks[1].get_attribute("title")
-        skill_3 = lnks[2].get_attribute("href")
-        skill_3_name = lnks[2].get_attribute("title")
+        print(lnks[0])
 
-        skill_1s.append(skill_1)
-        skill_1_names.append(skill_1_name)
-        skill_2s.append(skill_2)
-        skill_2_names.append(skill_2_name)
-        skill_3s.append(skill_3)
-        skill_3_names.append(skill_3_name)
+        with open('skills.png', 'wb') as file:
+            file.write(lnks[0].screenshot_as_png)
+
+        # skill_1 = lnks[0].get_attribute("href")
+        # skill_1_name = lnks[0].get_attribute("title")
+        # skill_2 = lnks[1].get_attribute("href")
+        # skill_2_name = lnks[1].get_attribute("title")
+        # skill_3 = lnks[2].get_attribute("href")
+        # skill_3_name = lnks[2].get_attribute("title")
+
+        # skill_1s.append(skill_1)
+        # skill_1_names.append(skill_1_name)
+        # skill_2s.append(skill_2)
+        # skill_2_names.append(skill_2_name)
+        # skill_3s.append(skill_3)
+        # skill_3_names.append(skill_3_name)
 
         # 抓取殺手武器名稱
         # 抓取殺手能力名稱

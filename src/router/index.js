@@ -42,6 +42,11 @@ const routes = [
     name:"Skills",
     component:()=> import(/* webpackChunkName: "records" */"../views/Personal/Skills.vue"),
   },
+  {
+    path:"/video",
+    name:"Video",
+    component:()=> import(/* webpackChunkName: "records" */"../components/Video.vue"),
+  }
 ]
 
 const router = createRouter({

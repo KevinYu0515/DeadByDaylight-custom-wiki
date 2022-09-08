@@ -129,7 +129,7 @@
               class="mx-1 my-1"
               v-model="v$.newSkillName.$model"
             />
-            <Button label="Confirm" class="mx-2" :disabled="disable[0]" @click="updateSkill(skill.id, 'name', index)" autofocus />
+            <Button label="Confirm" class="mx-2" :disabled="disable[0]" @click="updateSkill(skill.id, 0, 'name', state.newSkillName)" autofocus />
           </div>
           <hr class="inDialog">
           <Dropdown
@@ -141,12 +141,12 @@
             class="mx-1"
             style="width:200px"
           />
-          <Button label="Confirm" class="mx-2" :disabled="disable[1]" @click="updateSkill(skill.id, 'usefulness', index)" autofocus />
+          <Button label="Confirm" class="mx-2" :disabled="disable[1]" @click="updateSkill(skill.id, 1, 'usefulness', state.newSkillUseful)" autofocus />
           <hr class="inDialog">
           <h3>Description</h3>
           <Textarea class="my-2" placeholder="Description" :modelValue="skill.illustrate" v-model="v$.newSkillInfor.$model" :autoResize="true" rows="5" cols="80" />
           <br>
-          <Button label="Confirm" class="mx-2"  :disabled="disable[2]" @click="updateSkill(skill.id, 'description', index)" autofocus />
+          <Button label="Confirm" class="mx-2"  :disabled="disable[2]" @click="updateSkill(skill.id, 2, 'description', state.newSkillInfor)" autofocus />
           <template #footer>
               <Button label="Complete" icon="pi pi-check" @click="complete(index); replaceSkill(skill, skills)" class="p-button-text"/>
           </template>
@@ -299,24 +299,25 @@ const addskill = () => {
   submitted.value = false
 }
 
-const updateSkill = (id, options, dia) => {
-  if(options == "name"){
-    if(isNone(state.newSkillName)){
+const updateSkill = (id, dis, options ,optionsValue) => {
+  if(isNone(optionsValue)){
+    if(options == "name"){
       updateDoc(doc(collection(db, "skills"), id), { name: state.newSkillName })
-      disable.value[0] = true
-    }
-  }else if(options == "usefulness"){
-    if(isNone(state.newSkillUseful)){
-      updateDoc(doc(collection(db, "skills"), id), { usefulness: state.newSkillUseful })
-      disable.value[1] = true
-    }
-  }else if(options == "description"){
-    if(isNone(state.newSkillInfor)){
+    }else if(options == "description"){
       updateDoc(doc(collection(db, "skills"), id), { illustrate: state.newSkillInfor })
-      disable.value[2] = true
+    }else if(options == "usefulness"){
+      updateDoc(doc(collection(db, "skills"), id), { usefulness: state.newSkillUseful })
     }
-  console.log("updateSkill")
+    disable.value[dis] = true
+    console.log("updateSkill")
   }
+}
+
+const isNone = options => {
+  if(!options){
+    displayModal.value[2] = true
+    return false
+  }else return true
 }
 
 const previewImage = event => {
@@ -355,15 +356,6 @@ const complete = i => {
   state.newSkillUseful = ""
   state.newSkillInfor = ""
   editStatue(i)
-}
-
-const isNone = options => {
-  if(!options){
-    displayModal.value[2] = true
-    return false
-  }else{
-    return true
-  }
 }
 
 const editStatue = i => {
