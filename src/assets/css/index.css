@@ -1,0 +1,9 @@
+:root{
+    --difficulty:yellow;
+}
+
+.difficulty{
+    letter-spacing: 1px;
+    font-weight: 900;
+    color: var(--difficulty);
+}

@@ -50,6 +50,18 @@
             <small v-if="(v$.newKillerName.$invalid && submitted) || v$.newKillerName.$pending.$response" class="p-error">
               {{v$.newKillerName.required.$message.replace('Value', 'Name')}}
             </small>
+            <Dropdown
+              v-model="v$.newKillerDR.$model" :class="{'p-invalid':v$.newKillerDR.$invalid && submitted}"
+              :options="drOptions"
+              optionLabel="dr"
+              optionValue="dr"
+              placeholder="Difficutly Rating"
+              class="mx-1 my-1"
+              style="width:200px"
+            />
+            <small v-if="(v$.newKillerDR.$invalid && submitted) || v$.newKillerDR.$pending.$response" class="p-error">
+              {{v$.newKillerDR.required.$message.replace('Value', 'Difficulty Rating')}}
+            </small>
             <br/>
             <hr class="inDialog">
             <Button 
@@ -89,18 +101,14 @@
           :key="killer"
         >
           <a @click="passDataToRecords(killer)">
-            <span></span>
+            <span class="bloodHover"></span>
             <div class="imgBox">
                 <img :src="killer.cover" alt="killer"/>
             </div>
             <div class="content">
               <div>
                 <h3 style="padding-bottom:20px">{{killer.name}}</h3>
-                <p>move： {{filltermove(killer)}} m/s</p>
-                <br>
-                <p>terror： {{killer.terror}} m</p>
-                <br>
-                <p>height： {{killer.height}}</p>
+                <p class="difficulty" :style="{'color':difficulty(killer)}">{{killer.difficulty}}</p>
               </div>
             </div>
           </a>
@@ -118,6 +126,7 @@ export default {
     return{
       levelOptions: ([{level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}]),
       heightOptions: ([{hei:"Tall"}, {hei:"Average"}, {hei:"Short"}]),
+      drOptions: ([{dr:"Easy"}, {dr:"Moderate"}, {dr:"Hard"}, {dr:"Very Hard"}]),
     }
   },
   methods:{
@@ -139,16 +148,19 @@ export default {
           killerWeapon: killer.weapon,
           killerPower: killer.power,
           killerRealName: killer.realName,
-          killerVideos: killer.videos
+          killerVideos: killer.videos,
+          killerDifficulty: killer.difficulty
         }
       }),
       console.log("pass")
     },
-    filltermove(killer){
-      if(!killer.move) return killer.move
-      if(killer.move.length > 11 ){
-        return killer.move.slice(7, 11)
-      }else return killer.move
+    difficulty(killer){
+      switch (killer.difficulty){
+        case "Easy": return "rgba(64,176,64)"
+        case "Moderate": return "yellow"
+        case "Hard": return "rgba(229,132,48)"
+        case "Very Hard": return "rgba(246,89,89)"
+      }
     },
     clickInput1(){
       this.$nextTick(()=>{
@@ -198,13 +210,15 @@ onMounted(() => {
         skills: doc.data().skills,
         reSkills: doc.data().recommandSkills,
         realName: doc.data().realName,
-        videos: doc.data().videos
+        videos: doc.data().videos,
+        difficulty: doc.data().difficulty
       }
       fbkillers.push(killer)
     })
     killers.value = fbkillers
   })
 }),
+
 
 onUpdated(() => {
   $(document).ready(function(){
@@ -233,12 +247,14 @@ onUpdated(() => {
 
 const state = reactive({
   newKillerName : "",
-  newKillerLevel : ""
+  newKillerLevel : "",
+  newKillerDR: ""
 })
 
 const rules = {
   newKillerLevel: { required },
-  newKillerName: { required }
+  newKillerName: { required },
+  newKillerDR: { required }
 }
 
 const v$ = useVuelidate(rules, state)
@@ -253,14 +269,11 @@ const addKiller = () => {
   addDoc(collection(db, "killers"), {
     name: state.newKillerName,
     level: state.newKillerLevel,
-    cover: imageUrl.value
+    cover: imageUrl.value,
+    difficulty: state.newKillerDR
   })
-  state.newKillerName = ""
-  state.newKillerLevel = ""
-  imageUrl.value = ""
-  image.value = null
+  clearData()
   displayModal.value[0] = false
-  submitted.value = false
 }
 
 const levelGroup = computed(() =>{
@@ -310,6 +323,7 @@ const onUpload = () => {
 const clearData = () => {
   state.newKillerLevel = ""
   state.newKillerName = ""
+  state.newKillerDR = ""
   image.value = null
   imageUrl.value = ""
   submitted.value = false
@@ -328,4 +342,8 @@ const logout = async() => {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/personal/personal.scss";
+</style>
+
+<style scoped>
+@import "../../assets/css/index.css";
 </style>

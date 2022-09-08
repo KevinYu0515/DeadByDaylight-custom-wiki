@@ -16,11 +16,7 @@
       <div class="content">
         <div>
           <h1>{{killerName}}</h1>
-          <p>Move： {{killerMove}} </p>
-          <br>
-          <p>Terror： {{fillterTerror(killerTerror)}} m</p>
-          <br>
-          <p>Height： {{killerHeight}}</p>
+          <p>Difficulty Rating： <span class="difficulty">{{killerDifficulty}}</span> </p>
       </div>
     </div>
        <Button 
@@ -53,15 +49,15 @@
         <h3>Movement Speed</h3>
         <div class="flex align-items-center my-2">
           <InputText placeholder="Movement Speed" v-model="state.move" />
-          <p class="mx-2">m/s</p>
+          <p class="mx-2"></p>
           <Button label="Confirm" class="mx-2"  :disabled="disable[2]" @click="updateSettings(killerID, 2, 'move', state.move)" autofocus />
         </div>
         <h3>Altnative Movement Speed</h3>
         <Textarea class="my-2" placeholder="Altnative Movement Speed" v-model="state.altMove" :autoResize="true" rows="5" cols="30" />
-        <Button label="Confirm" class="mx-2"  :disabled="disable[3]" @click="updateSettings(killerID, 3, 'altMove', state.altMove)" autofocus />
+        <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[3]" @click="updateSettings(killerID, 3, 'altMove', state.altMove)" autofocus />
         <h3>Terror Radius</h3>
         <Textarea class="my-2" placeholder="Terror Radius" v-model="state.terror" :autoResize="true" rows="5" cols="30" />
-        <Button label="Confirm" class="mx-2"  :disabled="disable[4]" @click="updateSettings(killerID, 4, 'terror', state.terror)" autofocus />
+        <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[4]" @click="updateSettings(killerID, 4, 'terror', state.terror)" autofocus />
         <h3>Height</h3>
         <Dropdown
             v-model.trim="state.height"
@@ -72,13 +68,24 @@
             class="mx-1 my-1"
             style="width:20%"
           />
-        <Button label="Confirm" class="mx-2"  :disabled="disable[5]" @click="updateSettings(killerID, 5, 'height', state.height)" autofocus />
+        <Button label="Confirm" class="mx-2 my-1"  :disabled="disable[5]" @click="updateSettings(killerID, 5, 'height', state.height)" autofocus />
+        <h3>Difficulty Rating</h3>
+        <Dropdown
+          v-model.trim="state.difficulty"
+          :options="drOptions"
+          optionLabel="dr"
+          optionValue="dr"
+          placeholder="Difficulty Rating"
+          class="mx-1 my-1"
+          style="width:40%"
+        />
+        <Button label="Confirm" class="mx-2 my-1"  :disabled="disable[6]" @click="updateSettings(killerID, 6, 'difficulty', state.difficulty)" autofocus />
         <h3>Weapon And Power</h3>
-        <div class="flex align-items-center my-2">
+        <div class="flex align-items-center my-1">
           <InputText placeholder="Weapon" v-model="state.weapon" />
-          <Button label="Confirm" class="mx-2"  :disabled="disable[6]" @click="updateSettings(killerID, 6, 'weapon', state.weapon)" autofocus />
+          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[7]" @click="updateSettings(killerID, 7, 'weapon', state.weapon)" autofocus />
           <InputText placeholder="Power" class="mx-2" v-model="state.power" />
-          <Button label="Confirm" class="mx-2"  :disabled="disable[7]" @click="updateSettings(killerID, 7, 'power', state.power)" autofocus />
+          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[8]" @click="updateSettings(killerID, 8, 'power', state.power)" autofocus />
         </div>
         <h3>Skills</h3>
         <Button 
@@ -87,7 +94,7 @@
           style="max-width:100%"
           @click="clickInput1" 
         />
-        <Button label="Confirm" class="mx-2"  :disabled="disable[8]" @click="updateSettings(killerID, 8, 'skills',sUrl.value)" autofocus />
+        <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[9]" @click="updateSettings(killerID, 9, 'skills',sUrl.value)" autofocus />
         <div class="flex">
           <div class="col-3" v-for="(skill, index) in sData" :key="index">
             <div v-if="skill!=null" style="transform:scale(50%)">                     
@@ -102,7 +109,7 @@
           style="max-width:100%"
           @click="clickInput2" 
         /> 
-        <Button label="Confirm" class="mx-2"  :disabled="disable[9]" @click="updateSettings(killerID, 9, 'recommandSkills', rsUrl.value)" autofocus />
+        <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[10]" @click="updateSettings(killerID, 10, 'recommandSkills', rsUrl.value)" autofocus />
         <div class="flex">
           <div class="col-2" v-for="(skill, index) in rsData" :key="index">
             <div v-if="skill!=null" style="transform:scale(50%)">               
@@ -160,8 +167,14 @@
       <div class="infor" v-if="killerWeapon!=null">
         <h1>Infor</h1>
          <hr>
-        <p>RealName：{{killerRealName}}<br> Weapon：{{killerWeapon}}<br> Power：{{killerPower}}<br> 
-          <span v-if="killerAltMove">Alternate Movement Speed：{{killerAltMove}}</span>
+        <p>
+          RealName：<span class="value">{{killerRealName}}</span><br>
+          Weapon：<span class="value">{{killerWeapon}}</span><br>
+          Power：<span class="value">{{killerPower}}</span><br> 
+          Movement Speed：<span class="value">{{killerMove}}</span><br>
+          Terror Radius：<span class="value">{{killerTerror}}</span><br>
+          Height：<span class="value">{{killerHeight}}</span><br>
+          <span v-if="killerAltMove">Alternate Movement Speed：<span class="value">{{killerAltMove}}</span><br></span>
         </p>
       </div>
       <div class="video">
@@ -206,6 +219,7 @@ export default {
   data(){
     return{
       heightOptions: ([{hei:"Tall"}, {hei:"Average"}, {hei:"Short"}]),
+      drOptions: ([{dr:"Easy"}, {dr:"Moderate"}, {dr:"Hard"}, {dr:"Very Hard"}]),
     }
   },
   props:{
@@ -221,6 +235,7 @@ export default {
       killerAltMove:{type: String},
       killerWeapon:{type: String},
       killerPower:{type: String},
+      killerDifficulty:{type: String},
       reSkills:{type: Array},
   },
   methods:{
@@ -242,7 +257,7 @@ export default {
 }
 </script>
 <script setup>
-import { reactive, ref } from "vue"
+import { reactive, ref, onMounted } from "vue"
 import { ref as r, uploadBytes } from "firebase/storage"
 import { db, storage } from "@/firebase"
 import { collection, doc, updateDoc, deleteDoc } from "firebase/firestore"
@@ -263,12 +278,27 @@ const state = reactive({
   power: "",
   background: "",
   realName: "",
+  difficulty: ""
 })
 
 const input1 = ref(null)
 const input2 = ref(null)
 const displayModal = ref([false])
 const disable = ref([false])
+
+
+onMounted(() =>{
+  let diff = document.querySelector(".difficulty")
+  if(diff.textContent == "Easy"){
+    document.documentElement.style.setProperty("--difficulty", "rgba(64,176,64)")
+  }else if(diff.textContent == "Moderate"){
+    document.documentElement.style.setProperty("--difficulty", "yellow")
+  }else if(diff.textContent == "Hard"){
+    document.documentElement.style.setProperty("--difficulty", "rgba(229,132,48)")
+  }else if(diff.textContent == "Very Hard"){
+    document.documentElement.style.setProperty("--difficulty", "rgba(239,37,37)")
+  }
+})
 
 const deleteKiller = id => {
   router.push("/personal")
@@ -286,6 +316,9 @@ const updateSettings = (id, dis, options, optionsValue) => {
   else if(isNone(optionsValue)){
     console.log("skills pass")
     switch (options){
+      case "difficulty":
+        updateDoc(doc(collection(db, "killers"), id),{ difficulty: state.difficulty })
+        break
       case "background":
         updateDoc(doc(collection(db, "killers"), id),{ background: state.background })
         break
@@ -389,4 +422,8 @@ const modalStatue = i => {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/personal/records.scss";
+</style>
+
+<style scoped>
+@import "../../assets/css/index.css";
 </style>

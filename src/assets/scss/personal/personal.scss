@@ -86,12 +86,15 @@
                         color:aliceblue;
                         visibility: hidden;
                         opacity: 0;
-                        transform: translateY(50px);
+                        transform: translateY(100px);
                         transition: .2s;
-                        p{ 
-                            font-size: small;
-                            line-height: 2px;
+                        h3{
+                            letter-spacing: 1px;
                         }
+                        p{
+                            font-size: larger;
+                            color:rgb(241, 224, 43);
+                        } 
                     }
                 }
                 &:hover .content div{

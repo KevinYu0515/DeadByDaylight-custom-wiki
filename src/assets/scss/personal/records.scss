@@ -83,7 +83,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
-        padding-left: 10vw;
+        padding-left: 13vw;
         z-index:2;
         .killerbg{
             max-width: 100%;
@@ -156,10 +156,15 @@
                 font-family: 'Amaranth';
                 font-size: 1.2em;
                 color:beige;
-                span{
+                .value{
                     font-family: 'Amaranth';
+                    color:rgb(181, 181, 118);
                 }
-                
+                span{
+                    word-spacing: 3px;
+                    font-family: 'Amaranth';
+                    color:beige;
+                }
             }
             margin-bottom: 40px;
         }
