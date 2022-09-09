@@ -142,13 +142,14 @@ export default {
           killerMove: killer.move,
           killerAltMove: killer.altMove,
           killerTerror: killer.terror,
+          killerAltTerror: killer.altTerror,
           killerHeight: killer.height,
           killerSkills: killer.skills,
           reSkills: killer.reSkills,
           killerWeapon: killer.weapon,
           killerPower: killer.power,
           killerRealName: killer.realName,
-          killerVideos: killer.videos,
+          killerBgImg: killer.bgImg,
           killerDifficulty: killer.difficulty
         }
       }),
@@ -175,12 +176,13 @@ export default {
 import { reactive, ref, onMounted, onUpdated, computed } from "vue"
 import axios from "axios"
 import { useRouter } from "vue-router"
-import { db, storage } from "@/firebase"
+import { killersColRef, storage } from "@/firebase"
 import { ref as r, uploadBytes } from "firebase/storage"
-import { collection, onSnapshot, addDoc } from "firebase/firestore"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import $ from "jquery"
+
+import { addDoc, onSnapshot } from "firebase/firestore"
 const router = useRouter()
 const killers = ref([])
 const imageUrl = ref("")
@@ -192,7 +194,7 @@ const input1 = ref(null)
 const submitted = ref(false)
 
 onMounted(() => {
-  onSnapshot(collection(db,"killers"), (querySnapshot) => {
+  onSnapshot(killersColRef, (querySnapshot) => {
     let fbkillers = []
     querySnapshot.forEach((doc) => {
       const killer = {
@@ -202,6 +204,7 @@ onMounted(() => {
         move: doc.data().movementSpeed,
         altMove: doc.data().altnativeMoveSpeed,
         terror: doc.data().terrorRadius,
+        altTerror: doc.data().altnativeTerrorRadius,
         height: doc.data().height,
         weapon: doc.data().weapon,
         power: doc.data().power,
@@ -210,7 +213,7 @@ onMounted(() => {
         skills: doc.data().skills,
         reSkills: doc.data().recommandSkills,
         realName: doc.data().realName,
-        videos: doc.data().videos,
+        bgImg: doc.data().bgImg,
         difficulty: doc.data().difficulty
       }
       fbkillers.push(killer)
@@ -266,7 +269,7 @@ const handleSubmit = (isFormValid) => {
 }
 
 const addKiller = () => {
-  addDoc(collection(db, "killers"), {
+  addDoc(killersColRef, {
     name: state.newKillerName,
     level: state.newKillerLevel,
     cover: imageUrl.value,

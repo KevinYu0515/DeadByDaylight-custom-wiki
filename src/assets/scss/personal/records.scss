@@ -14,12 +14,13 @@
     }
     .leftBg{
         width: 220px;
-        height: 180vh;
+        height: 190vh;
         background-color: darkolivegreen;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        margin-right: 200px;
         z-index:2;
         @media screen and (max-width: 1024px){
             height: 200vh;
@@ -67,14 +68,6 @@
                 }
             }
         }
-        .bs{
-            left: 100px;
-            top: 40px;
-            width: 110px;
-            height: 50px;
-            font-size: larger;
-            margin-bottom: 20px;
-        }
     }
     .container{
         width: 120vw;
@@ -83,7 +76,6 @@
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
-        padding-left: 13vw;
         z-index:2;
         .killerbg{
             max-width: 100%;
@@ -151,20 +143,28 @@
                 color:darkgoldenrod;
                 font-family: 'Carter One';
             }
+            table {
+                border-collapse: collapse;
+                max-width: 100%;
+                min-width: 400px;
+                td, th {
+                font-family: "Amaranth";
+                border: 1px solid #dddddd;
+                text-align: left;
+                color:rgb(181, 181, 118);
+                padding: 8px;
+                    span{
+                        word-spacing: 3px;
+                        font-family: 'Amaranth';
+                        color:beige;
+                    }
+                }
+            }
             p{
                 word-spacing: 3px;
                 font-family: 'Amaranth';
                 font-size: 1.2em;
                 color:beige;
-                .value{
-                    font-family: 'Amaranth';
-                    color:rgb(181, 181, 118);
-                }
-                span{
-                    word-spacing: 3px;
-                    font-family: 'Amaranth';
-                    color:beige;
-                }
             }
             margin-bottom: 40px;
         }
@@ -266,3 +266,22 @@ hr{
     margin:0px 0px 20px 0px;
 }
 
+.bs{
+    position: relative;
+    left: 100px;
+    top: 40px;
+    width: 110px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.videoPreview{
+    word-spacing: 3px;
+    font-family: 'Amaranth';
+    font-size: 1.2em;
+    color:beige;
+}

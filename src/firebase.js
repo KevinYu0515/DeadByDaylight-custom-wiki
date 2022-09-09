@@ -1,6 +1,7 @@
 import firebase from "firebase/compat/app"
-import { getFirestore } from "firebase/firestore"
+import { getFirestore, collection } from "firebase/firestore"
 import { getStorage } from "firebase/storage"
+
 /* code from our Firebase console */
 const firebaseConfig = {
   apiKey: "AIzaSyCSAHslHTQRCj3IMX_1Kx6T22uL_VQhfMo",
@@ -16,7 +17,9 @@ const firebaseConfig = {
 const firebaseApp = firebase.initializeApp(firebaseConfig)
 var db = getFirestore(firebaseApp)
 const storage = getStorage(firebaseApp)
+const killersColRef = collection(db,"killers")
+const skillsColRef = collection(db,"skills")
 
 export{
-  db, storage
+  storage, killersColRef, skillsColRef
 }
