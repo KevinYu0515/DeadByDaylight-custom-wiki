@@ -55,13 +55,6 @@
             color:darkgoldenrod;
             font-family: 'Carter One';
         }
-        .outDialog{ 
-            width: 50%;
-            height: 2px;
-            background-color:black;
-            border:none;
-            margin:0px 0px 20px 0px;
-        }
         .noneSkills{
             padding: 100px;
             letter-spacing: 2px;
@@ -110,15 +103,6 @@
             }
         }
     }
-}
-
-.inDialog{ 
-    width: 90%;
-    height: 2px;
-    background-color:rgb(161, 156, 156);
-    opacity: .2;
-    margin: 20px 0;
-    border:none;
 }
 
 .p-dialog .p-dialog-header .p-dialog-header-icon:last-child{

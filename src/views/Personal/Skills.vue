@@ -234,8 +234,8 @@ export default {
 
 <script setup>
 import { reactive, ref, onMounted } from "vue"
-import { db, storage } from "@/firebase"
-import { collection, onSnapshot, addDoc, updateDoc, doc } from "firebase/firestore"
+import { storage, skillsColRef } from "@/firebase"
+import { onSnapshot, addDoc, updateDoc, doc } from "firebase/firestore"
 import { ref as r, uploadBytes } from "firebase/storage"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
@@ -249,7 +249,7 @@ const disable = ref([false])
 
 onMounted(() => {
   console.log("sucess setup7")
-  onSnapshot(collection(db,"skills"), (querySnapshot) => {
+  onSnapshot(skillsColRef, (querySnapshot) => {
     let fbskills = []
     querySnapshot.forEach((doc) => {
       const skill = {
@@ -284,7 +284,7 @@ const handleSubmit = (isFormValid) => {
 }
 
 const addskill = () => {
-  addDoc(collection(db, "skills"), {
+  addDoc(skillsColRef, {
     name: state.newSkillName,
     usefulness: state.newSkillUseful,
     icon: sUrl.value,
@@ -302,11 +302,11 @@ const addskill = () => {
 const updateSkill = (id, dis, options ,optionsValue) => {
   if(isNone(optionsValue)){
     if(options == "name"){
-      updateDoc(doc(collection(db, "skills"), id), { name: state.newSkillName })
+      updateDoc(doc(skillsColRef, id), { name: state.newSkillName })
     }else if(options == "description"){
-      updateDoc(doc(collection(db, "skills"), id), { illustrate: state.newSkillInfor })
+      updateDoc(doc(skillsColRef, id), { illustrate: state.newSkillInfor })
     }else if(options == "usefulness"){
-      updateDoc(doc(collection(db, "skills"), id), { usefulness: state.newSkillUseful })
+      updateDoc(doc(skillsColRef, id), { usefulness: state.newSkillUseful })
     }
     disable.value[dis] = true
     console.log("updateSkill")
@@ -372,4 +372,8 @@ const modalStatue = i => {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/personal/skills.scss";
+</style>
+
+<style scoped>
+@import "../../assets/css/index.css";
 </style>
