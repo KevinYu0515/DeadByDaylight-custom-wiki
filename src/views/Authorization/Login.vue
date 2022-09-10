@@ -21,8 +21,8 @@
 
 <script>
 import { useRouter } from "vue-router"
-import Navbar from "../../components/Navbar.vue"
-import Footer from "../../components/Footer.vue"
+import Navbar from "../../components/Navbar/Navbar.vue"
+import Footer from "../../components/Footer/Footer.vue"
 import "@/firebase"
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"

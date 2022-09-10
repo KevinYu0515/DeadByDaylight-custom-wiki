@@ -24,3 +24,7 @@
     border:none;
     margin:0px 0px 20px 0px;
 }
+
+.p-dialog-header-icons{
+    visibility: hidden !important;
+}

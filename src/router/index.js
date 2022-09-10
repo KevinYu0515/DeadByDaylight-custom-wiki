@@ -23,7 +23,7 @@ const routes = [
   {
     path:"/register",
     name:"Register",
-    component:()=>import(/* webpackChunkName: "login" */"../views/Authorization/Register.vue")
+    component:()=>import(/* webpackChunkName: "register" */"../views/Authorization/Register.vue")
   },
   {
     path:"/personal",
@@ -40,12 +40,12 @@ const routes = [
   {
     path:"/skills",
     name:"Skills",
-    component:()=> import(/* webpackChunkName: "records" */"../views/Personal/Skills.vue"),
+    component:()=> import(/* webpackChunkName: "skills" */"../views/Personal/Skills.vue"),
   },
   {
     path:"/video",
     name:"Video",
-    component:()=> import(/* webpackChunkName: "records" */"../components/Video.vue"),
+    component:()=> import(/* webpackChunkName: "videos" */"../components/Others/Video.vue"),
   }
 ]
 

@@ -11,7 +11,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import "../assets/scss/dbdnavbar.scss";
+@import "../../assets/scss/dbdnavbar.scss";
 @import url('https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Rubik+Dirt&display=swap');
 </style>
