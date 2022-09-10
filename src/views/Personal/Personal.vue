@@ -81,17 +81,7 @@
               <Button label="Discard" icon="pi pi-trash" @click="modalStatue(1)" class="p-button-text"/>
           </template>
         </Dialog>
-        <Dialog 
-          header="Warning" 
-          v-model:visible="displayModal[1]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-          :style="{width: '30vw'}" :modal="true"
-        >
-        <p>你所作的紀錄將不會儲存，確定要退出?</p>
-          <template #footer>
-            <Button label="Yes" icon="pi pi-check" @click="modalStatue(1); modalStatue(0); clearData()" class="p-button-text"/>
-            <Button label="No" icon="pi pi-times" @click="modalStatue(1)" class="p-button-text"/>
-          </template>
-        </Dialog>
+        <WarningDialog :isdisplay="displayModal[1]" location="Append New Role" @childmodal="modalStatue"></WarningDialog>
         <Button href="javascript:void(0)" class="p-button-success mx-2" @click="logout">Logout</Button>   
       </div>
       <div class="container">
@@ -120,8 +110,10 @@
 
 <script>
 import DBDNavbar from "../../components/DBDNavbar.vue"
+import WarningDialog from "../../components/DialogGroup/WarningDialog.vue"
 export default {
-  components:{ DBDNavbar },
+  name:"Personal",
+  components:{ DBDNavbar, WarningDialog },
   data(){
     return{
       levelOptions: ([{level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}]),
@@ -329,11 +321,14 @@ const clearData = () => {
   state.newKillerDR = ""
   image.value = null
   imageUrl.value = ""
-  submitted.value = false
 }
 
-const modalStatue = i => {
+const modalStatue = (i, isClear) => {
   displayModal.value[i] = !displayModal.value[i]
+  submitted.value = false
+  if(isClear){
+    clearData()
+  }
 }
 
 const logout = async() => {

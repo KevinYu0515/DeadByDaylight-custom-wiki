@@ -83,17 +83,7 @@
                 <Button label="Discard" icon="pi pi-trash" @click="modalStatue(1)" class="p-button-text"/>
             </template>
         </Dialog>
-        <Dialog 
-          header="Warning" 
-          v-model:visible="displayModal[1]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-          :style="{width: '30vw'}" :modal="true"
-        >
-        <p>你所作的紀錄將不會儲存，確定要退出?</p>
-          <template #footer>
-            <Button label="Yes" icon="pi pi-check" @click="modalStatue(1); modalStatue(0); clearData()" class="p-button-text"/>
-            <Button label="No" icon="pi pi-times" @click="modalStatue(1)" class="p-button-text"/>
-          </template>
-        </Dialog>
+        <warning-dialog :isdisplay="displayModal[1]" location="Append New Skill" @childmodal="modalStatue"></warning-dialog>
       </ul>
     </div>
     <div class="infor">
@@ -169,8 +159,10 @@
 
 <script>
 import DBDNavbar from "../../components/DBDNavbar.vue"
+import WarningDialog from "../../components/DialogGroup/WarningDialog.vue"
 export default {
-  components:{ DBDNavbar },
+  name:"Skills",
+  components:{ DBDNavbar, WarningDialog },
   data(){
     return{
       skillsClick: [],
@@ -290,13 +282,7 @@ const addskill = () => {
     icon: sUrl.value,
     illustrate: state.newSkillInfor
   })
-  sUrl.value = "",
-  sData.value = null,
-  state.newSkillName = "",
-  state.newSkillInfor = "",
-  state.newSkillUseful = "",
-  displayModal.value[0] = false
-  submitted.value = false
+  modalStatue(0, true)
 }
 
 const updateSkill = (id, dis, options ,optionsValue) => {
@@ -352,9 +338,7 @@ const clearData = () => {
 }
 
 const complete = i => {
-  state.newSkillName = ""
-  state.newSkillUseful = ""
-  state.newSkillInfor = ""
+  clearData()
   editStatue(i)
 }
 
@@ -363,9 +347,12 @@ const editStatue = i => {
   disable.value = [false]
 }
 
-const modalStatue = i => {
+const modalStatue = (i, isClear) => {
   displayModal.value[i] = !displayModal.value[i]
   submitted.value = false
+  if(isClear){
+    clearData()
+  }
 }
 
 </script>

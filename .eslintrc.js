@@ -23,5 +23,6 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     "quotes":['error',"double"],
     "semi":[1,"never"],
+    "vue/no-mutating-props": 0
   }
 }
