@@ -14,7 +14,7 @@
 
   <!-- 全部內容視窗 -->
   <Dialog 
-    :header="`${killerName} Background`" 
+    :header="`${title}`" 
     v-model:visible="isdisplay2" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
     :style="{width: '60vw'}" :modal="true"
   >
@@ -31,7 +31,7 @@ export default {
   props:{ isdisplay:{ type: Boolean, deafult:false },
           isdisplay2:{ type: Boolean, deafult:false },
           location:{ type: String },
-          killerName:{ type: String },
+          title:{ type: String },
           content:{ type: String }
         },
   emits:["childmodal"],

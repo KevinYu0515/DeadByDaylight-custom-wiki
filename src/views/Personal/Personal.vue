@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import DBDNavbar from "../../components/DBDNavbar.vue"
+import DBDNavbar from "../../components/Navbar/DBDNavbar.vue"
 import AppendRole from "../../components/DialogGroup/AppendRole.vue"
 import WarningDialog from "../../components/DialogGroup/WarningDialog.vue"
 export default {

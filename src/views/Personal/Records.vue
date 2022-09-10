@@ -200,7 +200,7 @@
         <h1>Background<span class="bgAll" @click="modalStatue(2)">(Read More)</span></h1>
         <warning-dialog 
           :isdisplay2="displayModal[2]" 
-          :killerName="killerName" 
+          :title="`${killerName} Background`" 
           :content="killerBackground"
           @childmodal="modalStatue"
         />

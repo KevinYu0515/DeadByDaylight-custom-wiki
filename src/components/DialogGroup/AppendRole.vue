@@ -61,12 +61,7 @@
 
 <script>
 export default {
-    name:"AppendRole",
-    methods:{
-        clickInput1(){
-            this.$refs.input1.click()
-        }
-    }
+    name:"AppendRole"
 }
 </script>
 
@@ -77,6 +72,9 @@ import { required } from "@vuelidate/validators"
 
 const input1 = ref(null)
 const submitted = ref(false)
+const clickInput1 = () => {
+    input1.value.click()
+}
 
 const props = defineProps(["isdisplay","levelOptions","drOptions"])
 const isdisplay = ref(false)
