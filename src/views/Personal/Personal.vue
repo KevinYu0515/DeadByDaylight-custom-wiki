@@ -110,11 +110,6 @@ export default {
         case "Hard": return "rgba(229,132,48)"
         case "Very Hard": return "rgba(246,89,89)"
       }
-    },
-    clickInput1(){
-      this.$nextTick(()=>{
-        this.$refs.input1.click()
-      })
     }
   }
 }

@@ -310,6 +310,7 @@ export default {
       killerID:{type: String},
       killerBackground:{type: String},
       killerCover:{type: String},
+      killerName:{type:String},
       killerRealName:{type: String},
       killerMove:{type: String},
       killerTerror:{type: String},
@@ -353,20 +354,15 @@ export default {
 }
 </script>
 <script setup>
-import { reactive, ref, onMounted, defineProps } from "vue"
+import { reactive, ref, onMounted, getCurrentInstance } from "vue"
 import { ref as r, uploadBytes, getDownloadURL } from "firebase/storage"
 import { killersColRef, storage } from "@/firebase"
 import { doc, updateDoc, deleteDoc } from "firebase/firestore"
 import { useRouter } from "vue-router"
 
-const props = defineProps(["killerName"])
-const killerName = ref(null)
-onMounted(() => {
-  killerName.value = props.killerName
-})
-
 const moveChecked = ref(false)
 const terrorChecked = ref(false)
+const Instance = getCurrentInstance()
 const items =  ref([
 {
   label: "Base Information",
@@ -418,7 +414,8 @@ onMounted(() =>{
 
 const videoUrl = ref("")
 onMounted(() =>{
-  const pathReference = r(storage, `killersVideo/Trailer/${killerName.value}.mp4`)
+  console.log(Instance.props.killerName)
+  const pathReference = r(storage, `killersVideo/Trailer/${Instance.props.killerName}.mp4`)
   getDownloadURL(pathReference)
   .then((url) => {
     videoUrl.value = url
