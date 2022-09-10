@@ -34,9 +34,9 @@ export default {
           killerName:{ type: String },
           content:{ type: String }
         },
+  emits:["childmodal"],
   methods:{
     modalStatue(i, isClear){
-      console.log("childmodal", this.isdisplay)
       this.$emit("childmodal", i, isClear)
     }
   },
