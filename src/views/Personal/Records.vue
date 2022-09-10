@@ -267,16 +267,21 @@
       <div class="video">
         <div class="videoHeader flex align-items-center">
           <h1> Video </h1>
-          <Button label="Upload" @click="isShow=!isShow" class="p-button-success my-2 mx-2"></Button>
-          <p class="videoPreview mx-2" v-if="isShow">Some problems with payload.</p>
-          <Button v-if="isShow" label="OK" @click="isShow=!isShow" class="p-button-infor my-2 mx-2"></Button>
+          <Button label="Upload" @click="modalStatue(3)" class="p-button-success my-2 mx-2"></Button>
+          <AppendVideo 
+            :isdisplay="displayModal[3]" 
+            :killerID="killerID"
+            @childmodal="modalStatue"
+            @uploadVideo="onUploadVideo"
+            @addToDoc="addVideoToDoc"
+          ></AppendVideo>
         </div>
         <input type="file" name="file" ref="input3" style="display:none" @change="previewVideo" accept="video/*"/>
         <hr class="outDialog">
         <div class="videos">
-          <div class="videoBox" @click="toVideo">
+          <div class="videoBox" @click="toVideo(); passDataToVideos(videoUrl)">
               <figure>
-                <video :src="require('@/assets/video/defaultAnimation.mp4')" alt="video"/>
+                <video class="Demo" :src="videoUrl" alt="video"/>
                 <figcaption>
                   <h1>VIDEO 1</h1>
                   <p>{{killerName}} Demo</p>
@@ -291,12 +296,12 @@
 
 <script>
 import WarningDialog from "../../components/DialogGroup/WarningDialog.vue"
+import AppendVideo from "../../components/DialogGroup/AppendVideo.vue"
 export default {
   name:"Records",
-  components:{ WarningDialog },
+  components:{ WarningDialog, AppendVideo },
   data(){
     return{
-      isShow: false,
       heightOptions: ([{hei:"Tall"}, {hei:"Average"}, {hei:"Short"}]),
       drOptions: ([{dr:"Easy"}, {dr:"Moderate"}, {dr:"Hard"}, {dr:"Very Hard"}]),
     }
@@ -305,7 +310,6 @@ export default {
       killerID:{type: String},
       killerBackground:{type: String},
       killerCover:{type: String},
-      killerName:{type: String},
       killerRealName:{type: String},
       killerMove:{type: String},
       killerTerror:{type: String},
@@ -336,15 +340,30 @@ export default {
     clickInput2() { this.$refs.input2.click() },
     clickInput3() { this.$refs.input3.click() },
     clickInput4() { this.$refs.input4.click() },
+
+    passDataToVideos(videoLink){
+      this.$router.push({
+        path:"/video",
+        name:"Video",
+        query:{
+          videoLink: videoLink}
+      })
+    }
   }
 }
 </script>
 <script setup>
-import { reactive, ref, onMounted } from "vue"
-import { ref as r, uploadBytes } from "firebase/storage"
+import { reactive, ref, onMounted, defineProps } from "vue"
+import { ref as r, uploadBytes, getDownloadURL } from "firebase/storage"
 import { killersColRef, storage } from "@/firebase"
 import { doc, updateDoc, deleteDoc } from "firebase/firestore"
 import { useRouter } from "vue-router"
+
+const props = defineProps(["killerName"])
+const killerName = ref(null)
+onMounted(() => {
+  killerName.value = props.killerName
+})
 
 const moveChecked = ref(false)
 const terrorChecked = ref(false)
@@ -397,9 +416,26 @@ onMounted(() =>{
   }
 })
 
+const videoUrl = ref("")
+onMounted(() =>{
+  const pathReference = r(storage, `killersVideo/Trailer/${killerName.value}.mp4`)
+  getDownloadURL(pathReference)
+  .then((url) => {
+    videoUrl.value = url
+  })
+  .catch((error) => {
+  })
+})
+
 const deleteKiller = id => {
   router.push("/personal")
   deleteDoc(doc(killersColRef, id))
+}
+
+const addVideoToDoc = (id, video) => {
+  updateDoc(doc(killersColRef, id),{ videos: video })
+  console.log("success")
+  modalStatue(3)
 }
 
 const updateSettings = (id, dis, options, optionsValue) => {
@@ -539,6 +575,14 @@ const onUploadBgImg = bg =>{
     console.log("Uploaded a blob or file!", snapshot)
   })
 }
+
+const onUploadVideo = video =>{
+  const storageRef = r(storage, `killersVideo/Trailer/${video.name}`)
+  uploadBytes(storageRef, video).then((snapshot) => {
+    console.log("Uploaded a blob or file!", snapshot)
+  })
+}
+
 
 
 const back = () => {

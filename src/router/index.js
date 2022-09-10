@@ -46,6 +46,7 @@ const routes = [
     path:"/video",
     name:"Video",
     component:()=> import(/* webpackChunkName: "videos" */"../components/Others/Video.vue"),
+    props: (route) => route.query
   }
 ]
 
