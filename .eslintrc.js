@@ -5,7 +5,7 @@ module.exports = {
   },
   extends: [
     'plugin:vue/vue3-essential',
-    "standard"
+    'eslint:recommended'
   ],
   parserOptions: {
     parser: 'babel-eslint'
@@ -14,15 +14,15 @@ module.exports = {
     {
       files:['*.vue','*.html'],
       rules: {
-        'quotes':['warning','double']
+        'quotes':['error','double']
       }
     },
   ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    "quotes":['warning',"double"],
+    "quotes":['error',"double"],
     "semi":[1,"never"],
-    "vue/no-mutating-props": 0
+    "vue/no-mutating-props":0
   }
 }
