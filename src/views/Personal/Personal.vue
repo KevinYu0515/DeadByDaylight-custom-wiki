@@ -30,6 +30,7 @@
           @childmodal="modalStatue"
           @uploadImg="onUpload"
           @setKillerDoc="addKiller"
+          ref="appendRole"
         />
         <WarningDialog 
           :isdisplay="displayModal[1]" 
@@ -65,9 +66,10 @@
 <script>
 import DBDNavbar from "../../components/DBDNavbar.vue"
 import AppendRole from "../../components/DialogGroup/AppendRole.vue"
+import WarningDialog from "../../components/DialogGroup/WarningDialog.vue"
 export default {
   name:"Personal",
-  components:{ DBDNavbar, AppendRole },
+  components:{ DBDNavbar, WarningDialog, AppendRole },
   data(){
     return{
       levelOptions: ([{level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}]),
@@ -132,6 +134,7 @@ const killers = ref([])
 const displayModal = ref([false])
 const selectedLevel = ref("ALL")
 const searchName = ref("")
+const appendRole = ref(null)
 
 onMounted(() => {
   onSnapshot(killersColRef, (querySnapshot) => {
@@ -230,7 +233,7 @@ const nameGroup = computed(() => {
 const modalStatue = (i, isClear) => {
   displayModal.value[i] = !displayModal.value[i]
   if(isClear){
-    console.log("Hello Vue")
+    appendRole.value.clearData()
   }
 }
 

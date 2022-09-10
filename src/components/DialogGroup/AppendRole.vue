@@ -71,7 +71,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, reactive, defineProps, defineEmits, onUpdated } from "vue"
+import { ref, reactive, defineProps, defineEmits, defineExpose, onUpdated } from "vue"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 
@@ -89,7 +89,6 @@ onUpdated(() => {
 })
 
 const emits = defineEmits(["uploadImg", "setKillerDoc", "childmodal"])
-
 
 const state = reactive({
     newKillerName : "",
@@ -143,6 +142,8 @@ const clearData = () => {
   state.imgData = null
   state.imgUrl = ""
 }
+
+defineExpose({ clearData })
 
 </script>
 
