@@ -138,7 +138,6 @@
       </div>
 
       <template #footer>
-          <Button label="No" icon="pi pi-times" @click="modalStatue(1);" class="p-button-text"/>
           <Button label="Complete" icon="pi pi-check" @click="complete" autofocus />
       </template>
     </Dialog>
@@ -159,6 +158,7 @@ export default {
 
 <script setup>
 import { ref, reactive, defineEmits } from "vue"
+import { useRouter } from "vue-router"
 
 const modalStatue = (i, isClear) => {
     emits("childmodal", i, isClear)
@@ -167,6 +167,7 @@ const modalStatue = (i, isClear) => {
 const input1 = ref(null)
 const input2 = ref(null)
 const disable = ref([false])
+const isConfirm = ref(false)
 const moveChecked = ref(false)
 const terrorChecked = ref(false)
 
@@ -226,7 +227,10 @@ const preview2 = event => {
 
 const updateSettings = (dis, select, data) => {
   emits("updateSettings", select, data)
-  if(data) disable.value[dis] = true
+  if(data){
+    disable.value[dis] = true
+    isConfirm.value = true
+  }
 }
 
 const clearData = () => {
@@ -246,10 +250,15 @@ const clearData = () => {
   state.rskillUrl = []
 }
 
+const router = useRouter()
 const complete = () => {
-  clearData()
+  if(isConfirm.value){
+    clearData()
+    isConfirm.value = false
+    disable.value = false
+    router.push("/personal")
+  }
   modalStatue(0)
-  disable.value = false
 }
 
 const emits = defineEmits(["updateSettings", "uploadData", "childmodal"])

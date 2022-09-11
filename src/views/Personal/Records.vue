@@ -33,12 +33,6 @@
     <div class="container">
       <div class="killerbg" v-if="killerBackground!=null">
         <h1>Background<span class="bgAll" @click="modalStatue(2)">(Read More)</span></h1>
-        <simple-dialog 
-          :isdisplay2="displayModal[2]" 
-          :title="`${killerName} Background`" 
-          :content="killerBackground"
-          @childmodal="modalStatue"
-        />
         <hr class="outDialog">
         <p>{{fillterbg(killerBackground)}}</p>
       </div>
@@ -129,6 +123,7 @@
     </div>
   </div>
 
+   <!-- 紀錄更改 -->
   <append-record
     :isdisplay="displayModal[0]"
     :killerName="killerName"
@@ -136,6 +131,23 @@
     @uploadData="onUpload"
     @updateSettings="updateSettings"
   ></append-record>
+
+  <!-- 紀錄儲存警告 -->
+  <simple-dialog
+    :isdisplay="displayModal[1]" 
+    :location="`${killerName} Settings`" 
+    @childmodal="modalStatue"
+  ></simple-dialog>
+
+  <!-- 背景資料全開 -->
+  <simple-dialog 
+    :isdisplay2="displayModal[2]" 
+    :title="`${killerName} Background`" 
+    :content="killerBackground"
+    @childmodal="modalStatue"
+  />
+
+  <!-- 影片更改 -->
   <append-video 
     :isdisplay="displayModal[3]" 
     :killerID="killerID"
@@ -144,15 +156,12 @@
     @uploadVideo="onUploadVideo"
     @deleteVideo="deleteVideo"
   ></append-video>
+
+  <!-- 背景圖片上傳 -->
   <simple-dialog
     :isdisplay3="displayModal[4]"
     :upload-title="`${killerName} Background`"
     @upload-doc="onUpload"
-    @childmodal="modalStatue"
-  ></simple-dialog>
-  <simple-dialog 
-    :isdisplay="displayModal[1]" 
-    :location="`${killerName} Settings`" 
     @childmodal="modalStatue"
   ></simple-dialog>
 </template>

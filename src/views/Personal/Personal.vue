@@ -101,8 +101,7 @@ export default {
           killerDifficulty: killer.difficulty,
           videoNumber: killer.videos
         }
-      }),
-      console.log("pass")
+      })
     },
     difficulty(killer){
       switch (killer.difficulty){
