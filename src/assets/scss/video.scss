@@ -1,5 +1,6 @@
 .video{
-    background-color: darkolivegreen;
+    background:url(~@/assets/picture/videoBG.jpg);
+    background-size: cover;
     min-height: 100vh;
     height: auto;
     width: 100%;
@@ -7,10 +8,20 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    .figure{
+        position: absolute;
+        background:url(~@/assets/picture/wraith.png);
+        opacity: .3;
+        background-size: cover;
+        left:0;
+        bottom: 0;
+        width: 400px;
+        height: 95%;
+    }
     .player {
         max-width:750px;
         border:5px solid rgba(0,0,0,0.2);
-        box-shadow:0 0 20px rgba(0,0,0,0.2);
+        box-shadow:0 0 200px rgba(214, 213, 213, 0.2);
         position: relative;
         font-size: 0;
         overflow: hidden;

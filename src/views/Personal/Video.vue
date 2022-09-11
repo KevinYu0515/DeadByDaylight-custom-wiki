@@ -1,5 +1,6 @@
 <template>
   <div class="video">
+    <div class="figure"></div>
     <div class="player">
       <video  class="player__video viewer" :src="videoLink"></video>
       <div class="player__controls">

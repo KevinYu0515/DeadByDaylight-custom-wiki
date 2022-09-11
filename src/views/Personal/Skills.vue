@@ -116,13 +116,13 @@ export default {
       if(i<=7){
         index = (i%2)*55
       }else{
-        index = (i%2)*55+(2*Math.floor(i/10))*55
+        index = (i%2)*55+(2*Math.floor(i/16))*55
       }
       index = index.toString()+"%"
       return index
     },
     leftcalc(i){
-      let index = i%10*13
+      let index = i%16*13
       index = index.toString()+"%"
       return index
     },
