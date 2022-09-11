@@ -6,10 +6,11 @@ import Textarea from "primevue/textarea"
 import Divider from "primevue/divider"
 import SplitButton from "primevue/splitbutton"
 import InputSwitch from "primevue/inputswitch"
+import Checkbox from "primevue/checkbox"
 
 
 export default{ 
   components:[
-    Dropdown, InputText, Button, Dialog, Textarea, Divider, SplitButton, InputSwitch
+    Dropdown, InputText, Button, Dialog, Textarea, Divider, SplitButton, InputSwitch, Checkbox
   ],
 }

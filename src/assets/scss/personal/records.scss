@@ -6,32 +6,29 @@
     padding-right: 10vw;
     background-color: darkslategrey;
     overflow: hidden;
+    border-left: darkolivegreen;
+    border-width: 250px;
+    border-left-style: solid;
     .bg {
         position: fixed;
-        height: 180vh;
+        height: auto;
         opacity: .1;
         width: 100%;
     }
-    .leftBg{
-        width: 220px;
-        height: 190vh;
-        background-color: darkolivegreen;
+    .leftInfor{
+        position: absolute;
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-right: 200px;
-        z-index:2;
-        @media screen and (max-width: 1024px){
-            height: 200vh;
-        }
+        flex-direction: column;
+        left:30px;
+        z-index: 5;
         .card{
             position: relative; 
             width: 192px;
             height: 252px;
             margin: 40px 15px 15px 15px;
             overflow: hidden;
-            left:100px;
             .imgBox{
                 position: absolute;
                 top: 0;
@@ -53,7 +50,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            left: 200px;
+            left:100px;
             div{
                 color:aliceblue;
                 visibility:  visible;
@@ -76,6 +73,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
+        margin: 100px 0 100px 200px;
         z-index:2;
         .killerbg{
             max-width: 100%;
@@ -268,7 +266,6 @@ hr{
 
 .bs{
     position: relative;
-    left: 100px;
     top: 40px;
     width: 110px;
     height: auto;

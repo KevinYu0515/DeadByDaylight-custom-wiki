@@ -98,7 +98,8 @@ export default {
           killerPower: killer.power,
           killerRealName: killer.realName,
           killerBgImg: killer.bgImg,
-          killerDifficulty: killer.difficulty
+          killerDifficulty: killer.difficulty,
+          videoNumber: killer.videos
         }
       }),
       console.log("pass")
@@ -152,7 +153,8 @@ onMounted(() => {
         reSkills: doc.data().recommandSkills,
         realName: doc.data().realName,
         bgImg: doc.data().bgImg,
-        difficulty: doc.data().difficulty
+        difficulty: doc.data().difficulty,
+        videos: doc.data().videos
       }
       fbkillers.push(killer)
     })
