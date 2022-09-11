@@ -26,7 +26,7 @@
           @setSkillDoc="addSkill"
           ref="appendSkill"
         />
-        <warning-dialog :isdisplay="displayModal[1]" location="Append New Skill" @childmodal="modalStatue"></warning-dialog>
+        <simple-dialog :isdisplay="displayModal[1]" location="Append New Skill" @childmodal="modalStatue"></simple-dialog>
       </ul>
     </div>
     <div class="infor">
@@ -84,12 +84,12 @@
               <Button label="Complete" icon="pi pi-check" @click="complete(index); replaceSkill(skill, skills)" class="p-button-text"/>
           </template>
         </Dialog>
-        <warning-dialog
+        <simple-dialog
           :isdisplay2="displayModal[2]"
           title="Warning"
           content="該資料不可為空"
           @childmodal="modalStatue"
-        ></warning-dialog>
+        ></simple-dialog>
       </div>
     </div>
   </div>
@@ -97,11 +97,11 @@
 
 <script>
 import DBDNavbar from "../../components/Navbar/DBDNavbar.vue"
-import WarningDialog from "../../components/DialogGroup/WarningDialog.vue"
+import SimpleDialog from "../../components/DialogGroup/SimpleDialog.vue"
 import AppendSkill from "../../components/DialogGroup/AppendSkill.vue"
 export default {
   name:"Skills",
-  components:{ DBDNavbar, WarningDialog, AppendSkill },
+  components:{ DBDNavbar, SimpleDialog, AppendSkill },
   data(){
     return{
       skillsClick: [],

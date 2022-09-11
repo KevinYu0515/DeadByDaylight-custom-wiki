@@ -29,176 +29,11 @@
         /> 
       </div>
     </div>
-    <Dialog 
-      header="Background Image Upload" 
-      v-model:visible="displayModal[4]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-      :style="{width: '30vw'}" :modal="true"
-    >
-      <Button 
-        label="Background Image Upload"  
-        class="p-button-warning my-2"
-        style="max-width:100%"
-        @click="clickInput4" 
-      />
-      <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[11]" @click="updateSettings(killerID, 11, 'backgroundImage',bgImg.value)" autofocus />
-      <div v-if="bgImgData!=null" style="transform:scale(90%)" class="flex justify-content-center align-items-center">                     
-        <img :src="bgImg">
-      </div>
-      <input type="file" name="file" ref="input4" style="display:none" @change="previewBg" accept="image/*"/>
-      <template #footer>
-        <Button label="Complete" @click=" complete(4)" class="p-button-text"/>
-      </template>
-    </Dialog>
-
-    <Dialog
-      :header="`${killerName} Settings`"
-      v-model:visible="displayModal[0]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-      :style="{width: '50vw'}" :modal="true"
-    >
-      <div class="my-2">
-        <h3>Real Name</h3>
-        <div class="flex align-items-center my-2">
-          <InputText placeholder="Real Name" v-model="state.realName" />
-          <Button label="Confirm" class="mx-2"  :disabled="disable[0]" @click="updateSettings(killerID, 0, 'realName', state.realName)" autofocus />
-        </div>
-      </div>
-      <hr class="inDialog">
-      
-      <div class="my-2">
-        <div class="flex align-items-center">
-          <h3>Background</h3>
-          <Button label="Confirm" class="mx-2"  :disabled="disable[1]" @click="updateSettings(killerID, 1, 'background', state.background)" autofocus />
-        </div>
-        <Textarea class="my-2" placeholder="Background" v-model="state.background" :autoResize="true" rows="5" cols="80" />
-      </div>
-      <hr class="inDialog">
-
-      <div class="flex flex-column my-2">
-        <div class="flex align-items-center">
-          <h3>Movement Speed</h3>
-          <InputSwitch class="mx-2" v-model="moveChecked" />
-          <p>Switch On if you need to edit alternative movement speed</p>
-        </div>
-        <div class="flex align-items-center">
-          <Textarea class="my-2" placeholder="Movement Speed" v-model="state.move" :autoResize="true" rows="1" cols="20" />
-          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[2]" @click="updateSettings(killerID, 2, 'move', state.move)" autofocus />
-        </div>
-        <div class="altmove" v-show="moveChecked">
-          <h3>Altnative Movement Speed</h3>
-          <div class="flex align-items-center">
-            <Textarea class="my-2" placeholder="Altnative Movement Speed" v-model="state.altMove" :autoResize="true" rows="1" cols="30" />
-            <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[3]" @click="updateSettings(killerID, 3, 'altMove', state.altMove)" autofocus />
-          </div>
-        </div>
-      </div>
-      <hr class="inDialog">
-
-      <div class="flex flex-column my-2">
-        <div class="flex align-items-center">
-          <h3>Terror Radius</h3>
-          <InputSwitch class="mx-2" v-model="terrorChecked" />
-          <p>Switch On if you need to edit alternative Terror Radius</p>
-        </div>
-        <div class="flex align-items-center">
-          <Textarea class="my-2" placeholder="Terror Radius" v-model="state.terror" :autoResize="true" rows="1" cols="20" />
-          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[4]" @click="updateSettings(killerID, 4, 'terror', state.terror)" autofocus />
-        </div>
-        <div class="altmove" v-show="terrorChecked">
-          <h3>Altnative Terror Radius</h3>
-          <div class="flex align-items-center">
-            <Textarea class="my-2" placeholder="Altnative Terror Radius" v-model="state.altTerror" :autoResize="true" rows="1" cols="30" />
-            <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[12]" @click="updateSettings(killerID, 12, 'altTerror', state.altTerror)" autofocus />
-          </div>
-        </div>
-      </div>
-      <hr class="inDialog">
-
-      <div class="my-2">
-        <h3>Height</h3>
-        <Dropdown
-            v-model.trim="state.height"
-            :options="heightOptions"
-            optionLabel="hei"
-            optionValue="hei"
-            placeholder="Height"
-            class="my-2"
-            style="width:20%"
-          />
-        <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[5]" @click="updateSettings(killerID, 5, 'height', state.height)" autofocus />
-      </div>
-      <hr class="inDialog">
-
-      <div class="my-2">
-        <h3>Difficulty Rating</h3>
-        <Dropdown
-          v-model.trim="state.difficulty"
-          :options="drOptions"
-          optionLabel="dr"
-          optionValue="dr"
-          placeholder="Difficulty Rating"
-          class="my-2"
-          style="width:40%"
-        />
-        <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[6]" @click="updateSettings(killerID, 6, 'difficulty', state.difficulty)" autofocus />
-      </div>
-      <hr class="inDialog">
-
-      <div class="my-2">
-        <h3>Weapon And Power</h3>
-        <div class="flex align-items-center my-1">
-          <InputText placeholder="Weapon" v-model="state.weapon" />
-          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[7]" @click="updateSettings(killerID, 7, 'weapon', state.weapon)" autofocus />
-          <InputText placeholder="Power" class="mx-2" v-model="state.power" />
-          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[8]" @click="updateSettings(killerID, 8, 'power', state.power)" autofocus />
-        </div>
-      </div>
-      <hr class="inDialog">
-
-      <div class="my-2">
-        <h3>Skills</h3>
-        <Button 
-          label="Skills Upload"  
-          class="p-button-warning my-2"
-          style="max-width:100%"
-          @click="clickInput1" 
-        />
-        <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[9]" @click="updateSettings(killerID, 9, 'skills',sUrl.value)" autofocus />
-        <div class="flex">
-          <div class="col-3" v-for="(skill, index) in sData" :key="index">
-            <div v-if="skill!=null" style="transform:scale(50%)">                     
-              <img :src="sUrl[index]">
-            </div>
-          </div>
-        </div>
-        <input type="file" name="file" ref="input1" style="display:none" @change="previewS" accept="image/*" multiple/>
-        <Button 
-          label="Recommand Skills Upload"
-          class="p-button-warning my-2"
-          style="max-width:100%"
-          @click="clickInput2" 
-        /> 
-        <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[10]" @click="updateSettings(killerID, 10, 'recommandSkills', rsUrl.value)" autofocus />
-        <div class="flex">
-          <div class="col-2" v-for="(skill, index) in rsData" :key="index">
-            <div v-if="skill!=null" style="transform:scale(50%)">
-              <img :src="rsUrl[index]">
-            </div>
-          </div>
-        </div>
-        <input type="file" name="file" ref="input2" style="display:none" @change="previewRS" accept="image/*" multiple/>
-      </div>
-
-      <template #footer>
-          <Button label="No" icon="pi pi-times" @click="modalStatue(1)" class="p-button-text"/>
-          <Button label="Complete" icon="pi pi-check" @click="complete(0)" autofocus />
-      </template>
-    </Dialog>
-    <warning-dialog :isdisplay="displayModal[1]" :location="`${killerName} Settings`" @childmodal="modalStatue"></warning-dialog>
 
     <div class="container">
       <div class="killerbg" v-if="killerBackground!=null">
         <h1>Background<span class="bgAll" @click="modalStatue(2)">(Read More)</span></h1>
-        <warning-dialog 
+        <simple-dialog 
           :isdisplay2="displayModal[2]" 
           :title="`${killerName} Background`" 
           :content="killerBackground"
@@ -268,16 +103,7 @@
         <div class="videoHeader flex align-items-center">
           <h1> Video </h1>
           <Button label="Edit" @click="modalStatue(3)" class="p-button-success my-2 mx-2"></Button>
-          <AppendVideo 
-            :isdisplay="displayModal[3]" 
-            :killerID="killerID"
-            :videoList="videoList"
-            @childmodal="modalStatue"
-            @uploadVideo="onUploadVideo"
-            @deleteVideo="deleteVideo"
-          ></AppendVideo>
         </div>
-        <input type="file" name="file" ref="input3" style="display:none" @change="previewVideo" accept="video/*"/>
         <hr class="outDialog">
         <div class="videos">
           <div class="videoBox" 
@@ -302,20 +128,42 @@
       </div>
     </div>
   </div>
+
+  <append-record
+    :isdisplay="displayModal[0]"
+    :killerName="killerName"
+    @childmodal="modalStatue"
+    @uploadData="onUpload"
+    @updateSettings="updateSettings"
+  ></append-record>
+  <append-video 
+    :isdisplay="displayModal[3]" 
+    :killerID="killerID"
+    :videoList="videoList"
+    @childmodal="modalStatue"
+    @uploadVideo="onUploadVideo"
+    @deleteVideo="deleteVideo"
+  ></append-video>
+  <simple-dialog
+    :isdisplay3="displayModal[4]"
+    :upload-title="`${killerName} Background`"
+    @upload-doc="onUpload"
+    @childmodal="modalStatue"
+  ></simple-dialog>
+  <simple-dialog 
+    :isdisplay="displayModal[1]" 
+    :location="`${killerName} Settings`" 
+    @childmodal="modalStatue"
+  ></simple-dialog>
 </template>
 
 <script>
-import WarningDialog from "../../components/DialogGroup/WarningDialog.vue"
+import SimpleDialog from "../../components/DialogGroup/SimpleDialog.vue"
 import AppendVideo from "../../components/DialogGroup/AppendVideo.vue"
+import AppendRecord from "../../components/DialogGroup/AppendRecord.vue"
 export default {
   name:"Records",
-  components:{ WarningDialog, AppendVideo },
-  data(){
-    return{
-      heightOptions: ([{hei:"Tall"}, {hei:"Average"}, {hei:"Short"}]),
-      drOptions: ([{dr:"Easy"}, {dr:"Moderate"}, {dr:"Hard"}, {dr:"Very Hard"}]),
-    }
-  },
+  components:{ SimpleDialog, AppendVideo, AppendRecord },
   props:{
       killerID:{type: String},
       killerBackground:{type: String},
@@ -348,10 +196,7 @@ export default {
         return terror.slice(0, 15) + "..."
       }else return terror
     },
-    clickInput1() { this.$refs.input1.click() },
-    clickInput2() { this.$refs.input2.click() },
     clickInput3() { this.$refs.input3.click() },
-    clickInput4() { this.$refs.input4.click() },
 
     passDataToVideos(videoLink){
       this.$router.push({
@@ -366,14 +211,12 @@ export default {
 }
 </script>
 <script setup>
-import { reactive, ref, onMounted, getCurrentInstance } from "vue"
+import { ref, onMounted, getCurrentInstance } from "vue"
 import { ref as r, uploadBytes, getDownloadURL } from "firebase/storage"
 import { killersColRef, storage } from "@/firebase"
 import { doc, updateDoc, deleteDoc } from "firebase/firestore"
 import { useRouter } from "vue-router"
 
-const moveChecked = ref(false)
-const terrorChecked = ref(false)
 const Instance = getCurrentInstance()
 const items =  ref([
 {
@@ -389,26 +232,7 @@ const items =  ref([
 ])
 
 const router = useRouter()
-
-const state = reactive({
-  move: "",
-  altMove: "",
-  terror: "",
-  altTerror:"",
-  height: "",
-  weapon: "",
-  power: "",
-  background: "",
-  realName: "",
-  difficulty: "",
-})
-
-const input1 = ref(null)
-const input2 = ref(null)
-const input3 = ref(null)
-const input4 = ref(null)
 const displayModal = ref([false])
-const disable = ref([false])
 
 const videoUrl = ref([])
 const videoList = ref([])
@@ -463,140 +287,62 @@ const deleteVideo = index => {
   console.log(videoList.value, index)
 }
 
-const updateSettings = (id, dis, options, optionsValue) => {
+const id = Instance.props.killerID
+const updateSettings = (options, optionsValue) => {
   if(options == "skills"){
-      updateDoc(doc(killersColRef, id),{ skills: sUrl.value })
-      disable.value[dis] = true
+      updateDoc(doc(killersColRef, id),{ skills: optionsValue })
     }else if(options == "recommandSkills"){
-      updateDoc(doc(killersColRef, id),{ recommandSkills: rsUrl.value })
-      disable.value[dis] = true
+      updateDoc(doc(killersColRef, id),{ recommandSkills: optionsValue })
     }else if(options == "backgroundImage"){
-      updateDoc(doc(killersColRef, id),{ bgImg: bgImg.value })
-      disable.value[dis] = true
+      updateDoc(doc(killersColRef, id),{ bgImg: optionsValue})
     }
   else if(isNone(optionsValue)){
-    console.log("skills pass")
     switch (options){
       case "difficulty":
-        updateDoc(doc(killersColRef, id),{ difficulty: state.difficulty })
+        updateDoc(doc(killersColRef, id),{ difficulty: optionsValue })
         break
       case "background":
-        updateDoc(doc(killersColRef, id),{ background: state.background })
+        updateDoc(doc(killersColRef, id),{ background: optionsValue })
         break
       case "move":
-        updateDoc(doc(killersColRef, id),{ movementSpeed: state.move })
+        updateDoc(doc(killersColRef, id),{ movementSpeed: optionsValue })
         break
       case "altMove":
-        updateDoc(doc(killersColRef, id),{ altnativeMoveSpeed: state.altMove })
+        updateDoc(doc(killersColRef, id),{ altnativeMoveSpeed: optionsValue })
         break
       case "terror":
-        updateDoc(doc(killersColRef, id),{ terrorRadius: state.terror })
+        updateDoc(doc(killersColRef, id),{ terrorRadius: optionsValue })
         break 
       case "altTerror":
-        updateDoc(doc(killersColRef, id),{ altnativeTerrorRadius: state.altTerror })
+        updateDoc(doc(killersColRef, id),{ altnativeTerrorRadius: optionsValue })
         break 
       case "height":
-        updateDoc(doc(killersColRef, id),{ height: state.height })
+        updateDoc(doc(killersColRef, id),{ height: optionsValue })
         break
       case "weapon":
-        updateDoc(doc(killersColRef, id),{ weapon: state.weapon })
+        updateDoc(doc(killersColRef, id),{ weapon: optionsValue })
         break
       case "power":
-        updateDoc(doc(killersColRef, id),{ power: state.power })
+        updateDoc(doc(killersColRef, id),{ power: optionsValue })
         break
       case "realName":
-        updateDoc(doc(killersColRef, id),{ realName: state.realName })
+        updateDoc(doc(killersColRef, id),{ realName: optionsValue })
         break
     }
-    disable.value[dis] = true
   }
   console.log("updateSettings")
 }
 
 const isNone = optionsValue => {
   if(!optionsValue){
-    displayModal.value[3] = true
+    console.log("該項目不可為空")
     return false
   }else return true
 }
 
-const sUrl = ref([])
-const sData = ref([])
-const rsUrl = ref([])
-const rsData = ref([])
-const bgImgData = ref("")
-const bgImg = ref("")
-
-const complete = m => {
-  sUrl.value = []
-  sData.value = []
-  rsUrl.value = []
-  rsData.value = []
-  bgImg.value = ""
-  bgImgData.value = ""
-  displayModal.value[m] = false
-  router.push("/personal")
-}
-
-const previewS = event => {
-  const files = event.target.files
-  for(let i = 0;i<files.length;i++){
-    const filename = files[i].name
-    if (filename.lastIndexOf(".") <= 0){
-      return alert("Please add a valid file!")
-    }
-    const fileReader = new FileReader()
-    fileReader.addEventListener("load",()=>{
-      sUrl.value[i] = fileReader.result
-    })
-    fileReader.readAsDataURL(files[i])
-    sData.value[i] = files[i]
-    onUpload(files[i])
-  }
-}
-
-const previewRS = event => {
-  const files = event.target.files
-  for(let i = 0;i<files.length;i++){
-    const filename = files[i].name
-    if (filename.lastIndexOf(".") <= 0){
-      return alert("Please add a valid file!")
-    }
-    const fileReader = new FileReader()
-    fileReader.addEventListener("load",()=>{
-      rsUrl.value[i] = fileReader.result
-    })
-    fileReader.readAsDataURL(files[i])
-    rsData.value[i] = files[i]
-    onUpload(files[i])
-  }
-}
-
-const previewBg = event => {
-  const files = event.target.files
-    const filename = files[0].name
-    if (filename.lastIndexOf(".") <= 0){
-      return alert("Please add a valid file!")
-    }
-    const fileReader = new FileReader()
-    fileReader.addEventListener("load",()=>{
-      bgImg.value = fileReader.result
-    })
-    fileReader.readAsDataURL(files[0])
-    bgImgData.value = files[0]
-    onUploadBgImg(files[0])
-}
-
-const onUpload = img =>{
-  const storageRef = r(storage, `killersSkills/${img.name}`)
-  uploadBytes(storageRef, img).then((snapshot) => {
-    console.log("Uploaded a blob or file!", snapshot)
-  })
-}
-
-const onUploadBgImg = bg =>{
-  const storageRef = r(storage, `killersBgImg/${bg.name}`)
-  uploadBytes(storageRef, bg).then((snapshot) => {
+const onUpload = (data, file) =>{
+  const storageRef = r(storage, `${file}/${data.name}`)
+  uploadBytes(storageRef, data).then((snapshot) => {
     console.log("Uploaded a blob or file!", snapshot)
   })
 }

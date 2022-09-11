@@ -90,7 +90,7 @@ const deleteVideo = video => {
 }
 
 const modalStatue = (i, isClear) => {
-    emits("childmodal", i, isClear)
+  emits("childmodal", i, isClear)
 }
 
 const emits = defineEmits(["childmodal", "uploadVideo", "deleteVideo"])

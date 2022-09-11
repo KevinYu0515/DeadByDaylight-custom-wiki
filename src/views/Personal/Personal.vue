@@ -32,7 +32,7 @@
           @setKillerDoc="addKiller"
           ref="appendRole"
         />
-        <WarningDialog 
+        <simple-dialog 
           :isdisplay="displayModal[1]" 
           location="Append New Role" 
           @childmodal="modalStatue"
@@ -66,10 +66,10 @@
 <script>
 import DBDNavbar from "../../components/Navbar/DBDNavbar.vue"
 import AppendRole from "../../components/DialogGroup/AppendRole.vue"
-import WarningDialog from "../../components/DialogGroup/WarningDialog.vue"
+import SimpleDialog from "../../components/DialogGroup/SimpleDialog.vue"
 export default {
   name:"Personal",
-  components:{ DBDNavbar, WarningDialog, AppendRole },
+  components:{ DBDNavbar, SimpleDialog, AppendRole },
   data(){
     return{
       levelOptions: ([{level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}]),
@@ -133,6 +133,7 @@ const searchName = ref("")
 const appendRole = ref(null)
 
 onMounted(() => {
+  console.log("OnSnapshot")
   onSnapshot(killersColRef, (querySnapshot) => {
     let fbkillers = []
     querySnapshot.forEach((doc) => {
@@ -169,13 +170,11 @@ onUpdated(() => {
       var x = e.pageX - $(this).offset().left
       var y = e.pageY - $(this).offset().top
       $(this).find("span").css({top:y, left:x})
-      console.log("x:",x,"y:",y)
     })
     $(".card").on("mouseout", function(e){
       var x = e.pageX - $(this).offset().left
       var y = e.pageY - $(this).offset().top
       $(this).find("span").css({top:y, left:x})
-      console.log("x:",x,"y:",y)
     })
   })
 })
