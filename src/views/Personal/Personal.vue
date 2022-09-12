@@ -1,43 +1,44 @@
 <template>
   <DBDNavbar></DBDNavbar>
-  <div class="personal">
-    <section class="bg"></section>
-    <section class="killer">
-      <div class="container">
+  <div class="personal flex justify-content-center align-items-center flex-column overflow-hidden h-auto">
+    <section class="bg w-full fixed top-0"></section>
+    <section class="killer w-full z-1 px-3 py-8 flex justify-content-center align-items-center flex-column">
+      <div class="w-5">
         <Dropdown
             v-model="selectedLevel"
             :options="levelOptions"
             optionLabel="level"
             optionValue="level"
             placeholder="ALL"
-            class="mx-3 col-3"
+            class="mx-1 flex-1 my-2"
             style="width:200px"
           />
         <InputText 
           placeholder="KillerName"
           v-model.trim="searchName"
+          class="flex-auto mx-1 my-2"
         />
         <Button
           label="Create"  
-          class="p-button-infor mx-3 col-fixed"
+          class="p-button-infor mx-1 flex-auto my-2"
           style="max-width:100%"
           @click="modalStatue(0)" 
         />
-        <Button href="javascript:void(0)" class="p-button-success mx-2" @click="logout">Logout</Button>   
+        <Button label="Logout" href="javascript:void(0)" class="p-button-success mx-2 flex-auto my-2" @click="logout"></Button>   
       </div>
-      <div class="container">
+      <div class="container w-9 flex justify-content-center align-items-center flex-wrap h-auto pt-5">
         <div 
-          class="card"
+          class="card m-2 overflow-hidden cursor-pointer relative"
           v-for="killer in nameGroup"
           :key="killer"
         >
           <a @click="passDataToRecords(killer)">
-            <span class="bloodHover"></span>
-            <div class="imgBox">
-                <img :src="killer.cover" alt="killer"/>
+            <span class="bloodHover absolute block z-1"></span>
+            <div class="imgBox absolute top-0 left-0 w-full h-full">
+                <img class="absolute top-0 left-0 w-full h-full" :src="killer.cover" alt="killer"/>
             </div>
-            <div class="content">
-              <div>
+            <div class="content absolute top-0 left-0 w-full h-full flex justify-content-center align-items-center z-1">
+              <div class="p-5">
                 <h3 style="padding-bottom:20px">{{killer.name}}</h3>
                 <p class="difficulty" :style="{'color':difficulty(killer)}">{{killer.difficulty}}</p>
               </div>

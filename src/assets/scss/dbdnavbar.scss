@@ -1,40 +1,28 @@
 .navbar{
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 80px;
     box-shadow: 0 0 20px 10px rgba(0,0,0,1);
-    padding: 0 500px 0 100px;
     box-sizing: border-box;
     z-index: 1000;
     transition: .5s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: url(~@/assets/picture/fog.gif);
+    background: url(~@/assets/picture/fog.gif);
     background-position-y: 300px;
     background-size: cover;
+    @media screen and (max-width:1200px) {
+        background-position: bottom;
+    }
     -moz-transform:scaleY(-1);
     -webkit-transform:scaleY(-1);
     -o-transform:scaleY(-1);
     transform:scaleY(-1);
-    .logo{
-        position: relative;
-        margin: 0px 8px 20px 0;
-        transform: scale(30%) translateX(-1000px) rotateX(180deg);
-    }
     ul{
-        display: flex;
-        flex-direction: row;
         -moz-transform:scaleY(-1);
         -webkit-transform:scaleY(-1);
         -o-transform:scaleY(-1);
-        transform:scaleY(-1) translateX(-100px);
+        transform:scaleY(-1);
         li{
-            list-style: none;
-
             a{
+                cursor: pointer;
                 color:rgb(20, 106, 72);
                 height:50px;
                 line-height: 50px;
@@ -43,7 +31,6 @@
                 font-size: 1.4em;
                 padding: 0 15px;
                 letter-spacing: 1px;
-                cursor: pointer;
                 text-transform: uppercase;
                 font-family: 'Permanent Marker';
                 &:hover{

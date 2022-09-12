@@ -1,52 +1,40 @@
 .personal{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     background: darkslategrey;
     min-height: 800px;
-    height:auto;
-    margin-top:80px;
     .bg{
-        width: 100%;
         height: 90vh;
         box-sizing: border-box;
         background: url(~@/assets/picture/mainBG.png);
-        background-position-y: 80px;
-        background-repeat: no-repeat;
+        background-position: center;
+        background-position-y: 50px;
         background-size: cover;
-        background-attachment: fixed;
+        background-repeat: no-repeat;
         opacity: .75;
     }
     .killer{
-        padding: 100px 0;
-        .container{
-            width: 1320px;
-            height: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            padding-top: 40px;
+        background-color: darkslategrey;
+        margin-top: 90vh ;
+        .container{    
             .card{
-                cursor:pointer;
-                position: relative; 
-                width: 192px;
-                height: 252px;
-                margin: 15px;
-                overflow: hidden;
-                opacity: .5;
+                width: 190px;
+                height: 260px;
                 transition: .2s;
+                opacity: .5;
+                @media screen and (max-width:860px) {
+                    width: 130px;
+                    height: 200px;
+                }
+                @media screen and (max-width:615px) {
+                    width: 100px;
+                    height: 150px;
+                }
                 &:hover{
                     opacity: .95;
                 }
                 span{
-                    position: absolute;
-                    display: block;
                     width: 0px;
                     height: 0px;
                     opacity: .95;
-                    z-index: 1;
                     transform: translate(-50%, -50%);
                     transition: width .3s, height .3s;
                 }
@@ -57,45 +45,23 @@
                     height: 500px;
                 }
                 .imgBox{
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
                     img{
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
                         object-fit: cover;
                     }
                 }
-                .content{
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    z-index: 1;
-                    div{
-                        padding: 40px;
-                        color:aliceblue;
-                        visibility: hidden;
-                        opacity: 0;
-                        transform: translateY(100px);
-                        transition: .2s;
-                        h3{
-                            letter-spacing: 1px;
-                        }
-                        p{
-                            font-size: larger;
-                            color:rgb(241, 224, 43);
-                        } 
+                .content div{
+                    color:aliceblue;
+                    visibility: hidden;
+                    opacity: 0;
+                    transform: translateY(100px);
+                    transition: .2s;
+                    h3{
+                        letter-spacing: 1px;
                     }
+                    p{
+                        font-size: larger;
+                        color:rgb(241, 224, 43);
+                    } 
                 }
                 &:hover .content div{
                     visibility: visible;
@@ -103,19 +69,6 @@
                     transform: translateY(0px);
                 }
             }
-            &:hover .delete{
-                visibility: visible;
-                opacity: 1;
-            }
         }
     }
-}
-
-.inDialog{ 
-    width: 90%;
-    height: 2px;
-    background-color:rgb(161, 156, 156);
-    opacity: .2;
-    margin: 20px 0;
-    border:none;
 }

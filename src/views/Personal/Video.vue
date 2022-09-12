@@ -92,5 +92,5 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/video.scss";
+@import "@/assets/scss/personal/video.scss";
 </style>

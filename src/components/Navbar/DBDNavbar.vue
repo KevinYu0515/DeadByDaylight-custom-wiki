@@ -1,9 +1,6 @@
 <template>
-  <div class="navbar">
-    <router-link to="/" class="logo">
-        <img :src="require('@/assets/icon/dbdlogo.png')" alt="logo"/>
-    </router-link>
-    <ul>
+  <div class="navbar flex justify-content-center align-items-center top-0 left-0 fixed">
+    <ul class="flex flex-row list-none">
         <li><router-link to="/personal">Main</router-link></li>
         <li><router-link to="/skills">Skills</router-link></li>
     </ul>
