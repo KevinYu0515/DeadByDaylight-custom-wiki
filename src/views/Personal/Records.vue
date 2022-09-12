@@ -25,7 +25,7 @@
           label="Back"  
           class="p-button-success mt-3"
           style="max-width:100%"
-          @click="back" 
+          @click="routerTo('/personal')" 
         /> 
       </div>
     </div>
@@ -103,7 +103,7 @@
           <div class="videoBox" 
             v-for="(video, index) in videoUrl" 
             :key="index" 
-            @click="toVideo(); 
+            @click="routerTo('/video'); 
             passDataToVideos(video)"
           >
               <figure>
@@ -161,7 +161,9 @@
   <simple-dialog
     :isdisplay3="displayModal[4]"
     :upload-title="`${killerName} Background`"
+    uploadItems="bgImg"
     @upload-doc="onUpload"
+    @updateSettings="updateSettings"
     @childmodal="modalStatue"
   ></simple-dialog>
 </template>
@@ -199,13 +201,6 @@ export default {
         return background.slice(0, 1000) + "..."
       }else return background
     },
-    fillterTerror(terror){
-      if(!terror) return terror
-      if(terror.length > 15 ){
-        return terror.slice(0, 15) + "..."
-      }else return terror
-    },
-    clickInput3() { this.$refs.input3.click() },
 
     passDataToVideos(videoLink){
       this.$router.push({
@@ -221,12 +216,18 @@ export default {
 </script>
 <script setup>
 import { ref, onMounted, getCurrentInstance } from "vue"
-import { ref as r, uploadBytes, getDownloadURL } from "firebase/storage"
-import { killersColRef, storage } from "@/firebase"
+import { ref as r, uploadBytes } from "firebase/storage"
+import { killersColRef, storage, download } from "@/firebase"
 import { doc, updateDoc, deleteDoc } from "firebase/firestore"
 import { useRouter } from "vue-router"
 
+const router = useRouter()
 const Instance = getCurrentInstance()
+const displayModal = ref([false])
+
+const videoUrl = ref([])
+const videoList = ref([])
+
 const items =  ref([
 {
   label: "Base Information",
@@ -240,52 +241,29 @@ const items =  ref([
 }
 ])
 
-const router = useRouter()
-const displayModal = ref([false])
-
-const videoUrl = ref([])
-const videoList = ref([])
 onMounted(() =>{
   let diff = document.querySelector(".difficulty")
-  if(diff.textContent == "Easy"){
-    document.documentElement.style.setProperty("--difficulty", "rgba(64,176,64)")
-  }else if(diff.textContent == "Moderate"){
-    document.documentElement.style.setProperty("--difficulty", "yellow")
-  }else if(diff.textContent == "Hard"){
-    document.documentElement.style.setProperty("--difficulty", "rgba(229,132,48)")
-  }else if(diff.textContent == "Very Hard"){
-    document.documentElement.style.setProperty("--difficulty", "rgba(239,37,37)")
+  const textColorMap = {
+    "Easy": "rgba(64,176,64)",
+    "Moderate": "yellow",
+    "Hard": "rgba(229,132,48)",
+    "Very Hard": "rgba(239,37,37)"
   }
+  const color = textColorMap[diff.textContent]
+  document.documentElement.style.setProperty("--difficulty", color)
   
   let videoName = `${Instance.props.killerName}.mp4`
   videoList.value.push(videoName)
   let pathReference = r(storage, `killersVideo/Trailer/${videoName}`)
-  getDownloadURL(pathReference)
-    .then((url) => {
-      videoUrl.value.push(url)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+  download(pathReference, videoUrl.value)
   const videoNumber = parseInt(Instance.props.videoNumber)
   for(let i = 1; i<videoNumber; i++){
     videoName = `${Instance.props.killerName}-00${i}.mp4`
     videoList.value.push(videoName)
     pathReference = r(storage, `killersVideo/Review/${videoName}`)
-    getDownloadURL(pathReference)
-      .then((url) => {
-        videoUrl.value.push(url)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    download(pathReference, videoUrl.value)
   }
-  console.log(videoList.value)
 })
-
-const updateVideoNumeber = n => {
-  updateDoc(doc(killersColRef, Instance.props.killerID),{ videos: n })
-}
 
 const deleteKiller = id => {
   router.push("/personal")
@@ -296,59 +274,23 @@ const deleteVideo = index => {
   console.log(videoList.value, index)
 }
 
-const id = Instance.props.killerID
-const updateSettings = (options, optionsValue) => {
-  if(options == "skills"){
-      updateDoc(doc(killersColRef, id),{ skills: optionsValue })
-    }else if(options == "recommandSkills"){
-      updateDoc(doc(killersColRef, id),{ recommandSkills: optionsValue })
-    }else if(options == "backgroundImage"){
-      updateDoc(doc(killersColRef, id),{ bgImg: optionsValue})
-    }
-  else if(isNone(optionsValue)){
-    switch (options){
-      case "difficulty":
-        updateDoc(doc(killersColRef, id),{ difficulty: optionsValue })
-        break
-      case "background":
-        updateDoc(doc(killersColRef, id),{ background: optionsValue })
-        break
-      case "move":
-        updateDoc(doc(killersColRef, id),{ movementSpeed: optionsValue })
-        break
-      case "altMove":
-        updateDoc(doc(killersColRef, id),{ altnativeMoveSpeed: optionsValue })
-        break
-      case "terror":
-        updateDoc(doc(killersColRef, id),{ terrorRadius: optionsValue })
-        break 
-      case "altTerror":
-        updateDoc(doc(killersColRef, id),{ altnativeTerrorRadius: optionsValue })
-        break 
-      case "height":
-        updateDoc(doc(killersColRef, id),{ height: optionsValue })
-        break
-      case "weapon":
-        updateDoc(doc(killersColRef, id),{ weapon: optionsValue })
-        break
-      case "power":
-        updateDoc(doc(killersColRef, id),{ power: optionsValue })
-        break
-      case "realName":
-        updateDoc(doc(killersColRef, id),{ realName: optionsValue })
-        break
-    }
-  }
-  console.log("updateSettings")
-}
-
+// 檢查項目
 const isNone = optionsValue => {
-  if(!optionsValue){
+  if(!optionsValue || optionsValue.length == 0){
     console.log("該項目不可為空")
     return false
   }else return true
 }
 
+//更新資料
+const updateSettings = (options, optionsValue) => {
+  if(isNone(optionsValue)){
+    updateDoc(doc(killersColRef, Instance.props.killerID),{ [options]: optionsValue })
+    console.log("updateSettings")
+  }
+}
+
+// 上傳檔案
 const onUpload = (data, file) =>{
   const storageRef = r(storage, `${file}/${data.name}`)
   uploadBytes(storageRef, data).then((snapshot) => {
@@ -356,6 +298,7 @@ const onUpload = (data, file) =>{
   })
 }
 
+// 上傳影片檔案
 const onUploadVideo = (video, kind) =>{
   const videoTrailer = `${Instance.props.killerName}.mp4`
   const videoReview = `${Instance.props.killerName}-00${videoList.value.length}.mp4`
@@ -365,16 +308,11 @@ const onUploadVideo = (video, kind) =>{
   uploadBytes(storageRef, video).then((snapshot) => {
     console.log("Uploaded a blob or file!", snapshot)
   })
-  console.log(videoList.value.length)
-  updateVideoNumeber(videoList.value.length+1)
+  updateSettings("videos",videoList.value.length+1)
 }
 
-const back = () => {
-  router.push("/personal")
-}
-
-const toVideo = () => {
-  router.push("/video")
+const routerTo = path => {
+  router.push(`${path}`)
 }
 
 const modalStatue = i => {

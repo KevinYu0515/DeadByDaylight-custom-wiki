@@ -41,7 +41,7 @@
       </div>
       <input type="file" name="file" ref="input1" style="display:none" @change="preview" accept="image/*"/>
       <template #footer>
-        <Button label="Confirm" v-show="ImgData" @click="confirm(ImgData)" class="p-button-text"/>
+        <Button label="Confirm" v-show="ImgData" @click="confirm(uploadItems, ImgData, ImgUrl)" class="p-button-text"/>
         <Button label="Close" @click="modalStatue(4)" class="p-button-text"/>
       </template>
     </Dialog>
@@ -51,15 +51,16 @@
 import { ref } from "vue"
 export default {
   name:"WarningDialog",
-  props:{ isdisplay:{ type: Boolean, deafult:false },
-          isdisplay2:{ type: Boolean, deafult:false },
-          isdisplay3:{ type: Boolean, deafult:false },
+  props:{ isdisplay:{ type: Boolean, deafult: false },
+          isdisplay2:{ type: Boolean, deafult: false },
+          isdisplay3:{ type: Boolean, deafult: false },
           location:{ type: String },
           title:{ type: String },
           content:{ type: String },
           uploadTitle:{ type: String },
+          uploadItems:{ type: String }
         },
-  emits:["childmodal", "uploadDoc"],
+  emits:["childmodal", "uploadDoc","updateSettings"],
   setup(){
     const input1 = ref(null)
     const clickInput1 = () => input1.value.click()
@@ -90,12 +91,14 @@ export default {
       this.ImgData = files[0]
     },
 
-    confirm(Data) { 
-      this.$emit("uploadDoc", Data, "killersBgImg")
+    confirm(select, data, url) { 
+      this.$emit("uploadDoc", data, "killersBgImg")
+      this.$emit("updateSettings", select, url)
       this.modalStatue(4)
       this.ImgUrl = null
       this.ImgData = null
-    }
+      this.$router.push("/personal")
+    },
   },
 }
 </script>

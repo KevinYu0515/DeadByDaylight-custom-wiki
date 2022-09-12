@@ -30,13 +30,13 @@
         </div>
         <div class="flex align-items-center">
           <Textarea class="my-2" placeholder="Movement Speed" v-model="state.move" :autoResize="true" rows="1" cols="20" />
-          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[2]" @click="updateSettings(2, 'move', state.move)" autofocus />
+          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[2]" @click="updateSettings(2, 'movementSpeed', state.move)" autofocus />
         </div>
         <div class="altmove" v-show="moveChecked">
           <h3>Altnative Movement Speed</h3>
           <div class="flex align-items-center">
             <Textarea class="my-2" placeholder="Altnative Movement Speed" v-model="state.altMove" :autoResize="true" rows="1" cols="30" />
-            <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[3]" @click="updateSettings(3, 'altMove', state.altMove)" autofocus />
+            <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[3]" @click="updateSettings(3, 'altnativeMoveSpeed', state.altMove)" autofocus />
           </div>
         </div>
       </div>
@@ -50,13 +50,13 @@
         </div>
         <div class="flex align-items-center">
           <Textarea class="my-2" placeholder="Terror Radius" v-model="state.terror" :autoResize="true" rows="1" cols="20" />
-          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[4]" @click="updateSettings(4, 'terror', state.terror)" autofocus />
+          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[4]" @click="updateSettings(4, 'terrorRadius', state.terror)" autofocus />
         </div>
         <div class="altmove" v-show="terrorChecked">
           <h3>Altnative Terror Radius</h3>
           <div class="flex align-items-center">
             <Textarea class="my-2" placeholder="Altnative Terror Radius" v-model="state.altTerror" :autoResize="true" rows="1" cols="30" />
-            <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[5]" @click="updateSettings(5, 'altTerror', state.altTerror)" autofocus />
+            <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[5]" @click="updateSettings(5, 'altnativeTerrorRadius', state.altTerror)" autofocus />
           </div>
         </div>
       </div>
@@ -204,7 +204,7 @@ const preview = event => {
     })
     fileReader.readAsDataURL(files[i])
     state.skillData[i] = files[i]
-    emits("uploadData", files[i], "killerSkills")
+    emits("uploadData", files[i], "killersSkills")
   }
 }
 
@@ -221,7 +221,7 @@ const preview2 = event => {
     })
     fileReader.readAsDataURL(files[i])
     state.rskillData[i] = files[i]
-    emits("uploadData", files[i], "killerSkills")
+    emits("uploadData", files[i], "killersSkills")
   }
 }
 

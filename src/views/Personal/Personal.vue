@@ -23,20 +23,6 @@
           style="max-width:100%"
           @click="modalStatue(0)" 
         />
-        <AppendRole
-          :isdisplay="displayModal[0]"
-          :levelOptions="levelOptions"
-          :drOptions="drOptions"
-          @childmodal="modalStatue"
-          @uploadImg="onUpload"
-          @setKillerDoc="addKiller"
-          ref="appendRole"
-        />
-        <simple-dialog 
-          :isdisplay="displayModal[1]" 
-          location="Append New Role" 
-          @childmodal="modalStatue"
-        />
         <Button href="javascript:void(0)" class="p-button-success mx-2" @click="logout">Logout</Button>   
       </div>
       <div class="container">
@@ -61,6 +47,23 @@
       </div>
     </section>
   </div>
+
+  <!-- 新增人物 -->
+  <append-role
+    :isdisplay="displayModal[0]"
+    :levelOptions="levelOptions"
+    :drOptions="drOptions"
+    @childmodal="modalStatue"
+    @uploadImg="onUpload"
+    @setKillerDoc="addKiller"
+    ref="appendRole"
+  />
+  <!-- 警告視窗 -->
+  <simple-dialog 
+    :isdisplay="displayModal[1]" 
+    location="Append New Role" 
+    @childmodal="modalStatue"
+  />
 </template>
 
 <script>
@@ -73,7 +76,6 @@ export default {
   data(){
     return{
       levelOptions: ([{level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}]),
-      heightOptions: ([{hei:"Tall"}, {hei:"Average"}, {hei:"Short"}]),
       drOptions: ([{dr:"Easy"}, {dr:"Moderate"}, {dr:"Hard"}, {dr:"Very Hard"}]),
     }
   },
@@ -104,12 +106,13 @@ export default {
       })
     },
     difficulty(killer){
-      switch (killer.difficulty){
-        case "Easy": return "rgba(64,176,64)"
-        case "Moderate": return "yellow"
-        case "Hard": return "rgba(229,132,48)"
-        case "Very Hard": return "rgba(246,89,89)"
+      const levelColorMap = {
+        "Easy": "rgba(64,176,64)",
+        "Moderate": "yellow",
+        "Hard": "rgba(229,132,48)",
+        "Very Hard": "rgba(246,89,89)"
       }
+      return levelColorMap[killer.difficulty]
     }
   }
 }
@@ -132,7 +135,6 @@ const searchName = ref("")
 const appendRole = ref(null)
 
 onMounted(() => {
-  console.log("OnSnapshot")
   onSnapshot(killersColRef, (querySnapshot) => {
     let fbkillers = []
     querySnapshot.forEach((doc) => {

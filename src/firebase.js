@@ -1,6 +1,6 @@
 import firebase from "firebase/compat/app"
 import { getFirestore, collection } from "firebase/firestore"
-import { getStorage } from "firebase/storage"
+import { getStorage, getDownloadURL  } from "firebase/storage"
 
 /* code from our Firebase console */
 const firebaseConfig = {
@@ -20,6 +20,16 @@ const storage = getStorage(firebaseApp)
 const killersColRef = collection(db,"killers")
 const skillsColRef = collection(db,"skills")
 
+const download = (pathReference, list) => {
+  getDownloadURL(pathReference)
+  .then((url) => {
+    list.push(url)
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+}
+
 export{
-  storage, killersColRef, skillsColRef
+  storage, killersColRef, skillsColRef, download
 }
