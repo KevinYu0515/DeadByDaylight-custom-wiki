@@ -1,19 +1,19 @@
 <template>
-  <div class="records">
-    <img class="bg" :src="killerBgImg"/>
-    <div class="leftInfor">
+  <img class="bg fixed h-auto opacity-10 w-full" :src="killerBgImg"/>
+  <div class="records flex justify-content-center align-items-center overflow-hidden pr-8">
+    <div class="leftInfor flex justify-content-center align-items-center flex-column absolute z-5">
       <Button
         label="Delete"  
         class="p-button-danger bs mb-3"
         style="max-width:100%"
         @click="deleteKiller(killerID)"
       />
-      <div class="card">
-        <div class="imgBox">
-          <img :src="killerCover" alt="killer"/>
+      <div class="card relative overflow-hidden">
+        <div class="imgBox absolute top-0 left-0 w-full h-full">
+          <img class="absolute top-0 left-0 w-full h-full" :src="killerCover" alt="killer"/>
         </div>
       </div>
-      <div class="content">
+      <div class="content flex justify-content-center align-items-center relative">
         <div>
           <h1>{{killerName}}</h1>
           <p>Difficulty Rating： <span class="difficulty">{{killerDifficulty}}</span> </p>
@@ -30,14 +30,14 @@
       </div>
     </div>
 
-    <div class="container">
-      <div class="killerbg" v-if="killerBackground!=null">
-        <h1>Background<span class="bgAll" @click="modalStatue(2)">(Read More)</span></h1>
+    <div class="container flex justify-content-center align-items-start flex-column z-2">
+      <div class="killerbg mb-5" v-if="killerBackground!=null">
+        <h1>Background<span class="bgAll cursor-pointer" @click="modalStatue(2)">(Read More)</span></h1>
         <hr class="outDialog">
         <p>{{fillterbg(killerBackground)}}</p>
       </div>
 
-      <div class="skills" v-if=" killerSkills!=null">
+      <div class="skills flex justify-content-center align-items-start flex-column relative" v-if=" killerSkills!=null">
         <h1>Skills<span><router-link to="/skills">(Read More)</router-link></span></h1>
         <hr class="outDialog">
         <h3>Self Skills</h3>
@@ -93,7 +93,7 @@
         </table>
       </div>
 
-      <div class="video">
+      <div class="video flex justify-content-center align-items-start flex-column">
         <div class="videoHeader flex align-items-center">
           <h1> Video </h1>
           <Button label="Edit" @click="modalStatue(3)" class="p-button-success my-2 mx-2"></Button>
