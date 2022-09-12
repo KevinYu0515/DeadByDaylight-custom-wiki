@@ -52,7 +52,7 @@
         v-model="v$.newSkillInfor.$model" :class="{'p-invalid':v$.newSkillInfor.$invalid && submitted}"
         :autoResize="true" 
         rows="5" 
-        cols="80" 
+        cols="50" 
       />
       <small v-if="(v$.newSkillInfor.$invalid && submitted) || v$.newSkillInfor.$pending.$response" class="p-error">
         {{v$.newSkillInfor.required.$message.replace('Value', 'Description')}}

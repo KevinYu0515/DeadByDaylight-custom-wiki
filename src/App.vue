@@ -13,6 +13,7 @@ export default {
 </script>
 
 <style>
+
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro&family=Space+Grotesk&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Rowdies&display=swap");

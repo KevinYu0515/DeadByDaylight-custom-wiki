@@ -1,20 +1,24 @@
 <template>
   <DBDNavbar></DBDNavbar>
-  <div class="skills">
+  <div class="skills flex justify-content-center align-items-center flex-column">
     <div class="illustrated">
       <ul>
-        <li 
+        <li
+          class="list-none absolute overflow-hidden cursor-pointer"
           :class="{'item': !isclick[index], 'active': isclick[index]}"
-          v-for="(skill, index) in skills" 
+          v-for="(skill, index) in skills"
           :key="index"
           :style="{'top': topcalc(index), 'left': leftcalc(index)}"
         >
-          <div class="bg" @click="clickSkill(skill, index)" :title="skill.name">
+          <div class="bg w-full h-full" @click="clickSkill(skill, index)" :title="skill.name">
             <img :src="skill.icon" alt="">
           </div>
         </li>
-        <li :style="{'top': topcalc(skills.length), 'left': leftcalc(skills.length)}">
-          <div class="bg" @click="modalStatue(0)" title="Add New Skills">
+        <li 
+          class="list-none absolute overflow-hidden"
+          :style="{'top': topcalc(skills.length), 'left': leftcalc(skills.length)}"
+        >
+          <div class="bg w-full h-full" @click="modalStatue(0)" title="Add New Skills">
             <img :src="require('@/assets/icon/IconHelp.png')" alt=""/>
           </div>
         </li>
@@ -29,18 +33,23 @@
         <simple-dialog :isdisplay="displayModal[1]" location="Append New Skill" @childmodal="modalStatue"></simple-dialog>
       </ul>
     </div>
-    <div class="infor">
+    <div class="infor flex justify-content-center align-items-center flex-column p-5">
       <h1>SKILLS INFORMATION</h1>
       <hr class="outDialog">
       <div v-if="skillsClick.length > 0" class="my-2">
         <Button @click="clearSkillsClick" class="p-button-success mx-2">已選：{{skillsClick.length}}</Button>
         <Button label="Clear" icon="pi pi-times" @click="clearSkillsClick" class="p-button-infor mx-2"/>
       </div>
-      <div class="noneSkills" v-if="skillsClick.length == 0">Please Click Skills Above</div>
-      <div class="inforBox" v-else v-for="(skill, index) in skillsClick" :key="index">
-        <h1>{{skill.usefulness}}</h1>
-        <img :src="skill.icon" alt="">
-        <div class="text">
+      <div class="noneSkills p-8" v-if="skillsClick.length == 0">Please Click Skills Above</div>
+      <div 
+        class="inforBox flex justify-content-center align-items-center" 
+        v-else 
+        v-for="(skill, index) in skillsClick" 
+        :key="index"
+      >
+        <h1 class="mx-5">{{skill.usefulness}}</h1>
+        <img class="mx-5" :src="skill.icon" alt="">
+        <div class="text flex justify-content-center align-items-start flex-column p-5 w-6">
           <h2>{{skill.name}}</h2>
           <p> {{skill.illustrate}} </p>
         </div>
@@ -112,17 +121,18 @@ export default {
   },
   methods:{
     topcalc(i){
-      let index
+      let index = 200
       if(i<=7){
-        index = (i%2)*55
+        index += (i%2)*55
       }else{
-        index = (i%2)*55+(2*Math.floor(i/16))*55
+        index += (i%2)*55+(2*Math.floor(i/16))*55
       }
       index = index.toString()+"%"
       return index
     },
     leftcalc(i){
-      let index = i%16*13
+      let index = 80
+      index += i%16*13
       index = index.toString()+"%"
       return index
     },
@@ -159,10 +169,11 @@ export default {
 </script>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue"
+import { ref, reactive, onMounted, onUpdated } from "vue"
 import { storage, skillsColRef } from "@/firebase"
 import { onSnapshot, addDoc, updateDoc, doc } from "firebase/firestore"
 import { ref as r, uploadBytes } from "firebase/storage"
+
 const skills = ref([])
 const displayEdit = ref([false])
 const displayModal = ref([false])
@@ -185,6 +196,9 @@ onMounted(() => {
     })
     skills.value = fbskills
   })
+})
+
+onUpdated(() => {
 })
 
 const addSkill = state => {
