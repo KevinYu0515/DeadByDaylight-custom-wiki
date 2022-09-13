@@ -1,7 +1,7 @@
 <template>
   <Navbar></Navbar>
   <section id="home">
-    <div class="home_firstParaph">
+    <div class="home">
       <div class="photo_bgRight"></div>
       <div id="content">
         <h1>Hi I'm<br /><span>Kevin LIN</span></h1>

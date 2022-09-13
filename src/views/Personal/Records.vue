@@ -1,6 +1,6 @@
 <template>
   <img class="bg fixed h-auto opacity-10 w-full" :src="killerBgImg"/>
-  <div class="records flex justify-content-center align-items-center overflow-hidden pr-8">
+  <div class="records flex justify-content-center align-items-center">
     <div class="leftInfor flex justify-content-center align-items-center flex-column absolute z-5">
       <Button
         label="Delete"  
@@ -24,20 +24,19 @@
         <Button 
           label="Back"  
           class="p-button-success mt-3"
-          style="max-width:100%"
           @click="routerTo('/personal')" 
         /> 
       </div>
     </div>
 
-    <div class="container flex justify-content-center align-items-start flex-column z-2">
+    <div class="container flex flex-column relative">
       <div class="killerbg mb-5" v-if="killerBackground!=null">
         <h1>Background<span class="bgAll cursor-pointer" @click="modalStatue(2)">(Read More)</span></h1>
         <hr class="outDialog">
-        <p>{{fillterbg(killerBackground)}}</p>
+        <div class="bgContent">{{fillterbg(killerBackground)}}</div>
       </div>
 
-      <div class="skills flex justify-content-center align-items-start flex-column relative" v-if=" killerSkills!=null">
+      <div class="skills mb-5 flex justify-content-center align-items-start flex-column relative" v-if=" killerSkills!=null">
         <h1>Skills<span><router-link to="/skills">(Read More)</router-link></span></h1>
         <hr class="outDialog">
         <h3>Self Skills</h3>
@@ -50,7 +49,7 @@
         </div>
       </div>
 
-      <div class="infor" v-if="killerWeapon!=null">
+      <div class="infor mb-5 relative" v-if="killerWeapon!=null">
         <h1>Infor</h1>
         <hr class="outDialog">
         <table>

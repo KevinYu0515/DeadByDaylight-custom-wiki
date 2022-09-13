@@ -28,3 +28,15 @@
 .p-dialog-header-icons{
     visibility: hidden !important;
 }
+
+.bs{
+    position: relative;
+    top: 40px;
+    width: 110px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}

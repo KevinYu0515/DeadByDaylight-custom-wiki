@@ -18,7 +18,7 @@
     v-model:visible="isdisplay2" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
     :style="{width: '60vw'}" :modal="true"
   >
-  <p>{{content}}</p>
+  <p style="white-space:pre-wrap">{{content}}</p>
     <template #footer>
       <Button label="No" icon="pi pi-times" @click="modalStatue(2)" class="p-button-text"/>
     </template>
