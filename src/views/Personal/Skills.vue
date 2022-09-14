@@ -18,20 +18,22 @@
           class="list-none absolute overflow-hidden"
           :style="{'top': topcalc(skills.length), 'left': leftcalc(skills.length)}"
         >
-          <div class="bg w-full h-full" @click="modalStatue(0)" title="Add New Skills">
+          <div class="bg w-full h-full cursor-pointer" @click="modalStatue(0)" title="Add New Skills">
             <img :src="require('@/assets/icon/IconHelp.png')" alt=""/>
           </div>
         </li>
-        <AppendSkill
-          :isdisplay="displayModal[0]"
-          @childmodal="modalStatue"
-          @uploadImg="onUpload"
-          @setSkillDoc="addSkill"
-          ref="appendSkill"
-        />
-        <simple-dialog :isdisplay="displayModal[1]" location="Append New Skill" @childmodal="modalStatue"></simple-dialog>
       </ul>
     </div>
+
+    <append-skill
+      :isdisplay="displayModal[0]"
+      @childmodal="modalStatue"
+      @uploadImg="onUpload"
+      @setSkillDoc="addSkill"
+      ref="appendSkill"
+    />
+    <simple-dialog :isdisplay="displayModal[1]" location="Append New Skill" @childmodal="modalStatue"></simple-dialog>
+
     <div class="infor flex justify-content-center align-items-center flex-column p-5">
       <h1>SKILLS INFORMATION</h1>
       <hr class="outDialog">
@@ -64,10 +66,10 @@
           :skillData="skill"
           :skillIndex="index"
           :skillList="skills"
-          @updateSkill="updateSkill"
-          @complete="complete"
+          @updateSkill="updateSkills"
+          @complete="editStatue"
           @replace="replaceSkill"
-        ></append-skill>
+        />
 
         <simple-dialog
           :isdisplay2="displayModal[2]"
@@ -137,7 +139,7 @@ export default {
     clearSkillsClick(){
       this.isclick = [false]
       this.skillsClick = []
-    }
+    },
   }
 }
 </script>
@@ -178,10 +180,9 @@ const addSkill = state => {
     icon: state.skillUrl,
     illustrate: state.newSkillInfor
   })
-  modalStatue(0, true)
 }
 
-const updateSkill = (id, options ,optionsValue) => {
+const updateSkills = (id, options ,optionsValue) => {
   if(isNone(optionsValue)){
     updateDoc(doc(skillsColRef, id), { [options]: optionsValue })
     console.log("updateSkill")
@@ -203,20 +204,14 @@ const onUpload = skill => {
   })
 }
 
-const complete = i => {
-  editStatue(i)
-  appendSkill.value.clearData()
-}
-
 const editStatue = i => {
   displayEdit.value[i] = displayEdit.value[i] ? false : true
 }
 
 const modalStatue = (i, isClear) => {
   displayModal.value[i] = !displayModal.value[i]
-  if(isClear){
-    appendSkill.value.clearData()
-  }
+  console.log(displayModal.value[i])
+  if(isClear) appendSkill.value.clearData()
 }
 
 </script>

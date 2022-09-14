@@ -113,7 +113,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, reactive, defineProps, defineEmits, defineExpose, onUpdated, onBeforeUpdate } from "vue"
+import { ref, reactive, defineProps, defineEmits, defineExpose, onUpdated } from "vue"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 
@@ -126,24 +126,23 @@ const skillData = ref(null)
 const skillName = ref(null)
 const skillID = ref(null)
 const skillList = ref(null)
-
-onBeforeUpdate(() => {
-  console.log("before update")
-  isdisplay.value = props.isdisplay
-  isEdit.value = props.isEdit
-})
+const defaulted = ref(false)
 
 onUpdated(()=>{
+  isdisplay.value = props.isdisplay
+  isEdit.value = props.isEdit
   if(isEdit.value){
-    console.log("isEdit", isEdit.value)
     skillData.value = props.skillData
     skillList.value = props.skillList
     skillIndex.value = props.skillIndex
     skillName.value = skillData.value.name
     skillID.value = skillData.value.id
-    state.newSkillName = skillData.value.name
-    state.newSkillInfor = skillData.value.illustrate
-    state.newSkillUseful = skillData.value.usefulness
+    if(!defaulted.value){
+      state.newSkillName = skillData.value.name
+      state.newSkillInfor = skillData.value.illustrate
+      state.newSkillUseful = skillData.value.usefulness
+      defaulted.value = true
+    }
   }
 })
 
@@ -213,8 +212,8 @@ const complete = (skill, list) => {
   emits("complete", skillIndex.value)
   emits("replace", skill, list)
   disable.value = [false]
+  defaulted.value = false
 }
-
 
 const emits = defineEmits(["uploadImg", "childmodal", "setSkillDoc", "updateSkill", "replace", "complete"])
 defineExpose({ clearData })
