@@ -64,25 +64,87 @@
           <Button label="Discard" icon="pi pi-trash" @click="modalStatue(1)" class="p-button-text"/>
       </template>
   </Dialog>
+
+  <Dialog 
+    :header="`編輯「${skillName}」`" 
+    v-model:visible="isEdit" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+    :style="{width: '50vw'}" :modal="true"
+  >
+    <div class="flex align-items-center">
+      <h3>Skill Name：</h3>
+      <InputText
+        placeholder="Skill Name"
+        class="mx-1 my-1"
+        v-model="state.newSkillName"
+      />
+      <Button label="Confirm" class="mx-2" :disabled="disable[0]" @click="updateSkill(skillID, 0, 'name', state.newSkillName)" autofocus />
+    </div>
+    <hr class="inDialog">
+    <Dropdown
+      v-model="state.newSkillUseful"
+      :options="usefulOptions"
+      optionLabel="level"
+      optionValue="level"
+      placeholder="UseFulness"
+      class="mx-1"
+      style="width:200px"
+    />
+    <Button label="Confirm" class="mx-2" :disabled="disable[1]" @click="updateSkill(skillID, 1, 'usefulness', state.newSkillUseful)" autofocus />
+    <hr class="inDialog">
+    <h3>Description</h3>
+    <Textarea class="my-2" placeholder="Description" v-model="state.newSkillInfor" :autoResize="true" rows="5" cols="80" />
+    <br>
+    <Button label="Confirm" class="mx-2"  :disabled="disable[2]" @click="updateSkill(skillID, 2, 'illustrate', state.newSkillInfor)" autofocus />
+    <template #footer>
+        <Button label="Complete" icon="pi pi-check" @click="complete(skillData, skillList)" class="p-button-text"/>
+    </template>
+  </Dialog>
 </template>
 
 <script>
 export default {
-    name:"AppendSkill"
+    name:"AppendSkill",
+    data() {
+      return{
+        usefulOptions: ([{level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}, {level:"T4"}])
+      }
+    }
 }
 </script>
 
 <script setup>
-import {ref, reactive, defineProps, defineEmits, defineExpose, onUpdated} from "vue"
+import { ref, reactive, defineProps, defineEmits, defineExpose, onUpdated, onBeforeUpdate } from "vue"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 
-const props = defineProps(["isdisplay","usefulOptions"])
+const props = defineProps(["isdisplay","isEdit","skillData","skillIndex","skillList"])
 const isdisplay = ref(null)
-const usefulOptions = ref(null)
-onUpdated(()=>{
+const isEdit = ref(null)
+const disable = ref([false])
+const skillIndex = ref(null)
+const skillData = ref(null)
+const skillName = ref(null)
+const skillID = ref(null)
+const skillList = ref(null)
+
+onBeforeUpdate(() => {
+  console.log("before update")
   isdisplay.value = props.isdisplay
-  usefulOptions.value = props.usefulOptions
+  isEdit.value = props.isEdit
+})
+
+onUpdated(()=>{
+  if(isEdit.value){
+    console.log("isEdit", isEdit.value)
+    skillData.value = props.skillData
+    skillList.value = props.skillList
+    skillIndex.value = props.skillIndex
+    skillName.value = skillData.value.name
+    skillID.value = skillData.value.id
+    state.newSkillName = skillData.value.name
+    state.newSkillInfor = skillData.value.illustrate
+    state.newSkillUseful = skillData.value.usefulness
+  }
 })
 
 const input1 = ref(null)
@@ -142,7 +204,19 @@ const clearData = () => {
   state.skillUrl = ""
 }
 
-const emits = defineEmits(["uploadImg", "childmodal", "setSkillDoc"])
+const updateSkill = (id, dis, options, optionsValue) => {
+  emits("updateSkill", id, options, optionsValue)
+  disable.value[dis] = true
+}
+
+const complete = (skill, list) => {
+  emits("complete", skillIndex.value)
+  emits("replace", skill, list)
+  disable.value = [false]
+}
+
+
+const emits = defineEmits(["uploadImg", "childmodal", "setSkillDoc", "updateSkill", "replace", "complete"])
 defineExpose({ clearData })
 
 </script>

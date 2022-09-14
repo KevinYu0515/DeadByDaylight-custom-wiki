@@ -24,7 +24,6 @@
         </li>
         <AppendSkill
           :isdisplay="displayModal[0]"
-          :usefulOptions="usefulOptions"
           @childmodal="modalStatue"
           @uploadImg="onUpload"
           @setSkillDoc="addSkill"
@@ -57,42 +56,19 @@
           label="Edit"  
           class="p-button-warning bs"
           style="max-width:100%"
-          @click="editStatue(index)" 
+          @click="editStatue(index);" 
         /> 
-        <Dialog 
-          :header="`編輯「${skill.name}」`" 
-          v-model:visible="displayEdit[index]" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-          :style="{width: '50vw'}" :modal="true"
-        >
-          <div class="flex align-items-center">
-            <h3>Skill Name：</h3>
-            <InputText
-              placeholder="Skill Name"
-              class="mx-1 my-1"
-              v-model="state.newSkillName"
-            />
-            <Button label="Confirm" class="mx-2" :disabled="disable[0]" @click="updateSkill(skill.id, 0, 'name', state.newSkillName)" autofocus />
-          </div>
-          <hr class="inDialog">
-          <Dropdown
-            v-model="state.newSkillUseful"
-            :options="usefulOptions"
-            optionLabel="level"
-            optionValue="level"
-            placeholder="UseFulness"
-            class="mx-1"
-            style="width:200px"
-          />
-          <Button label="Confirm" class="mx-2" :disabled="disable[1]" @click="updateSkill(skill.id, 1, 'usefulness', state.newSkillUseful)" autofocus />
-          <hr class="inDialog">
-          <h3>Description</h3>
-          <Textarea class="my-2" placeholder="Description" v-model="state.newSkillInfor" :autoResize="true" rows="5" cols="80" />
-          <br>
-          <Button label="Confirm" class="mx-2"  :disabled="disable[2]" @click="updateSkill(skill.id, 2, 'description', state.newSkillInfor)" autofocus />
-          <template #footer>
-              <Button label="Complete" icon="pi pi-check" @click="complete(index); replaceSkill(skill, skills)" class="p-button-text"/>
-          </template>
-        </Dialog>
+
+        <append-skill
+          :isEdit="displayEdit[index]"
+          :skillData="skill"
+          :skillIndex="index"
+          :skillList="skills"
+          @updateSkill="updateSkill"
+          @complete="complete"
+          @replace="replaceSkill"
+        ></append-skill>
+
         <simple-dialog
           :isdisplay2="displayModal[2]"
           title="Warning"
@@ -116,7 +92,6 @@ export default {
       skillsClick: [],
       clickIndex: [],
       isclick : [false],
-      usefulOptions: ([{level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}, {level:"T4"}]),
     }
   },
   methods:{
@@ -137,7 +112,6 @@ export default {
       return index
     },
     clickSkill(e, n){
-      console.log(e.name, e)
       this.isclick[n] = !this.isclick[n]
       if(this.isclick[n]){
         this.skillsClick.unshift(e)
@@ -169,7 +143,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, reactive, onMounted, onUpdated } from "vue"
+import { ref,  onMounted } from "vue"
 import { storage, skillsColRef } from "@/firebase"
 import { onSnapshot, addDoc, updateDoc, doc } from "firebase/firestore"
 import { ref as r, uploadBytes } from "firebase/storage"
@@ -177,7 +151,6 @@ import { ref as r, uploadBytes } from "firebase/storage"
 const skills = ref([])
 const displayEdit = ref([false])
 const displayModal = ref([false])
-const disable = ref([false])
 const appendSkill = ref(null)
 
 onMounted(() => {
@@ -198,9 +171,6 @@ onMounted(() => {
   })
 })
 
-onUpdated(() => {
-})
-
 const addSkill = state => {
   addDoc(skillsColRef, {
     name: state.newSkillName,
@@ -211,22 +181,9 @@ const addSkill = state => {
   modalStatue(0, true)
 }
 
-const state = reactive({
-  newSkillName:"",
-  newSkillInfor:"",
-  newSkillUseful:""
-})
-
-const updateSkill = (id, dis, options ,optionsValue) => {
+const updateSkill = (id, options ,optionsValue) => {
   if(isNone(optionsValue)){
-    if(options == "name"){
-      updateDoc(doc(skillsColRef, id), { name: state.newSkillName })
-    }else if(options == "description"){
-      updateDoc(doc(skillsColRef, id), { illustrate: state.newSkillInfor })
-    }else if(options == "usefulness"){
-      updateDoc(doc(skillsColRef, id), { usefulness: state.newSkillUseful })
-    }
-    disable.value[dis] = true
+    updateDoc(doc(skillsColRef, id), { [options]: optionsValue })
     console.log("updateSkill")
   }
 }
@@ -247,13 +204,12 @@ const onUpload = skill => {
 }
 
 const complete = i => {
-  appendSkill.value.clearData()
   editStatue(i)
+  appendSkill.value.clearData()
 }
 
 const editStatue = i => {
   displayEdit.value[i] = displayEdit.value[i] ? false : true
-  disable.value = [false]
 }
 
 const modalStatue = (i, isClear) => {
