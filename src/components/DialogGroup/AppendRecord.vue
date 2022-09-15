@@ -146,7 +146,9 @@
 <script>
 export default {
     name:"AppendRecord",
-    props:["isdisplay","killerName"],
+    props:["isdisplay","killerName","killerBackground","killerRealName","killerMove","killerTerror","killerHeight",
+          "killerWeapon","killerPower","killerDifficulty","killerAltMove","killerAltTerror","killerSkills","killerReSkills"
+          ],
     data(){
       return{
         heightOptions: ([{hei:"Tall"}, {hei:"Average"}, {hei:"Short"}]),
@@ -157,11 +159,12 @@ export default {
 </script>
 
 <script setup>
-import { ref, reactive, defineEmits } from "vue"
+import { ref, reactive, defineEmits, getCurrentInstance } from "vue"
 import { useRouter } from "vue-router"
 
+const Instance = getCurrentInstance()
 const modalStatue = (i, isClear) => {
-    emits("childmodal", i, isClear)
+  emits("childmodal", i, isClear)
 }
 
 const input1 = ref(null)
@@ -175,20 +178,20 @@ const clickInput1 = () => input1.value.click()
 const clickInput2 = () => input2.value.click()
 
 const state = reactive({
-  move: "",
-  altMove: "",
-  terror: "",
-  altTerror:"",
-  height: "",
-  weapon: "",
-  power: "",
-  background: "",
-  realName: "",
-  difficulty: "",
-  skillData: [],
-  skillUrl: [],
-  rskillData: [],
-  rskillUrl: []
+  move: Instance.props.killerMove,
+  altMove: Instance.props.killerAltMove,
+  terror: Instance.props.killerTerror,
+  altTerror:Instance.props.killerAltTerror,
+  height: Instance.props.killerHeight,
+  weapon: Instance.props.killerWeapon,
+  power: Instance.props.killerPower,
+  background: Instance.props.killerBackground,
+  realName: Instance.props.killerRealName,
+  difficulty: Instance.props.killerDifficulty,
+  skillData: Instance.props.killerSkills,
+  skillUrl: Instance.props.killerSkills,
+  rskillData: Instance.props.killerReSkills,
+  rskillUrl: Instance.props.killerReSkills
 })
 
 const preview = event => {

@@ -126,6 +126,18 @@
   <append-record
     :isdisplay="displayModal[0]"
     :killerName="killerName"
+    :killerBackground="killerBackground"
+    :killerRealName="killerRealName"
+    :killerMove="killerMove"
+    :killerTerror="killerTerror"
+    :killerHeight="killerHeight"
+    :killerDifficulty="killerDifficulty"
+    :killerPower="killerPower"
+    :killerAltMove="killerAltMove"
+    :killerAltTerror="killerAltTerror"
+    :killerWeapon="killerWeapon"
+    :killerSkills="killerSkills"
+    :killerReSkills="reSkills"
     @childmodal="modalStatue"
     @uploadData="onUpload"
     @updateSettings="updateSettings"
@@ -240,7 +252,7 @@ const items =  ref([
 }
 ])
 
-onMounted(() =>{
+onMounted(() => {
   let diff = document.querySelector(".difficulty")
   const textColorMap = {
     "Easy": "rgba(64,176,64)",
@@ -248,6 +260,7 @@ onMounted(() =>{
     "Hard": "rgba(229,132,48)",
     "Very Hard": "rgba(239,37,37)"
   }
+
   const color = textColorMap[diff.textContent]
   document.documentElement.style.setProperty("--difficulty", color)
   
