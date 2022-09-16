@@ -1,6 +1,7 @@
 <template>
   <div class="video">
-    <div class="figure"></div>
+    <img class="videoFigure" :src="videoBg" alt="videoBackground"/>
+    <Button @click="back" class="back my-5">Back to Personal</Button>
     <div class="player">
       <video  class="player__video viewer" :src="videoLink"></video>
       <div class="player__controls">
@@ -14,7 +15,11 @@
           <button data-skip="25" class="player__button">25s »</button>
       </div>
     </div>
-    <Button @click="back" class="back">Back to Personal</Button>
+    <div class="flex justify-content-center align-items-center">
+      <div class="mx-5" v-for="video in videoUrl" :key="video">
+        <video height="150" width="260" class="videoSwipe mt-3" :src="video"></video>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -22,7 +27,9 @@
 export default {
   name:"Video",
   props:{
-    videoLink:{type: String}
+    videoLink:{type: String},
+    videoUrl:{type: Array},
+    videoBg:{type: String}
   }
 }
 </script>

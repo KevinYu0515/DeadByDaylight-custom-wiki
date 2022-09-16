@@ -1,5 +1,6 @@
 :root{
     --difficulty:yellow;
+    --videoBackground: "wraith";
 }
 
 .difficulty{
@@ -39,4 +40,15 @@
     justify-content: center;
     align-items: center;
     z-index: 100;
+}
+
+.videoFigure{
+    position: absolute;
+    background:url();
+    opacity: .3;
+    background-size: cover;
+    left:0;
+    bottom: 0;
+    width: 400px;
+    height: 95%;
 }

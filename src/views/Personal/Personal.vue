@@ -102,7 +102,8 @@ export default {
           killerRealName: killer.realName,
           killerBgImg: killer.bgImg,
           killerDifficulty: killer.difficulty,
-          videoNumber: killer.videos
+          videoNumber: killer.videos,
+          videoBg: killer.videoBg
         }
       })
     },
@@ -157,7 +158,8 @@ onMounted(() => {
         realName: doc.data().realName,
         bgImg: doc.data().bgImg,
         difficulty: doc.data().difficulty,
-        videos: doc.data().videos
+        videos: doc.data().videos,
+        videoBg: doc.data().videoBg
       }
       fbkillers.push(killer)
     })

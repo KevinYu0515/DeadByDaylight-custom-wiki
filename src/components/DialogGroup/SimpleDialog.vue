@@ -42,7 +42,7 @@
       <input type="file" name="file" ref="input1" style="display:none" @change="preview" accept="image/*"/>
       <template #footer>
         <Button label="Confirm" v-show="ImgData" @click="confirm(uploadItems, ImgData, ImgUrl)" class="p-button-text"/>
-        <Button label="Close" @click="modalStatue(4)" class="p-button-text"/>
+        <Button label="Close" @click="modalStatue(close3)" class="p-button-text"/>
       </template>
     </Dialog>
 </template>
@@ -54,6 +54,7 @@ export default {
   props:{ isdisplay:{ type: Boolean, deafult: false },
           isdisplay2:{ type: Boolean, deafult: false },
           isdisplay3:{ type: Boolean, deafult: false },
+          close3: { type: Number },
           location:{ type: String },
           title:{ type: String },
           content:{ type: String },

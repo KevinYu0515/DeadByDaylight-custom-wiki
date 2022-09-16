@@ -103,7 +103,7 @@
             v-for="(video, index) in videoUrl" 
             :key="index" 
             @click="routerTo('/video'); 
-            passDataToVideos(video)"
+            passDataToVideos(video, videoUrl, videoBg)"
           >
               <figure>
                 <video class="Demo" :src="video" alt="video"/>
@@ -172,7 +172,19 @@
   <simple-dialog
     :isdisplay3="displayModal[4]"
     :upload-title="`${killerName} Background`"
+    :close3= 4
     uploadItems="bgImg"
+    @upload-doc="onUpload"
+    @updateSettings="updateSettings"
+    @childmodal="modalStatue"
+  ></simple-dialog>
+
+  <!-- 影片背景圖片上傳 -->
+  <simple-dialog
+    :isdisplay3="displayModal[5]"
+    :upload-title="`${killerName} Video Background`"
+    :close3= 5
+    uploadItems="videoBg"
     @upload-doc="onUpload"
     @updateSettings="updateSettings"
     @childmodal="modalStatue"
@@ -203,6 +215,7 @@ export default {
       killerDifficulty:{type: String},
       killerBgImg:{type: String},
       videoNumber:{type: String},
+      videoBg:{type: String},
       reSkills:{type: Array}
   },
   methods:{
@@ -213,12 +226,14 @@ export default {
       }else return background
     },
 
-    passDataToVideos(videoLink){
+    passDataToVideos(videoLink, videoUrl, videoBg){
       this.$router.push({
         path:"/video",
         name:"Video",
         query:{
-          videoLink: videoLink
+          videoLink: videoLink,
+          videoUrl: videoUrl,
+          videoBg: videoBg
         }
       })
     }
@@ -249,6 +264,10 @@ const items =  ref([
   label: "Background",
   icon: "pi pi-cog",
   command: () => { modalStatue(4) }
+},{
+  label: "Video Background",
+  icon: "pi pi-cog",
+  command: () => { modalStatue(5) }
 }
 ])
 
