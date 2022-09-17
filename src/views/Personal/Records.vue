@@ -103,7 +103,7 @@
             v-for="(video, index) in videoUrl" 
             :key="index" 
             @click="routerTo('/video'); 
-            passDataToVideos(video, videoUrl, videoBg)"
+            passDataToVideos(video, index, videoUrl, videoBg)"
           >
               <figure>
                 <video class="Demo" :src="video" alt="video"/>
@@ -226,12 +226,13 @@ export default {
       }else return background
     },
 
-    passDataToVideos(videoLink, videoUrl, videoBg){
+    passDataToVideos(videoLink, videoIndex, videoUrl, videoBg){
       this.$router.push({
         path:"/video",
         name:"Video",
         query:{
           videoLink: videoLink,
+          videoIndex: videoIndex,
           videoUrl: videoUrl,
           videoBg: videoBg
         }
@@ -305,20 +306,10 @@ const deleteVideo = index => {
   console.log(videoList.value, index)
 }
 
-// 檢查項目
-const isNone = optionsValue => {
-  if(!optionsValue || optionsValue.length == 0){
-    console.log("該項目不可為空")
-    return false
-  }else return true
-}
-
 //更新資料
 const updateSettings = (options, optionsValue) => {
-  if(isNone(optionsValue)){
-    updateDoc(doc(killersColRef, Instance.props.killerID),{ [options]: optionsValue })
-    console.log("updateSettings")
-  }
+  updateDoc(doc(killersColRef, Instance.props.killerID),{ [options]: optionsValue })
+  console.log("updateSettings")
 }
 
 // 上傳檔案

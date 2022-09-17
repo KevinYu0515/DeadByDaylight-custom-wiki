@@ -230,10 +230,8 @@ const preview2 = event => {
 
 const updateSettings = (dis, select, data) => {
   emits("updateSettings", select, data)
-  if(data){
-    disable.value[dis] = true
-    isConfirm.value = true
-  }
+  disable.value[dis] = true
+  isConfirm.value = true
 }
 
 const clearData = () => {

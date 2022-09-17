@@ -23,6 +23,17 @@
         position: relative;
         font-size: 0;
         overflow: hidden;
+
+        &:fullscreen {
+            max-width: none;
+            width: 100%;
+          }
+          
+        &:-webkit-full-screen {
+            max-width: none;
+            width: 100%;
+        }
+
         .player__video {
             width: 100%;
           }
@@ -53,7 +64,7 @@
         }
           
         .player__controls {
-            display:flex;
+            display: flex;
             position: absolute;
             bottom:0;
             width: 100%;
@@ -145,6 +156,12 @@
     
       .videoSwipe{
         box-shadow:0 0 200px rgba(212, 122, 122, 0.4);
+      }
+
+      .isplayed{
+        border-width: 6px;
+        border-style: solid;
+        border-color: yellowgreen;
       }
 
     .back{
