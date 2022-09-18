@@ -1,7 +1,13 @@
 <template>
   <DBDNavbar></DBDNavbar>
   <div class="personal flex justify-content-center align-items-center flex-column overflow-hidden h-auto">
-    <section class="bg w-full fixed top-0"></section>
+    <section class="bg w-full fixed top-0 flex justify-content-center align-items-center flex-column">
+      <h1 class="mainTitle mb-5">Dead By Daylight Recording Side Project</h1>
+      <p class="subTitle">Recording Videos, Killers Information, Skills</p>
+      <p class="subTitle">Starting Date： 2022/08/15</p>
+      <p class="subTitle">Maker： Kevin Lin</p>
+      <p class="subTitle">Version： DBD 6.1.0</p>
+    </section>
     <section class="killer w-full z-1 px-3 py-8 flex justify-content-center align-items-center flex-column">
       <div class="w-5">
         <Dropdown
@@ -189,6 +195,23 @@ onUpdated(() => {
     let value = 1 + window.scrollY / -600
     background.style.opacity = value
   })
+})
+
+onMounted(() => {
+  const text = document.querySelector(".mainTitle")
+  const factor = 20
+  function shadowMove(e){
+    const { offsetWidth: width, offsetHeight: height } = text
+    let { offsetX: x, offsetY: y } = e
+    if(this !== e.target){
+      x = x + e.target.offsetLeft
+      y = y + e.target.offsetTop
+    }
+    const xShadow = parseInt(x / width * factor - (factor / 2))
+    const yShadow = parseInt(y / height * factor - (factor / 2))
+    text.style.textShadow = `${xShadow}px ${yShadow}px 0 gray`
+  }
+  text.addEventListener("mousemove", shadowMove)
 })
 
 const onUpload = img => {
