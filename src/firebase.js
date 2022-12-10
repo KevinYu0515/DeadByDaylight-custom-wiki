@@ -19,6 +19,8 @@ var db = getFirestore(firebaseApp)
 const storage = getStorage(firebaseApp)
 const killersColRef = collection(db,"killers")
 const skillsColRef = collection(db,"skills")
+const videosColRef = collection(db,"videos")
+
 
 const download = (pathReference, list) => {
   getDownloadURL(pathReference)
@@ -31,5 +33,5 @@ const download = (pathReference, list) => {
 }
 
 export{
-  storage, killersColRef, skillsColRef, download
+  storage, killersColRef, skillsColRef, videosColRef, download
 }

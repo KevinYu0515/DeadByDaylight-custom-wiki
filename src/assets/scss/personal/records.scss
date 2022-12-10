@@ -1,4 +1,11 @@
+@mixin title-settings(){
+    letter-spacing: 2px;
+    color:darkgoldenrod;
+    font-family: 'Carter One';
+}
+
 .records{
+    min-height: 100vh;
     height: auto;
     background-color: darkslategrey;
     border-left: darkolivegreen;
@@ -64,9 +71,7 @@
                 width: 800px;
             }
             h1{
-                letter-spacing: 2px;
-                color:darkgoldenrod;
-                font-family: 'Carter One';
+                @include title-settings();
                 .bgAll{
                     margin:0 20px;
                     font-size: large;
@@ -86,14 +91,12 @@
                 word-wrap: break-word;
             }
         }
-        .skills{
+        .perks{
             max-width: 100%;
             height: auto;
 
             h1{
-                letter-spacing: 2px;
-                color:darkgoldenrod;
-                font-family: 'Carter One';
+                @include title-settings();
                 span a{
                     margin:0 20px;
                     font-size: large;
@@ -119,9 +122,7 @@
             max-width: 100%;
             height: auto;
             h1{
-                letter-spacing: 2px;
-                color:darkgoldenrod;
-                font-family: 'Carter One';
+                @include title-settings();
             }
             table {
                 border-collapse: collapse;
@@ -147,83 +148,20 @@
                 color:beige;
             }
         }
-        .video{
-            max-width: 100%;
+
+        .add-ones-container{
             h1{
-                letter-spacing: 2px;
-                color:darkgoldenrod;
-                font-family: 'Carter One';
+                @include title-settings();
             }
-            .videos{
+            .add-ones-block{
                 display: flex;
-                .videoBox{
-                    width: 300px;
-                    height: 180px;
-                    box-sizing: border-box;
-                    padding: 0 10px;
-                    cursor: pointer;
-                    figure{
-                        position: relative;
-                        margin: 0;
-                        padding: 0;
-                        overflow:hidden;
-                        video{
-                            width:100%;
-                            height:100%;
-                        }
-                        figcaption{
-                            position: absolute;
-                            top:20px;
-                            left:20px;
-                            right:20px;
-                            bottom: 20px;
-                            background: #fff;
-                            text-align: center;
-                            padding: 20px;
-                            opacity: 0;
-                            transition: .8s;
-                            transition-delay: .2s;
-                            transform: translateY(20px);
-                            z-index: 1;
-                            h1{
-                                margin: 0;
-                                padding: 0;
-                                color:black;
-                                font-size: 22px;
-                            }
-                            p{
-                                margin: 10px 0 0;
-                                padding: 0;
-                                font-size: 16px;
-                            }
-                        }
-                        &:hover figcaption{
-                            opacity: 1;
-                            transform: translateY(0);
-                        }
-                        &::before, &::after{
-                            content: "";
-                            position: absolute;
-                            top: 0;
-                            height: 100%;
-                            width: 50%;
-                            background-color:dimgray;
-                            opacity:.8;
-                            transition: .5s;
-                        }
-                        &::before{
-                            left:-50%;
-                        }   
-                        &::after{
-                            right:-50%;
-                        }  
-                    }
-                    &:hover figure::before{
-                        left:0;
-                    }
-                    &:hover figure::after{
-                        right:0;
-                    }
+                align-items: center;
+                .add-ones-name{
+                    word-spacing: 3px;
+                    font-size: 1.5em;
+                    font-family: 'Amaranth';
+                    color: bisque;
+                    padding: 0 20px;
                 }
             }
         }
@@ -232,11 +170,4 @@
 
 .container::-webkit-scrollbar{
     display: none;
-}
-
-.videoPreview{
-    word-spacing: 3px;
-    font-family: 'Amaranth';
-    font-size: 1.2em;
-    color:beige;
 }

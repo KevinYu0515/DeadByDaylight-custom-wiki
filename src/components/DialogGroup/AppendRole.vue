@@ -93,7 +93,7 @@ const state = reactive({
     newKillerLevel : "",
     newKillerDR: "",
     imgUrl: "",
-    imgData: null
+    imgData: null,
 })
 
 const rules = {

@@ -1,4 +1,5 @@
 .video{
+    transform: translateY(80px);
     background:url(~@/assets/picture/videoBG.jpg);
     background-size: cover;
     min-height: 100vh;
@@ -157,14 +158,32 @@
       .videoSwipe{
         box-shadow:0 0 200px rgba(212, 122, 122, 0.4);
       }
-
-      .isplayed{
-        border-width: 6px;
-        border-style: solid;
-        border-color: yellowgreen;
-      }
-
-    .back{
-        margin-top: 30px;
+}
+.videoList{
+    width: 100%;
+    min-height: 500px;
+    height: auto;
+    background-color: darkslategray;
+    overflow: hidden;
+    border-top:40px solid #6b8908;
+    padding-bottom: 100px;
+    transform: translateY(80px);
+    .videoBox{
+        width: 100%;
+        padding: 0 100px;
+        overflow-x: scroll;
+        cursor: grab;
+        video{
+            cursor: pointer;
+        }
+        
+        .isplayed{
+            border-width: 6px;
+            border-style: solid;
+            border-color: yellowgreen;
+          }
+    }
+    .videoBox::-webkit-scrollbar{
+        display: none;
     }
 }

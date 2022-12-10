@@ -28,7 +28,7 @@ const routes = [
   {
     path:"/personal",
     name:"Personal",
-    component:()=> import(/* webpackChunkName: "personal" */"../views/Personal/Personal.vue"),
+    component:()=> import(/* webpackChunkName: "personal" */"../views/Personal/Main.vue"),
     meta:{ "requiresAuth": true }
   },
   {

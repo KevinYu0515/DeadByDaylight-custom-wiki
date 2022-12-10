@@ -3,6 +3,7 @@
     <ul class="flex flex-row list-none">
         <li><router-link to="/personal">Main</router-link></li>
         <li><router-link to="/skills">Skills</router-link></li>
+        <!-- <li><router-link to="/video">Videos</router-link></li> -->
     </ul>
   </div>
 </template>
