@@ -190,17 +190,16 @@ export default {
 }
 </script>
 <script setup>
-import { ref, onMounted, getCurrentInstance, reactive } from "vue"
-import { ref as r, uploadBytes } from "firebase/storage"
-import { db, killersColRef, storage } from "@/firebase"
-import { collection, onSnapshot, doc, updateDoc, deleteDoc } from "firebase/firestore"
+import { ref, onMounted, getCurrentInstance, reactive, computed } from "vue"
 import { useRouter } from "vue-router"
+import { useStore } from "vuex"
 
+const store = useStore()
 const router = useRouter()
 const Instance = getCurrentInstance()
 const killer_information = JSON.parse(Instance.props.killer_information)
-const displayModal = ref([false])
-const add_ones_group = ref([])
+
+const add_ones_group = computed(() => store.state.fbAdd_ones)
 const add_ones_popup = ref(false)
 const add_ones_information = reactive({
   image: "",
@@ -208,6 +207,7 @@ const add_ones_information = reactive({
   description: ""
 })
 
+const displayModal = ref([false])
 const items =  ref([
 {
   label: "Base Information",
@@ -221,19 +221,26 @@ const items =  ref([
 }
 ])
 
+const id = killer_information.id
+const updateSettings = (options, optionsValue) => store.dispatch("UPDATEDATA", {id, options, optionsValue})
+const onUpload = (data, file) => store.dispatch("UPLOADIMG", {file, data})
+const deleteKiller = id => {
+  router.push("/personal")
+  store.dispatch("DELETEROLE", id)
+}
+
+const filterText = (text, num) => text.slice(0, num * -1)
+const routerTo = path => router.push(`${path}`)
+const modalStatue = i => displayModal.value[i] = !displayModal.value[i]
+const toggleAddOnes = index => {
+  add_ones_popup.value = !add_ones_popup.value
+  add_ones_information.image = killer_information.add_ones_images[index]
+  add_ones_information.name = add_ones_group.value[index].names.ch
+  add_ones_information.description = add_ones_group.value[index].descriptions.en
+}
+
 onMounted(() => {
-  onSnapshot(collection(db, `killers/${killer_information.id}/add-ones`), (querySnapshot) => {
-    let fbAdd_ones = []
-    querySnapshot.forEach((doc) => {
-      const add_ones = {
-        id: doc.id,
-        names: doc.data().names,
-        descriptions: doc.data().descriptions
-      }
-      fbAdd_ones.push(add_ones)
-    })
-    add_ones_group.value = fbAdd_ones
-  })
+  store.dispatch("GETADDONES", killer_information.id)
 
   let diff = document.querySelector(".difficulty")
   const textColorMap = {
@@ -246,42 +253,6 @@ onMounted(() => {
   const color = textColorMap[diff.textContent]
   document.documentElement.style.setProperty("--difficulty", color)
 })
-
-const deleteKiller = id => {
-  router.push("/personal")
-  deleteDoc(doc(killersColRef, id))
-}
-
-//更新資料
-const updateSettings = (options, optionsValue) => {
-  updateDoc(doc(killersColRef, killer_information.id),{ [options]: optionsValue })
-  console.log("updateSettings")
-}
-
-// 上傳檔案
-const onUpload = (data, file) =>{
-  const storageRef = r(storage, `${file}/${data.name}`)
-  uploadBytes(storageRef, data).then((snapshot) => {
-    console.log("Uploaded a blob or file!", snapshot)
-  })
-}
-
-const filterText = (text, num) => text.slice(0, num * -1)
-
-const routerTo = path => {
-  router.push(`${path}`)
-}
-
-const modalStatue = i => {
-  displayModal.value[i] = !displayModal.value[i]
-}
-
-const toggleAddOnes = index => {
-  add_ones_popup.value = !add_ones_popup.value
-  add_ones_information.image = killer_information.add_ones_images[index]
-  add_ones_information.name = add_ones_group.value[index].names.ch
-  add_ones_information.description = add_ones_group.value[index].descriptions.en
-}
 
 </script>
 

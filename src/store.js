@@ -1,19 +1,25 @@
 import { createStore } from "vuex"
 
-import { killersColRef, storage } from "@/firebase"
+import { db, killersColRef, storage } from "@/firebase"
 import { ref as r, uploadBytes } from "firebase/storage"
-import { onSnapshot, addDoc } from "firebase/firestore"
+import { doc, collection, onSnapshot, addDoc, updateDoc, deleteDoc } from "firebase/firestore"
 
 export default createStore({
     state:{
-        fbkillers: []
+        fbkillers: [],
+        fbAdd_ones: []
     },
     mutations:{
         SETDATA(state, data){
             state.fbkillers = data
+        },
+        SETADDONES(state, data){
+            state.fbAdd_ones = data
         }
     },
     actions:{
+
+        // 從 firebase 獲取資料
         GETDATA(context){
             onSnapshot(killersColRef, (querySnapshot) => {
                 let tmpkillers = []
@@ -44,13 +50,32 @@ export default createStore({
                 context.commit("SETDATA", tmpkillers)
             })
         },
-        UPLOADIMG(context, img){
-            const storageRef = r(storage, `killersCover/${img.name}`)
+
+        GETADDONES(context, id){
+            onSnapshot(collection(db, `killers/${id}/add-ones`), (querySnapshot) => {
+                let tmpAdd_ones = []
+                querySnapshot.forEach((doc) => {
+                  const add_ones = {
+                    id: doc.id,
+                    names: doc.data().names,
+                    descriptions: doc.data().descriptions
+                  }
+                  tmpAdd_ones.push(add_ones)
+                })
+                context.commit("SETADDONES", tmpAdd_ones)
+            })
+        },
+
+        // 上傳圖片至 firebase 儲存庫
+        UPLOADIMG(context, {file, img}){
+            const storageRef = r(storage, `${file}/${img.name}`)
             uploadBytes(storageRef, img.value).then((snapshot) => {
                 console.log("Uploaded a blob or file!")
                 console.log(snapshot)
             })
         },
+
+        // 增加資料至 firebase
         ADDROLE(context, role){
             addDoc(killersColRef, {
                 name: role.newKillerName,
@@ -62,6 +87,17 @@ export default createStore({
                 add_ones_images: [null],
                 add_ones_names: [null]
             })
+        },
+
+        // 更新資料
+        UPDATEDATA(context, {id, options, optionsValue}){
+            updateDoc(doc(killersColRef, id),{ [options]: optionsValue })
+            console.log("updateSettings")
+        },
+
+        // 刪除資料
+        DELETEROLE(context, id){
+            deleteDoc(doc(killersColRef, id))
         }
     }
 })

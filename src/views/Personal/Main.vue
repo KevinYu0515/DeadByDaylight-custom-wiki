@@ -124,7 +124,7 @@ const searchName = ref("")
 const appendRole = ref(null)
 
 const addKiller = role => store.dispatch("ADDROLE", role)
-const onUpload = img => store.dispatch("UPLOADIMG", img)
+const onUpload = img => store.dispatch("UPLOADIMG", "killersCover", img)
 
 const levelGroup = computed(() =>{
   if (selectedLevel.value !== "ALL") {
