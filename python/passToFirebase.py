@@ -3,9 +3,6 @@ import time
 import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
 
 def scroll(pos, delay):
     js = 'window.scrollTo({top: %d, behavior: "smooth"})' % pos
@@ -50,7 +47,6 @@ if __name__  == "__main__":
     password.send_keys("770936avm")
     submit.click()
     time.sleep(3)
-
 
     for i in range(0, 30):
 

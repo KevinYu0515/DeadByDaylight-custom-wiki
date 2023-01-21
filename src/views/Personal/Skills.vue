@@ -156,7 +156,6 @@ const displayModal = ref([false])
 const appendSkill = ref(null)
 
 onMounted(() => {
-  console.log("sucess setup7")
   onSnapshot(skillsColRef, (querySnapshot) => {
     let fbskills = []
     querySnapshot.forEach((doc) => {

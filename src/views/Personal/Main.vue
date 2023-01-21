@@ -111,111 +111,20 @@ export default {
 <script setup>
 import { ref, onMounted, onUpdated, computed } from "vue"
 import { useRouter } from "vue-router"
-import { killersColRef, storage } from "@/firebase"
-import { ref as r, uploadBytes } from "firebase/storage"
-import { addDoc, onSnapshot } from "firebase/firestore"
+import { useStore } from "vuex"
 import $ from "jquery"
 import axios from "axios"
 
+const store = useStore()
 const router = useRouter()
-const killers = ref([])
+const killers = computed(() => store.state.fbkillers)
 const displayModal = ref([false])
 const selectedLevel = ref("ALL")
 const searchName = ref("")
 const appendRole = ref(null)
 
-onMounted(() => {
-  onSnapshot(killersColRef, (querySnapshot) => {
-    let fbkillers = []
-    querySnapshot.forEach((doc) => {
-      const killer = {
-        id: doc.id,
-        background: doc.data().background,
-        name: doc.data().name,
-        movementSpeed: doc.data().movementSpeed,
-        terrorRadius: doc.data().terrorRadius,
-        alternativeMovementSpeed: doc.data().altnativeMoveSpeed,
-        alternativeTerrorRadius: doc.data().altnativeTerrorRadius,
-        height: doc.data().height,
-        weapon: doc.data().weapon,
-        power: doc.data().power,
-        level: doc.data().level,
-        cover: doc.data().cover,
-        perks: doc.data().perks,
-        recommendPerks: doc.data().recommendPerks,
-        realName: doc.data().realName,
-        backgroundImage: doc.data().backgroundImage,
-        difficulty: doc.data().difficulty,
-        add_ones_images: doc.data().add_ones_images,
-        add_ones_names: doc.data().add_ones_names
-      }
-      fbkillers.push(killer)
-    })
-    killers.value = fbkillers
-  })
-}),
-
-
-onUpdated(() => {
-  $(document).ready(function(){
-    $(".card").on("mousein", function(e){
-      var x = e.pageX - $(this).offset().left
-      var y = e.pageY - $(this).offset().top
-      $(this).find("span").css({top:y, left:x})
-    })
-    $(".card").on("mouseout", function(e){
-      var x = e.pageX - $(this).offset().left
-      var y = e.pageY - $(this).offset().top
-      $(this).find("span").css({top:y, left:x})
-    })
-  })
-})
-
-onUpdated(() => {
-  let background = document.querySelector(".bg")
-  window.addEventListener("scroll", () => {
-    let value = 1 + window.scrollY / -600
-    background.style.opacity = value
-  })
-})
-
-onMounted(() => {
-  const text = document.querySelector(".mainTitle")
-  const factor = 30
-  function shadowMove(e){
-    const { offsetWidth: width, offsetHeight: height } = text
-    let { offsetX: x, offsetY: y } = e
-    if(this !== e.target){
-      x = x + e.target.offsetLeft
-      y = y + e.target.offsetTop
-    }
-    const xShadow = parseInt(x / width * factor - (factor / 2))
-    const yShadow = parseInt(y / height * factor - (factor / 2))
-    text.style.textShadow = `${xShadow}px ${yShadow}px 0 gray`
-  }
-  text.addEventListener("mousemove", shadowMove)
-})
-
-const onUpload = img => {
-  const storageRef = r(storage, `killersCover/${img.name}`)
-  uploadBytes(storageRef, img.value).then((snapshot) => {
-    console.log("Uploaded a blob or file!")
-    console.log(snapshot)
-  })
-}
-
-const addKiller = state => {
-  addDoc(killersColRef, {
-    name: state.newKillerName,
-    level: state.newKillerLevel,
-    cover: state.imgUrl,
-    difficulty: state.newKillerDR,
-    perks: [null],
-    recommendPerks: [null],
-    add_ones_images: [null],
-    add_ones_names: [null]
-  })
-}
+const addKiller = role => store.dispatch("ADDROLE", role)
+const onUpload = img => store.dispatch("UPLOADIMG", img)
 
 const levelGroup = computed(() =>{
   if (selectedLevel.value !== "ALL") {
@@ -251,6 +160,52 @@ const logout = async() => {
   axios.defaults.headers.common["Authorization"] = ""
   await router.push("/login")
 }
+
+onMounted(() => {
+  // 抓取資料
+  store.dispatch("GETDATA")
+
+  //文字特效
+  const text = document.querySelector(".mainTitle")
+  const factor = 30
+  function shadowMove(e){
+    const { offsetWidth: width, offsetHeight: height } = text
+    let { offsetX: x, offsetY: y } = e
+    if(this !== e.target){
+      x = x + e.target.offsetLeft
+      y = y + e.target.offsetTop
+    }
+    const xShadow = parseInt(x / width * factor - (factor / 2))
+    const yShadow = parseInt(y / height * factor - (factor / 2))
+    text.style.textShadow = `${xShadow}px ${yShadow}px 0 gray`
+  }
+  text.addEventListener("mousemove", shadowMove)
+}),
+
+
+onUpdated(() => {
+  $(document).ready(function(){
+    $(".card").on("mousein", function(e){
+      var x = e.pageX - $(this).offset().left
+      var y = e.pageY - $(this).offset().top
+      $(this).find("span").css({top:y, left:x})
+    })
+    $(".card").on("mouseout", function(e){
+      var x = e.pageX - $(this).offset().left
+      var y = e.pageY - $(this).offset().top
+      $(this).find("span").css({top:y, left:x})
+    })
+  })
+})
+
+onUpdated(() => {
+  let background = document.querySelector(".bg")
+  window.addEventListener("scroll", () => {
+    let value = 1 + window.scrollY / -600
+    background.style.opacity = value
+  })
+})
+
 </script>
 
 <style lang="scss" scoped>

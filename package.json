@@ -25,7 +25,8 @@
     "vue-awesome": "^4.5.0",
     "vue-awesome-swiper": "^5.0.1",
     "vue-js-star-rating": "^1.1.5",
-    "vue-router": "^4.0.0-0"
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.14",
