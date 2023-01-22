@@ -126,23 +126,23 @@
   </div>
 
    <!-- 紀錄更改 -->
-  <append-record
+  <AppendRecord
     :isdisplay="displayModal[0]"
     :killer_information="JSON.stringify(killer_information)"
     @childmodal="modalStatue"
     @uploadData="onUpload"
     @updateSettings="updateSettings"
-  ></append-record>
+  />
 
   <!-- 紀錄儲存警告 -->
-  <simple-dialog
+  <SimpleDialog
     :isdisplay="displayModal[1]" 
     :location="`${killer_information.name} Settings`" 
-    @childmodal="modalStatue"
-  ></simple-dialog>
+    @childModal="modalStatue"
+  />
 
   <!-- 背景圖片上傳 -->
-  <simple-dialog
+  <SimpleDialog
     :isdisplay3="displayModal[4]"
     :upload-title="`${killer_information.name} Background`"
     :close3= 4
@@ -150,56 +150,25 @@
     @upload-doc="onUpload"
     @updateSettings="updateSettings"
     @childModal="modalStatue"
-  ></simple-dialog>
+  />
 </template>
 
-<script>
+<script setup>
 import SimpleDialog from "../../components/DialogGroup/SimpleDialog.vue"
 import AppendRecord from "../../components/DialogGroup/AppendRecord.vue"
-import json from "../../../python/killers.json"
-export default {
-  name:"Records",
-  components:{ SimpleDialog, AppendRecord },
-  props: [ "killer_information" ],
-  data () {
-    return {
-      jsonKillers: json
-    }
-  },
-  methods:{
-    fillterbg(background){
-      if(!background) return background
-      if(background.length > 1000 ){
-        return background.slice(0, 1000) + "..."
-      }else return background
-    },
-
-    passDataToVideos(videoLink, videoIndex, videoUrl, videoBg){
-      this.$router.push({
-        path:"/video",
-        name:"Video",
-        query:{
-          videoLink: videoLink,
-          videoIndex: videoIndex,
-          videoUrl: videoUrl,
-          videoBg: videoBg
-        }
-      })
-    }
-  }
-}
-</script>
-<script setup>
 import killersStore from "../../vuex/killersStore"
-import { ref, onMounted, onBeforeUnmount, getCurrentInstance, reactive, computed } from "vue"
+import { ref, onMounted, onBeforeUnmount, reactive, computed, defineProps } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "vuex"
+// import json from "../../../python/killers.json"
 
 const store = useStore()
 const router = useRouter()
-const Instance = getCurrentInstance()
-const killer_information = JSON.parse(Instance.props.killer_information)
+const props = defineProps(["killer_information"])
+const displayModal = ref([false])
+const killer_information = JSON.parse(props.killer_information)
 
+// 附屬品資料設定
 const add_ones_group = computed(() => store.state.killers ? store.state.killers.fbAdd_ones : [])
 const add_ones_popup = ref(false)
 const add_ones_information = reactive({
@@ -208,7 +177,7 @@ const add_ones_information = reactive({
   description: ""
 })
 
-const displayModal = ref([false])
+// 按鈕組設定
 const items =  ref([
 {
   label: "Base Information",
@@ -222,6 +191,16 @@ const items =  ref([
 }
 ])
 
+// 背景長度過濾器
+// const fillterbg = background => {
+//   if(!background) return background
+//   if( background.length > 1000 ) return background.slice(0, 1000) + "..."
+//   return background
+// }
+// 文字長度過濾器
+const filterText = (text, num) => text.slice(0, num * -1)
+
+// 資料處裡表達式
 const id = killer_information.id
 const updateSettings = (options, optionsValue) => store.dispatch("killers/UPDATEDATA", {id, options, optionsValue})
 const onUpload = (data, file) => store.dispatch("killers/UPLOADIMG", {file, data})
@@ -230,9 +209,13 @@ const deleteKiller = id => {
   store.dispatch("killers/DELETEROLE", id)
 }
 
-const filterText = (text, num) => text.slice(0, num * -1)
+// 跳轉路由器
 const routerTo = path => router.push(`${path}`)
+
+// 彈出視窗狀態控制
 const modalStatue = i => displayModal.value[i] = !displayModal.value[i]
+
+// 附屬品介紹觸發器
 const toggleAddOnes = index => {
   add_ones_popup.value = !add_ones_popup.value
   add_ones_information.image = killer_information.add_ones_images[index]
@@ -240,18 +223,15 @@ const toggleAddOnes = index => {
   add_ones_information.description = add_ones_group.value[index].descriptions.en
 }
 
+// 生命週期
 onMounted(() => {
   store.registerModule("killers", killersStore)
   store.dispatch("killers/GETADDONES", killer_information.id)
+})
 
+onMounted(() => {
   let diff = document.querySelector(".difficulty")
-  const textColorMap = {
-    "Easy": "rgba(64,176,64)",
-    "Moderate": "yellow",
-    "Hard": "rgba(229,132,48)",
-    "Very Hard": "rgba(239,37,37)"
-  }
-
+  const textColorMap = store.state.killers.difficultyColor
   const color = textColorMap[diff.textContent]
   document.documentElement.style.setProperty("--difficulty", color)
 })

@@ -56,7 +56,7 @@
     </section>
   </div>
 
-  <append-role
+  <AppendRole
     :isdisplay="displayModal[0]"
     :levelOptions="levelOptions"
     :drOptions="drOptions"
@@ -66,48 +66,17 @@
     ref="appendRole"
   />
 
-  <simple-dialog 
+  <SimpleDialog 
     :isDisplay="displayModal[1]" 
     location="Append New Role" 
     @childModal="modalStatue"
   />
 </template>
 
-<script>
+<script setup>
 import DBDNavbar from "../../components/Navbar/DBDNavbar.vue"
 import AppendRole from "../../components/DialogGroup/AppendRole.vue"
 import SimpleDialog from "../../components/DialogGroup/SimpleDialog.vue"
-export default {
-  name:"Personal",
-  components:{ DBDNavbar, SimpleDialog, AppendRole },
-  data(){
-    return{
-      levelOptions: ([{level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}]),
-      drOptions: ([{dr:"Easy"}, {dr:"Moderate"}, {dr:"Hard"}, {dr:"Very Hard"}]),
-    }
-  },
-  methods:{
-    passDataToRecords(killer){
-      this.$router.push({
-        path:"/records",
-        name:"Records",
-        query:{ killer_information: JSON.stringify(killer) }
-      })
-    },
-    difficulty(killer){
-      const levelColorMap = {
-        "Easy": "rgba(64,176,64)",
-        "Moderate": "yellow",
-        "Hard": "rgba(229,132,48)",
-        "Very Hard": "rgba(246,89,89)"
-      }
-      return levelColorMap[killer.difficulty]
-    }
-  }
-}
-</script>
-
-<script setup>
 import { ref, onMounted, onUpdated, computed, onBeforeUnmount } from "vue"
 import killersStore from "../../vuex/killersStore"
 import { useRouter } from "vue-router"
@@ -117,25 +86,25 @@ import axios from "axios"
 
 const store = useStore()
 const router = useRouter()
-const killers = computed(() => store.state.killers ? store.state.killers.fbkillers : [])
 const displayModal = ref([false])
 const selectedLevel = ref("ALL")
 const searchName = ref("")
 const appendRole = ref(null)
+const killers = computed(() => store.state.killers ? store.state.killers.fbkillers : [])
+const levelOptions = computed(() => store.state.killers ? store.state.killers.levelOptions : [])
+const drOptions =  computed(() => store.state.killers ? store.state.killers.drOptions : [])
 
+// 資料處裡表達式
 const addKiller = role => store.dispatch("killers/ADDROLE", role)
 const onUpload = img => store.dispatch("killers/UPLOADIMG", "killersCover", img)
 
+// 等級過濾器
 const levelGroup = computed(() =>{
-  if (selectedLevel.value !== "ALL") {
-    return killers.value.filter((item) => {
-      return item.level == selectedLevel.value
-    })
-  } else {
-    return killers.value
-  }
+  if (selectedLevel.value !== "ALL") return killers.value.filter((item) => item.level == selectedLevel.value)
+  return killers.value
 })
 
+// 名稱過濾器
 const nameGroup = computed(() => {
   if (searchName.value) {
       return killers.value.filter((item) => {
@@ -143,30 +112,44 @@ const nameGroup = computed(() => {
         let keyword = searchName.value.toLowerCase()
         return name.indexOf(keyword) !== -1
       })
-    } else {
-      return levelGroup.value
-    }
+    } return levelGroup.value
 })
 
+// 彈出視窗狀態控制
 const modalStatue = (i, isClear) => {
   displayModal.value[i] = !displayModal.value[i]
-  if(isClear){
-    appendRole.value.clearData()
-  }
+  if(isClear) appendRole.value.clearData()
 }
 
+// 登出功能
 const logout = async() => {
   await axios.post("logout", {}, { withCredentials:true })
   axios.defaults.headers.common["Authorization"] = ""
   await router.push("/login")
 }
 
+// 經路由傳資料
+const passDataToRecords = role => {
+  router.push({
+    path:"/records",
+    name:"Records",
+    query:{ killer_information: JSON.stringify(role) }
+  })
+}
+
+// 難易度顏色配置
+const difficulty = role => {
+  const levelColorMap = store.state.killers.difficultyColor
+  return levelColorMap[role.difficulty]
+}
+
+// 生命週期
 onMounted(() => {
-  // 抓取資料
   store.registerModule("killers", killersStore)
   store.dispatch("killers/GETDATA")
+}),
 
-  //文字特效
+onMounted(() => {
   const text = document.querySelector(".mainTitle")
   const factor = 30
   function shadowMove(e){
@@ -181,8 +164,7 @@ onMounted(() => {
     text.style.textShadow = `${xShadow}px ${yShadow}px 0 gray`
   }
   text.addEventListener("mousemove", shadowMove)
-}),
-
+})
 
 onUpdated(() => {
   $(document).ready(function(){
@@ -207,9 +189,7 @@ onUpdated(() => {
   })
 })
 
-onBeforeUnmount(() => {
-  store.unregisterModule("killers")
-})
+onBeforeUnmount(() => store.unregisterModule("killers"))
 
 </script>
 

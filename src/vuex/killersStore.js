@@ -6,7 +6,15 @@ export default{
     namespaced: true,
     state:{
         fbkillers: [],
-        fbAdd_ones: []
+        fbAdd_ones: [],
+        levelOptions: [{level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}],
+        drOptions: [{dr:"Easy"}, {dr:"Moderate"}, {dr:"Hard"}, {dr:"Very Hard"}],
+        difficultyColor: {
+            "Easy": "rgba(64,176,64)",
+            "Moderate": "yellow",
+            "Hard": "rgba(229,132,48)",
+            "Very Hard": "rgba(246,89,89)"
+        }
     },
     mutations:{
         SETDATA(state, data){

@@ -25,14 +25,14 @@
       </ul>
     </div>
 
-    <append-perk
+    <AppendPerk
       :isDisplay="displayModal[0]"
       @childModal="modalStatue"
       @uploadImg="onUpload"
       @setPerkDoc="addPerk"
       ref="appendPerk"
     />
-    <simple-dialog :isDisplay="displayModal[1]" location="Append New perk" @childModal="modalStatue"></simple-dialog>
+    <SimpleDialog :isDisplay="displayModal[1]" location="Append New perk" @childModal="modalStatue"/>
 
     <div class="infor flex justify-content-center align-items-center flex-column p-5">
       <h1>Perks INFORMATION</h1>
@@ -61,7 +61,7 @@
           @click="editStatue(index);" 
         /> 
 
-        <append-perk
+        <AppendPerk
           :isEdit="displayEdit[index]"
           :perkData="perk"
           :perkIndex="index"
@@ -71,89 +71,78 @@
           @replace="replacePerk"
         />
 
-        <simple-dialog
+        <SimpleDialog
           :isDisplay2="displayModal[2]"
           title="Warning"
           content="該資料不可為空"
           @childModal="modalStatue"
-        ></simple-dialog>
+        />
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import DBDNavbar from "../../components/Navbar/DBDNavbar.vue"
 import SimpleDialog from "../../components/DialogGroup/SimpleDialog.vue"
 import AppendPerk from "../../components/DialogGroup/AppendPerk.vue"
-export default {
-  name:"perks",
-  components:{ DBDNavbar, SimpleDialog, AppendPerk },
-  data(){
-    return{
-      perksClick: [],
-      clickIndex: [],
-      isClick : [false],
-    }
-  },
-  methods:{
-    topCalc(i){
-      let index = 200
-      if(i<=7){
-        index += (i%2)*55
-      }else{
-        index += (i%2)*55+(2*Math.floor(i/16))*55
-      }
-      index = index.toString()+"%"
-      return index
-    },
-    leftCalc(i){
-      let index = 80
-      index += i%16*13
-      index = index.toString()+"%"
-      return index
-    },
-    clickPerk(e, n){
-      this.isClick[n] = !this.isClick[n]
-      if(this.isClick[n]){
-        this.perksClick.unshift(e)
-        this.clickIndex.unshift(n)
-      }else{
-        for(let i=0; i<this.perksClick.length;i++){
-          if(this.perksClick[i].name == e.name){
-            this.perksClick.splice(i,1)
-            this.clickIndex.splice(i,1)
-          }else{
-            console.log("false")
-          }
-        }
-      }
-    },
-    replacePerk(perk, perks){
-      for(let i=0; i<this.perksClick.length;i++){
-          if(this.perksClick[i] == perk){
-            this.perksClick.splice(i,1,perks[this.clickIndex[i]])
-          }
-        }
-    },
-    clearPerksClick(){
-      this.isClick = [false]
-      this.perksClick = []
-    },
-  }
-}
-</script>
-
-<script setup>
 import { ref,  onMounted, computed, onBeforeUnmount } from "vue"
 import { useStore } from "vuex"
 import perksStore from "../../vuex/perksStore"
 
 const store = useStore()
-const perks = computed(() => store.state.perks ? store.state.perks.fbPerks : [])
 const displayEdit = ref([false])
 const displayModal = ref([false])
 const appendPerk = ref(null)
+const clickIndex = ref([])
+const perksClick = ref([])
+const isClick = ref([false])
+const perks = computed(() => store.state.perks ? store.state.perks.fbPerks : [])
+
+// 技能圖示排版
+const topCalc = i => {
+  let index = 200
+  if(i <= 7) index += (i % 2) * 55
+  else index += (i % 2) * 55 + (2 * Math.floor(i / 16)) * 55
+  index = index.toString() + "%"
+  return index
+}
+
+const leftCalc = i => {
+  let index = 80
+  index += i % 16 * 13
+  index = index.toString() + "%"
+  return index
+}
+
+// 技能點擊
+const clickPerk = (e, n) => {
+  isClick.value[n] = !isClick.value[n]
+  if(isClick.value[n]){
+    perksClick.value.unshift(e)
+    clickIndex.value.unshift(n)
+  }else{
+    for(let i=0; i<perksClick.value.length;i++){
+      if(perksClick[i].name == e.name){
+        perksClick.value.splice(i,1)
+        clickIndex.value.splice(i,1)
+      } else console.log("false")
+    }
+  }
+}
+
+// 替換技能資料
+const replacePerk = (perk, perks) => {
+  for(let i=0; i<perksClick.value.length;i++){
+    if(perksClick.value[i] == perk) perksClick.value.splice(i,1,perks[clickIndex.value[i]])
+  }
+}
+
+// 清除所選技能
+const clearPerksClick = () => {
+  isClick.value = [false]
+  perksClick.value = []
+}
 
 // 資料處理表達式
 const addPerk = perkData => store.dispatch("perks/ADDDATA", perkData)
