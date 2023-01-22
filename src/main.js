@@ -7,7 +7,7 @@ import PrimeVue from "primevue/config"
 import Tooltip from "primevue/tooltip"
 import { Swiper, SwiperSlide } from "vue-awesome-swiper"
 import "swiper/swiper-bundle.css"
-import store from "./store"
+import store from "./vuex/store"
 
 import "primevue/resources/themes/saga-blue/theme.css"
 import "primevue/resources/primevue.min.css"                                                                                    

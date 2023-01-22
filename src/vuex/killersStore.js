@@ -1,10 +1,9 @@
-import { createStore } from "vuex"
-
 import { db, killersColRef, storage } from "@/firebase"
 import { ref as r, uploadBytes } from "firebase/storage"
 import { doc, collection, onSnapshot, addDoc, updateDoc, deleteDoc } from "firebase/firestore"
 
-export default createStore({
+export default{
+    namespaced: true,
     state:{
         fbkillers: [],
         fbAdd_ones: []
@@ -100,4 +99,4 @@ export default createStore({
             deleteDoc(doc(killersColRef, id))
         }
     }
-})
+}

@@ -149,7 +149,7 @@
     uploadItems="bgImg"
     @upload-doc="onUpload"
     @updateSettings="updateSettings"
-    @childmodal="modalStatue"
+    @childModal="modalStatue"
   ></simple-dialog>
 </template>
 
@@ -190,7 +190,8 @@ export default {
 }
 </script>
 <script setup>
-import { ref, onMounted, getCurrentInstance, reactive, computed } from "vue"
+import killersStore from "../../vuex/killersStore"
+import { ref, onMounted, onBeforeUnmount, getCurrentInstance, reactive, computed } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "vuex"
 
@@ -199,7 +200,7 @@ const router = useRouter()
 const Instance = getCurrentInstance()
 const killer_information = JSON.parse(Instance.props.killer_information)
 
-const add_ones_group = computed(() => store.state.fbAdd_ones)
+const add_ones_group = computed(() => store.state.killers ? store.state.killers.fbAdd_ones : [])
 const add_ones_popup = ref(false)
 const add_ones_information = reactive({
   image: "",
@@ -222,11 +223,11 @@ const items =  ref([
 ])
 
 const id = killer_information.id
-const updateSettings = (options, optionsValue) => store.dispatch("UPDATEDATA", {id, options, optionsValue})
-const onUpload = (data, file) => store.dispatch("UPLOADIMG", {file, data})
+const updateSettings = (options, optionsValue) => store.dispatch("killers/UPDATEDATA", {id, options, optionsValue})
+const onUpload = (data, file) => store.dispatch("killers/UPLOADIMG", {file, data})
 const deleteKiller = id => {
   router.push("/personal")
-  store.dispatch("DELETEROLE", id)
+  store.dispatch("killers/DELETEROLE", id)
 }
 
 const filterText = (text, num) => text.slice(0, num * -1)
@@ -240,7 +241,8 @@ const toggleAddOnes = index => {
 }
 
 onMounted(() => {
-  store.dispatch("GETADDONES", killer_information.id)
+  store.registerModule("killers", killersStore)
+  store.dispatch("killers/GETADDONES", killer_information.id)
 
   let diff = document.querySelector(".difficulty")
   const textColorMap = {
@@ -253,6 +255,8 @@ onMounted(() => {
   const color = textColorMap[diff.textContent]
   document.documentElement.style.setProperty("--difficulty", color)
 })
+
+onBeforeUnmount(() => store.unregisterModule("killers"))
 
 </script>
 

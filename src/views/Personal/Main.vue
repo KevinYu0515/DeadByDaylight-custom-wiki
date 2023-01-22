@@ -56,7 +56,6 @@
     </section>
   </div>
 
-  <!-- 新增人物 -->
   <append-role
     :isdisplay="displayModal[0]"
     :levelOptions="levelOptions"
@@ -66,11 +65,11 @@
     @setKillerDoc="addKiller"
     ref="appendRole"
   />
-  <!-- 警告視窗 -->
+
   <simple-dialog 
-    :isdisplay="displayModal[1]" 
+    :isDisplay="displayModal[1]" 
     location="Append New Role" 
-    @childmodal="modalStatue"
+    @childModal="modalStatue"
   />
 </template>
 
@@ -109,7 +108,8 @@ export default {
 </script>
 
 <script setup>
-import { ref, onMounted, onUpdated, computed } from "vue"
+import { ref, onMounted, onUpdated, computed, onBeforeUnmount } from "vue"
+import killersStore from "../../vuex/killersStore"
 import { useRouter } from "vue-router"
 import { useStore } from "vuex"
 import $ from "jquery"
@@ -117,14 +117,14 @@ import axios from "axios"
 
 const store = useStore()
 const router = useRouter()
-const killers = computed(() => store.state.fbkillers)
+const killers = computed(() => store.state.killers ? store.state.killers.fbkillers : [])
 const displayModal = ref([false])
 const selectedLevel = ref("ALL")
 const searchName = ref("")
 const appendRole = ref(null)
 
-const addKiller = role => store.dispatch("ADDROLE", role)
-const onUpload = img => store.dispatch("UPLOADIMG", "killersCover", img)
+const addKiller = role => store.dispatch("killers/ADDROLE", role)
+const onUpload = img => store.dispatch("killers/UPLOADIMG", "killersCover", img)
 
 const levelGroup = computed(() =>{
   if (selectedLevel.value !== "ALL") {
@@ -163,7 +163,8 @@ const logout = async() => {
 
 onMounted(() => {
   // 抓取資料
-  store.dispatch("GETDATA")
+  store.registerModule("killers", killersStore)
+  store.dispatch("killers/GETDATA")
 
   //文字特效
   const text = document.querySelector(".mainTitle")
@@ -204,6 +205,10 @@ onUpdated(() => {
     let value = 1 + window.scrollY / -600
     background.style.opacity = value
   })
+})
+
+onBeforeUnmount(() => {
+  store.unregisterModule("killers")
 })
 
 </script>
