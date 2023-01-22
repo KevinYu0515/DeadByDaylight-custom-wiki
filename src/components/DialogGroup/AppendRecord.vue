@@ -265,7 +265,7 @@ const updateSettings = (dis, select, data) => {
 }
 
 const clearData = () => {
-  state.move = "",
+  state.movementSpeed = "",
   state.alternativeMovementSpeed = "",
   state.terrorRadius = "",
   state.alternativeTerrorRadius ="",

@@ -2,7 +2,7 @@
   <!-- 警告視窗 -->
   <Dialog 
     header="Warning" 
-    v-model:visible="isdisplay" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+    v-model:visible="isDisplay" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
     :style="{width: '40vw'}" :modal="true"
   >
     <p>你於 「{{location}}」所作的紀錄將不會儲存，確定要退出?</p>
@@ -15,7 +15,7 @@
   <!-- 全部內容視窗 -->
   <Dialog 
     :header="`${title}`" 
-    v-model:visible="isdisplay2" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+    v-model:visible="isDisplay2" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
     :style="{width: '60vw'}" :modal="true"
   >
   <p style="white-space:pre-wrap">{{content}}</p>
@@ -27,7 +27,7 @@
   <!-- 單純上傳視窗 -->
   <Dialog 
       :header="`${uploadTitle} Upload`"
-      v-model:visible="isdisplay3" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+      v-model:visible="isDisplay3" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
       :style="{width: '30vw'}" :modal="true"
     >
       <Button 
@@ -51,9 +51,9 @@
 import { ref } from "vue"
 export default {
   name:"WarningDialog",
-  props:{ isdisplay:{ type: Boolean, deafult: false },
-          isdisplay2:{ type: Boolean, deafult: false },
-          isdisplay3:{ type: Boolean, deafult: false },
+  props:{ isDisplay:{ type: Boolean, default: false },
+          isDisplay2:{ type: Boolean, default: false },
+          isDisplay3:{ type: Boolean, default: false },
           close3: { type: Number },
           location:{ type: String },
           title:{ type: String },
@@ -61,7 +61,7 @@ export default {
           uploadTitle:{ type: String },
           uploadItems:{ type: String }
         },
-  emits:["childmodal", "uploadDoc","updateSettings"],
+  emits:["childModal", "uploadDoc","updateSettings"],
   setup(){
     const input1 = ref(null)
     const clickInput1 = () => input1.value.click()
@@ -75,7 +75,7 @@ export default {
   },
   methods:{
     modalStatue(i, isClear) {
-      this.$emit("childmodal", i, isClear)
+      this.$emit("childModal", i, isClear)
     },
 
     preview(event) {

@@ -30,72 +30,99 @@
       </div>
     </div>
 
-    <div class="container flex flex-column relative">
-      <div class="perks mb-5 flex justify-content-center align-items-start flex-column relative" v-if="(killer_information.perks[0])">
-        <h1>Perks<span><router-link to="/skills">(Read More)</router-link></span></h1>
-        <hr class="outDialog">
-        <h3>Self Perks</h3>
-        <div class="selfPerks flex" v-if="(killer_information.perks[0])">
-          <div class="selfPerks__item" v-for="perk in killer_information.perks" :key="perk"><img :src="perk" width="130" height="130"/></div>
-        </div>
-        <h3>Recommend Perks</h3>
-        <div class="recommendPerks flex" v-if="(killer_information.recommendPerks[0])">
-          <div class="recommendPerks__item" v-for="perk in killer_information.recommendPerks" :key="perk"><img :src="perk" width="130" height="130"/></div>
-        </div>
-      </div>
-
-      <div class="infor mb-5 relative">
-        <h1>Infor</h1>
-        <hr class="outDialog">
-        <table>
-          <tr>
-            <th>Type</th>
-            <th><span class="value">Content</span></th>
-          </tr>
-          <tr>
-            <td>RealName</td>
-            <td><span class="value">{{killer_information.realName}}</span></td>
-          </tr>
-          <tr>
-            <td>Weapon</td>
-            <td><span class="value">{{killer_information.weapon}}</span></td>
-          </tr>
-          <tr>
-            <td>Power</td>
-            <td><span class="value">{{killer_information.power}}</span></td>
-          </tr>
-          <tr>
-            <td>Movement Speed</td>
-            <td><span class="value">{{killer_information.movementSpeed}}</span></td>
-          </tr>
-          <tr v-if="killer_information.alternativeMovementSpeed">
-            <td>Alternate Movement Speed</td>
-            <td><span class="value">{{killer_information.alternativeMovementSpeed}}</span></td>
-          </tr>
-          <tr>
-            <td>Terror Radius</td>
-            <td><span class="value">{{killer_information.terrorRadius}}</span></td>
-          </tr>
-          <tr v-if="killer_information.alternativeTerrorRadius">
-            <td>Alternate Terror Radius</td>
-            <td><span class="value">{{killer_information.alternativeTerrorRadius}}</span></td>
-          </tr>
-          <tr>
-            <td>Height</td>
-            <td><span class="value">{{killer_information.height}}</span></td>
-          </tr>
-        </table>
-      </div>
-      <div class="add-ones-container mb-5 relative" v-if="(killer_information.add_ones_images[0])">
-        <h1>Add-Ones</h1>
-        <div v-for="(add_ones_image, index) in killer_information.add_ones_images" :key="index">
-          <div class="add-ones-block">
-            <img :src="add_ones_image" width="100" height="100" alt="" class=""/>
-            <p class="add-ones-name">{{ killer_information.add_ones_names[index] }}</p>
+    <div class="swiper-area relative">
+      <swiper
+        :observer="true"
+        :observeParents="true"
+        :slidesPerView="1"
+        :spaceBetween="30"
+        :centered-slides="true"
+        :loop="true"
+      >
+        <swiper-slide>
+          <div class="perks mb-5 flex justify-content-center align-items-start flex-column relative" v-if="(killer_information.perks[0])">
+            <h1>Perks<span><router-link to="/skills">(Read More)</router-link></span></h1>
+            <hr class="outDialog">
+            <h3>Self Perks</h3>
+            <div class="selfPerks flex" v-if="(killer_information.perks[0])">
+              <div class="selfPerks__item" v-for="perk in killer_information.perks" :key="perk"><img :src="perk" width="130" height="130"/></div>
+            </div>
+            <h3>Recommend Perks</h3>
+            <div class="recommendPerks flex" v-if="(killer_information.recommendPerks[0])">
+              <div class="recommendPerks__item" v-for="perk in killer_information.recommendPerks" :key="perk"><img :src="perk" width="130" height="130"/></div>
+            </div>
           </div>
-        </div>
-      </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="infor mb-5 relative">
+            <h1>Infor</h1>
+            <hr class="outDialog">
+            <table>
+              <tr>
+                <th>Type</th>
+                <th><span class="value">Content</span></th>
+              </tr>
+              <tr>
+                <td>RealName</td>
+                <td><span class="value">{{killer_information.realName}}</span></td>
+              </tr>
+              <tr>
+                <td>Weapon</td>
+                <td><span class="value">{{killer_information.weapon}}</span></td>
+              </tr>
+              <tr>
+                <td>Power</td>
+                <td><span class="value">{{killer_information.power}}</span></td>
+              </tr>
+              <tr>
+                <td>Movement Speed</td>
+                <td><span class="value">{{killer_information.movementSpeed}}</span></td>
+              </tr>
+              <tr v-if="killer_information.alternativeMovementSpeed">
+                <td>Alternate Movement Speed</td>
+                <td><span class="value">{{killer_information.alternativeMovementSpeed}}</span></td>
+              </tr>
+              <tr>
+                <td>Terror Radius</td>
+                <td><span class="value">{{killer_information.terrorRadius}}</span></td>
+              </tr>
+              <tr v-if="killer_information.alternativeTerrorRadius">
+                <td>Alternate Terror Radius</td>
+                <td><span class="value">{{killer_information.alternativeTerrorRadius}}</span></td>
+              </tr>
+              <tr>
+                <td>Height</td>
+                <td><span class="value">{{killer_information.height}}</span></td>
+              </tr>
+            </table>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="add-ones-container mb-5 relative" v-if="(killer_information.add_ones_images[0])">
+            <h1>Add-Ones</h1>
+            <hr class="outDialog"/>
+            <div class="add-ones-block" v-for="(add_ones_image, index) in killer_information.add_ones_images" :key="index">
+              <img @click="toggleAddOnes(index)" :src="add_ones_image" width="100" height="100" alt="" class="" :title="filterText(killer_information.add_ones_names[index], 4)"/>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
     </div>
+
+    <Dialog
+      :header="add_ones_information.name"
+      v-model:visible="add_ones_popup"
+      :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+      :modal="true"
+    >
+      <img :src="add_ones_information.image" width="100" height="100" alt="" class=""/>
+      <p>
+        {{ add_ones_information.description }}
+      </p>
+      <template #footer>
+        <Button label="Close" @click="toggleAddOnes()" class="p-button-text"/>
+      </template>
+    </Dialog>
   </div>
 
    <!-- 紀錄更改 -->
@@ -122,7 +149,7 @@
     uploadItems="bgImg"
     @upload-doc="onUpload"
     @updateSettings="updateSettings"
-    @childmodal="modalStatue"
+    @childModal="modalStatue"
   ></simple-dialog>
 </template>
 
@@ -163,20 +190,25 @@ export default {
 }
 </script>
 <script setup>
-import { ref, onMounted, getCurrentInstance } from "vue"
-import { ref as r, uploadBytes } from "firebase/storage"
-import { killersColRef, storage } from "@/firebase"
-import { doc, updateDoc, deleteDoc } from "firebase/firestore"
+import killersStore from "../../vuex/killersStore"
+import { ref, onMounted, onBeforeUnmount, getCurrentInstance, reactive, computed } from "vue"
 import { useRouter } from "vue-router"
+import { useStore } from "vuex"
 
+const store = useStore()
 const router = useRouter()
 const Instance = getCurrentInstance()
 const killer_information = JSON.parse(Instance.props.killer_information)
+
+const add_ones_group = computed(() => store.state.killers ? store.state.killers.fbAdd_ones : [])
+const add_ones_popup = ref(false)
+const add_ones_information = reactive({
+  image: "",
+  name: "",
+  description: ""
+})
+
 const displayModal = ref([false])
-
-// const videoUrl = ref([])
-// const videoList = ref([])
-
 const items =  ref([
 {
   label: "Base Information",
@@ -190,7 +222,28 @@ const items =  ref([
 }
 ])
 
+const id = killer_information.id
+const updateSettings = (options, optionsValue) => store.dispatch("killers/UPDATEDATA", {id, options, optionsValue})
+const onUpload = (data, file) => store.dispatch("killers/UPLOADIMG", {file, data})
+const deleteKiller = id => {
+  router.push("/personal")
+  store.dispatch("killers/DELETEROLE", id)
+}
+
+const filterText = (text, num) => text.slice(0, num * -1)
+const routerTo = path => router.push(`${path}`)
+const modalStatue = i => displayModal.value[i] = !displayModal.value[i]
+const toggleAddOnes = index => {
+  add_ones_popup.value = !add_ones_popup.value
+  add_ones_information.image = killer_information.add_ones_images[index]
+  add_ones_information.name = add_ones_group.value[index].names.ch
+  add_ones_information.description = add_ones_group.value[index].descriptions.en
+}
+
 onMounted(() => {
+  store.registerModule("killers", killersStore)
+  store.dispatch("killers/GETADDONES", killer_information.id)
+
   let diff = document.querySelector(".difficulty")
   const textColorMap = {
     "Easy": "rgba(64,176,64)",
@@ -201,46 +254,9 @@ onMounted(() => {
 
   const color = textColorMap[diff.textContent]
   document.documentElement.style.setProperty("--difficulty", color)
-  
-  // let videoName = `${Instance.props.killerName}.mp4`
-  // videoList.value.push(videoName)
-  // let pathReference = r(storage, `killersVideo/Trailer/${videoName}`)
-  // download(pathReference, videoUrl.value)
-  // const videoNumber = parseInt(Instance.props.videoNumber)
-  // for(let i = 1; i<videoNumber; i++){
-  //   videoName = `${Instance.props.killerName}-00${i}.mp4`
-  //   videoList.value.push(videoName)
-  //   pathReference = r(storage, `killersVideo/Review/${videoName}`)
-  //   download(pathReference, videoUrl.value)
-  // }
 })
 
-const deleteKiller = id => {
-  router.push("/personal")
-  deleteDoc(doc(killersColRef, id))
-}
-
-//更新資料
-const updateSettings = (options, optionsValue) => {
-  updateDoc(doc(killersColRef, killer_information.id),{ [options]: optionsValue })
-  console.log("updateSettings")
-}
-
-// 上傳檔案
-const onUpload = (data, file) =>{
-  const storageRef = r(storage, `${file}/${data.name}`)
-  uploadBytes(storageRef, data).then((snapshot) => {
-    console.log("Uploaded a blob or file!", snapshot)
-  })
-}
-
-const routerTo = path => {
-  router.push(`${path}`)
-}
-
-const modalStatue = i => {
-  displayModal.value[i] = !displayModal.value[i]
-}
+onBeforeUnmount(() => store.unregisterModule("killers"))
 
 </script>
 

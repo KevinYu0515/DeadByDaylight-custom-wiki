@@ -38,15 +38,9 @@ const routes = [
     props: (route) => route.query
   },
   {
-    path:"/skills",
-    name:"Skills",
-    component:()=> import(/* webpackChunkName: "skills" */"../views/Personal/Skills.vue"),
-  },
-  {
-    path:"/video",
-    name:"Video",
-    component:()=> import(/* webpackChunkName: "videos" */"../views/Personal/Video.vue"),
-    props: (route) => route.query
+    path:"/perks",
+    name:"Perks",
+    component:()=> import(/* webpackChunkName: "perks" */"../views/Personal/Perks.vue"),
   }
 ]
 

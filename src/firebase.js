@@ -21,7 +21,6 @@ const killersColRef = collection(db,"killers")
 const skillsColRef = collection(db,"skills")
 const videosColRef = collection(db,"videos")
 
-
 const download = (pathReference, list) => {
   getDownloadURL(pathReference)
   .then((url) => {
@@ -33,5 +32,5 @@ const download = (pathReference, list) => {
 }
 
 export{
-  storage, killersColRef, skillsColRef, videosColRef, download
+  storage, killersColRef, skillsColRef, videosColRef, download, db
 }

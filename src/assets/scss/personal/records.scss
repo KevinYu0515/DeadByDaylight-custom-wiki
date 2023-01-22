@@ -17,6 +17,7 @@
     }
     .leftInfor{
         max-height: auto;
+        top: 70px;
         left: 2vw;
         @media screen and (max-width: 1000px) {
             left: -5vw;
@@ -54,14 +55,13 @@
         display: none;
     }
 
-    .container{
-        max-width: 100%;
-        height: auto;
-        margin: 100px 0 100px 20vw;
-        overflow-x: scroll;
-        scroll-behavior: smooth;
+    .swiper-area{
+        padding: 100px 30px 100px 20vw;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
         @media screen and (max-width: 1200px) {
-            margin: 100px 50px 100px 20vw;
+            padding: 100px 50px 100px 20vw;
             padding-left: 10px;
         }
 
@@ -154,15 +154,7 @@
                 @include title-settings();
             }
             .add-ones-block{
-                display: flex;
-                align-items: center;
-                .add-ones-name{
-                    word-spacing: 3px;
-                    font-size: 1.5em;
-                    font-family: 'Amaranth';
-                    color: bisque;
-                    padding: 0 20px;
-                }
+                display: inline;
             }
         }
     }
@@ -170,4 +162,19 @@
 
 .container::-webkit-scrollbar{
     display: none;
+}
+
+:deep(.swiper-area) {
+    .swiper-pagination-bullet {
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+      border-radius: 50%;
+      background: black;
+      opacity: 0.6;
+    }
+    .swiper-pagination-bullet-active {
+      opacity: 1;
+      background: orange;
+    }
 }
