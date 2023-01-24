@@ -2,7 +2,7 @@
   <Dialog
     header="Append New Perk" 
     v-model:visible="isDisplay" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-    :style="{width: '50vw'}" :modal="true"
+    :style="{width: '50vw'}" :model="true"
   >
     <form @submit.prevent="handleSubmit(!v$.$invalid, state)">
       <div class="flex align-items-center">
@@ -61,14 +61,14 @@
       <Button type="submit"  label="Submit" class="mt-2" />
     </form>
       <template #footer>
-          <Button label="Discard" icon="pi pi-trash" @click="modalStatue(1)" class="p-button-text"/>
+          <Button label="Discard" icon="pi pi-trash" @click="modelStatue(1)" class="p-button-text"/>
       </template>
   </Dialog>
 
   <Dialog 
     :header="`編輯「${perkName}」`" 
     v-model:visible="isEdit" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-    :style="{width: '50vw'}" :modal="true"
+    :style="{width: '50vw'}" :model="true"
   >
     <div class="flex align-items-center">
       <h3>Perk Name：</h3>
@@ -173,7 +173,7 @@ const handleSubmit = (isFormValid, state) => {
     console.log(state)
     if (!isFormValid) { return }
     emits("setPerkDoc", state)
-    modalStatue(0, true)
+    modelStatue(0, true)
 }
 
 const previewImage = event => {
@@ -191,8 +191,8 @@ const previewImage = event => {
   emits("uploadImg", files[0])
 }
 
-const modalStatue = (i, isClear) =>{
-  emits("childModal", i, isClear)
+const modelStatue = (i, isClear) =>{
+  emits("childModel", i, isClear)
   submitted.value = false
 }
 
@@ -216,7 +216,7 @@ const complete = (perk, list) => {
   defaulted.value = false
 }
 
-const emits = defineEmits(["uploadImg", "childModal", "setPerkDoc", "updatePerk", "replace", "complete"])
+const emits = defineEmits(["uploadImg", "childModel", "setPerkDoc", "updatePerk", "replace", "complete"])
 defineExpose({ clearData })
 
 </script>

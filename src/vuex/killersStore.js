@@ -47,7 +47,7 @@ export default{
                     perks: doc.data().perks,
                     recommendPerks: doc.data().recommendPerks,
                     realName: doc.data().realName,
-                    backgroundImage: doc.data().backgroundImage,
+                    backgroundImage: doc.data().bgImg,
                     difficulty: doc.data().difficulty,
                     add_ones_images: doc.data().add_ones_images,
                     add_ones_names: doc.data().add_ones_names
@@ -74,8 +74,8 @@ export default{
         },
 
         // 上傳圖片至 firebase 儲存庫
-        UPLOADIMG(context, {file, img}){
-            const storageRef = r(storage, `${file}/${img.name}`)
+        UPLOADIMG(context, img){
+            const storageRef = r(storage, `${img.file}/${img.name}`)
             uploadBytes(storageRef, img.value).then((snapshot) => {
                 console.log("Uploaded a blob or file!")
                 console.log(snapshot)

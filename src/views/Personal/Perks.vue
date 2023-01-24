@@ -18,7 +18,7 @@
           class="list-none absolute overflow-hidden"
           :style="{'top': topCalc(perks.length), 'left': leftCalc(perks.length)}"
         >
-          <div class="bg w-full h-full cursor-pointer" @click="modalStatue(0, false)" title="Add New perks">
+          <div class="bg w-full h-full cursor-pointer" @click="modelStatue(0, false)" title="Add New perks">
             <img :src="require('@/assets/icon/IconHelp.png')" alt=""/>
           </div>
         </li>
@@ -26,13 +26,13 @@
     </div>
 
     <AppendPerk
-      :isDisplay="displayModal[0]"
-      @childModal="modalStatue"
+      :isDisplay="displayModel[0]"
+      @childModel="modelStatue"
       @uploadImg="onUpload"
       @setPerkDoc="addPerk"
       ref="appendPerk"
     />
-    <SimpleDialog :isDisplay="displayModal[1]" location="Append New perk" @childModal="modalStatue"/>
+    <SimpleDialog :isDisplay="displayModel[1]" location="Append New perk" @childModel="modelStatue"/>
 
     <div class="infor flex justify-content-center align-items-center flex-column p-5">
       <h1>Perks INFORMATION</h1>
@@ -72,10 +72,10 @@
         />
 
         <SimpleDialog
-          :isDisplay2="displayModal[2]"
+          :isDisplay2="displayModel[2]"
           title="Warning"
           content="該資料不可為空"
-          @childModal="modalStatue"
+          @childModel="modelStatue"
         />
       </div>
     </div>
@@ -92,7 +92,7 @@ import perksStore from "../../vuex/perksStore"
 
 const store = useStore()
 const displayEdit = ref([false])
-const displayModal = ref([false])
+const displayModel = ref([false])
 const appendPerk = ref(null)
 const clickIndex = ref([])
 const perksClick = ref([])
@@ -151,9 +151,9 @@ const onUpload = perk => store.dispatch("perks/UPLOADDATA", perk)
 
 // 彈出視窗狀態控制
 const editStatue = i => displayEdit.value[i] = !displayEdit.value[i]
-const modalStatue = (i, isClear) => {
-  console.log(displayModal.value[i], "Test")
-  displayModal.value[i] = !displayModal.value[i]
+const modelStatue = (i, isClear) => {
+  console.log(displayModel.value[i], "Test")
+  displayModel.value[i] = !displayModel.value[i]
   if(isClear) appendPerk.value.clearData()
 }
 

@@ -28,7 +28,7 @@
           label="Create"  
           class="p-button-infor mx-1 flex-auto my-2"
           style="max-width:100%"
-          @click="modalStatue(0)" 
+          @click="modelStatue(0)" 
         />
         <Button label="Logout" href="javascript:void(0)" class="p-button-success mx-2 flex-auto my-2" @click="logout"></Button>   
       </div>
@@ -60,7 +60,7 @@
     :isdisplay="displayModal[0]"
     :levelOptions="levelOptions"
     :drOptions="drOptions"
-    @childmodal="modalStatue"
+    @childModel="modelStatue"
     @uploadImg="onUpload"
     @setKillerDoc="addKiller"
     ref="appendRole"
@@ -69,7 +69,7 @@
   <SimpleDialog 
     :isDisplay="displayModal[1]" 
     location="Append New Role" 
-    @childModal="modalStatue"
+    @childModel="modelStatue"
   />
 </template>
 
@@ -116,7 +116,7 @@ const nameGroup = computed(() => {
 })
 
 // 彈出視窗狀態控制
-const modalStatue = (i, isClear) => {
+const modelStatue = (i, isClear) => {
   displayModal.value[i] = !displayModal.value[i]
   if(isClear) appendRole.value.clearData()
 }

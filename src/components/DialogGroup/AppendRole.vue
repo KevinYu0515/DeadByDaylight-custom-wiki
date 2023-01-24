@@ -1,7 +1,7 @@
 <template>
    <Dialog 
         header="Append New Role" 
-        v-model:visible="isdisplay" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+        v-model:visible="isDisplay" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
         :style="{width: '50vw'}" :modal="true"
     >
     <form @submit.prevent="handleSubmit(!v$.$invalid, state)">
@@ -54,7 +54,7 @@
         </div>
         </form>
         <template #footer>
-            <Button label="Discard" icon="pi pi-trash" @click="modalStatue(1)" class="p-button-text"/>
+            <Button label="Discard" icon="pi pi-trash" @click="modelStatue(1)" class="p-button-text"/>
         </template>
     </Dialog>
 </template>
@@ -76,17 +76,15 @@ const clickInput1 = () => {
     input1.value.click()
 }
 
-const props = defineProps(["isdisplay","levelOptions","drOptions"])
-const isdisplay = ref(false)
+const props = defineProps(["isDisplay","levelOptions","drOptions"])
+const isDisplay = ref(false)
 const levelOptions = ref(null)
 const drOptions = ref(null)
 onUpdated(() => {
-    isdisplay.value = props.isdisplay
+    isDisplay.value = props.isDisplay
     levelOptions.value = props.levelOptions
     drOptions.value = props.drOptions
 })
-
-const emits = defineEmits(["uploadImg", "setKillerDoc", "childmodal"])
 
 const state = reactive({
     newKillerName : "",
@@ -125,11 +123,11 @@ const handleSubmit = (isFormValid, state) => {
     if (!isFormValid) { return }
     emits("setKillerDoc", state)
     clearData()
-    modalStatue(0)
+    modelStatue(0)
 }
 
-const modalStatue = (i, isClear) => {
-    emits("childmodal", i, isClear)
+const modelStatue = (i, isClear) => {
+    emits("childModel", i, isClear)
     submitted.value = false
 }
 
@@ -140,6 +138,8 @@ const clearData = () => {
   state.imgData = null
   state.imgUrl = ""
 }
+
+const emits = defineEmits(["uploadImg", "setKillerDoc", "childModel"])
 
 defineExpose({ clearData })
 

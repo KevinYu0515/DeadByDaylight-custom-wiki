@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "json": "json-server --watch db.json --port 1020",
-    "lintfix": "eslint --fix \"{,!(node_modules)/**/}*.{js,vue}\"",
+    "lint": "eslint --fix \"{,!(node_modules)/**/}*.{js,vue}\"",
     "deploy": "firebase deploy"
   },
   "dependencies": {
@@ -24,6 +24,7 @@
     "vue": "^3.0.0",
     "vue-awesome": "^4.5.0",
     "vue-awesome-swiper": "^5.0.1",
+    "vue-cropper": "^1.0.5",
     "vue-js-star-rating": "^1.1.5",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.1.0"

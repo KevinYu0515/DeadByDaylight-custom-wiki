@@ -1,8 +1,8 @@
 <template>
   <Dialog
       :header="`${killer_information.name} Settings`"
-      v-model:visible="isdisplay" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-      :style="{width: '50vw'}" :modal="true"
+      v-model:visible="isDisplay" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+      :style="{width: '50vw'}" :model="true"
     >
       <div class="my-2">
         <h3>Real Name</h3>
@@ -154,7 +154,7 @@
 <script>
 export default {
     name:"AppendRecord",
-    props:["isdisplay", "killer_information"],
+    props:["isDisplay", "killer_information"],
     data(){
       return{
         heightOptions: ([{hei:"Tall"}, {hei:"Average"}, {hei:"Short"}]),
@@ -169,8 +169,8 @@ import { ref, reactive, defineEmits, getCurrentInstance } from "vue"
 import { useRouter } from "vue-router"
 
 const Instance = getCurrentInstance()
-const modalStatue = (i, isClear) => {
-  emits("childmodal", i, isClear)
+const modelStatue = (i, isClear) => {
+  emits("childModel", i, isClear)
 }
 
 const killer_information = JSON.parse(Instance.props.killer_information)
@@ -254,7 +254,7 @@ const preview3 = event => {
     })
     fileReader.readAsDataURL(files[i])
     state.add_ones_data[i] = filename
-    emits("uploadData", files[i], "add-ones/" + killer_information.name)
+    emits("uploadData", "add-ones/" + killer_information.name, files[i])
   }
 }
 
@@ -291,10 +291,10 @@ const complete = () => {
     disable.value = false
     router.push("/personal")
   }
-  modalStatue(0)
+  modelStatue(0)
 }
 
-const emits = defineEmits(["updateSettings", "uploadData", "childmodal"])
+const emits = defineEmits(["updateSettings", "uploadData", "childModel"])
 </script> 
 
 <style scoped>

@@ -1,11 +1,11 @@
 <template>
-  <!-- <img class="bg fixed h-auto opacity-10 w-full" :src="killer_information.backgroundImage"/> -->
   <div class="records flex justify-content-center align-items-center">
+    <img class="background" :src="backgroundImage" alt="backgroundImage"/>
     <div class="leftInfor flex justify-content-center align-items-center flex-column absolute z-5">
       <Button
         label="Delete"  
         class="p-button-danger bs mb-3"
-        style="max-width:100%"
+        style="max-width:100%;"
         @click="deleteKiller(killer_information.id)"
       />
       <div class="card relative overflow-hidden">
@@ -41,7 +41,7 @@
       >
         <swiper-slide>
           <div class="perks mb-5 flex justify-content-center align-items-start flex-column relative" v-if="(killer_information.perks[0])">
-            <h1>Perks<span><router-link to="/skills">(Read More)</router-link></span></h1>
+            <h1>Perks<span><router-link to="/perks">(Read More)</router-link></span></h1>
             <hr class="outDialog">
             <h3>Self Perks</h3>
             <div class="selfPerks flex" v-if="(killer_information.perks[0])">
@@ -113,7 +113,7 @@
       :header="add_ones_information.name"
       v-model:visible="add_ones_popup"
       :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-      :modal="true"
+      :model="true"
     >
       <img :src="add_ones_information.image" width="100" height="100" alt="" class=""/>
       <p>
@@ -127,35 +127,35 @@
 
    <!-- 紀錄更改 -->
   <AppendRecord
-    :isdisplay="displayModal[0]"
+    :isDisplay="displayModel[0]"
     :killer_information="JSON.stringify(killer_information)"
-    @childmodal="modalStatue"
+    @childModel="modelStatue"
     @uploadData="onUpload"
     @updateSettings="updateSettings"
   />
 
   <!-- 紀錄儲存警告 -->
   <SimpleDialog
-    :isdisplay="displayModal[1]" 
+    :isDisplay="displayModel[1]" 
     :location="`${killer_information.name} Settings`" 
-    @childModal="modalStatue"
+    @childModel="modelStatue"
   />
 
   <!-- 背景圖片上傳 -->
-  <SimpleDialog
-    :isdisplay3="displayModal[4]"
-    :upload-title="`${killer_information.name} Background`"
-    :close3= 4
-    uploadItems="bgImg"
-    @upload-doc="onUpload"
+  <UploadImg
+    :isDisplay="displayModel[4]"
+    :title="`${killer_information.name} Background`"
+    option="bgImg"
+    @upload-img="onUpload"
     @updateSettings="updateSettings"
-    @childModal="modalStatue"
+    @childModel="modelStatue"
   />
 </template>
 
 <script setup>
 import SimpleDialog from "../../components/DialogGroup/SimpleDialog.vue"
 import AppendRecord from "../../components/DialogGroup/AppendRecord.vue"
+import UploadImg from "../../components/DialogGroup/UploadImg.vue"
 import killersStore from "../../vuex/killersStore"
 import { ref, onMounted, onBeforeUnmount, reactive, computed, defineProps } from "vue"
 import { useRouter } from "vue-router"
@@ -165,8 +165,9 @@ import { useStore } from "vuex"
 const store = useStore()
 const router = useRouter()
 const props = defineProps(["killer_information"])
-const displayModal = ref([false])
+const displayModel = ref([false])
 const killer_information = JSON.parse(props.killer_information)
+let backgroundImage = computed(() => killer_information.backgroundImage || require("../../assets/picture/default_record_background.png"))
 
 // 附屬品資料設定
 const add_ones_group = computed(() => store.state.killers ? store.state.killers.fbAdd_ones : [])
@@ -182,12 +183,12 @@ const items =  ref([
 {
   label: "Base Information",
   icon: "pi pi-cog",
-  command: () => { modalStatue(0) }
+  command: () => { modelStatue(0) }
 },
 {
   label: "Background",
   icon: "pi pi-cog",
-  command: () => { modalStatue(4) }
+  command: () => { modelStatue(4) }
 }
 ])
 
@@ -203,7 +204,14 @@ const filterText = (text, num) => text.slice(0, num * -1)
 // 資料處裡表達式
 const id = killer_information.id
 const updateSettings = (options, optionsValue) => store.dispatch("killers/UPDATEDATA", {id, options, optionsValue})
-const onUpload = (data, file) => store.dispatch("killers/UPLOADIMG", {file, data})
+const onUpload = (file, data) => {
+  const new_data = {
+    file: file,
+    name: data.name,
+    value: data
+  }
+  store.dispatch("killers/UPLOADIMG", new_data)
+}
 const deleteKiller = id => {
   router.push("/personal")
   store.dispatch("killers/DELETEROLE", id)
@@ -213,7 +221,7 @@ const deleteKiller = id => {
 const routerTo = path => router.push(`${path}`)
 
 // 彈出視窗狀態控制
-const modalStatue = i => displayModal.value[i] = !displayModal.value[i]
+const modelStatue = i => displayModel.value[i] = !displayModel.value[i]
 
 // 附屬品介紹觸發器
 const toggleAddOnes = index => {
