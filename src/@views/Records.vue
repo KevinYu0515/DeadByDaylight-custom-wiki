@@ -2,12 +2,6 @@
   <div class="records flex justify-content-center align-items-center">
     <img class="background" :src="backgroundImage" alt="backgroundImage"/>
     <div class="leftInfor flex justify-content-center align-items-center flex-column absolute z-5">
-      <Button
-        label="Delete"  
-        class="p-button-danger bs mb-3"
-        style="max-width:100%;"
-        @click="deleteKiller(killer_information.id)"
-      />
       <div class="card relative overflow-hidden">
         <div class="imgBox absolute top-0 left-0 w-full h-full">
           <img class="absolute top-0 left-0 w-full h-full" :src="killer_information.cover" alt="killer"/>
@@ -20,12 +14,11 @@
         </div>
       </div>
       <div class="buttonGroup bs">
-        <SplitButton data-type="settings" label="Settings" icon="pi pi-bars" :model="items"></SplitButton>
         <Button 
           label="Back"
           data-type="back"  
           class="p-button-success mt-3"
-          @click="routerTo('/personal')" 
+          @click="routerTo('/')" 
         /> 
       </div>
     </div>
@@ -124,50 +117,19 @@
       </template>
     </Dialog>
   </div>
-
-   <!-- 紀錄更改 -->
-  <AppendRecord
-    :isDisplay="displayModel[0]"
-    :killer_information="JSON.stringify(killer_information)"
-    @childModel="modelStatue"
-    @uploadData="onUpload"
-    @updateSettings="updateSettings"
-  />
-
-  <!-- 紀錄儲存警告 -->
-  <SimpleDialog
-    :isDisplay="displayModel[1]" 
-    :location="`${killer_information.name} Settings`" 
-    @childModel="modelStatue"
-  />
-
-  <!-- 背景圖片上傳 -->
-  <UploadImg
-    :isDisplay="displayModel[4]"
-    :title="`${killer_information.name} Background`"
-    option="bgImg"
-    @upload-img="onUpload"
-    @updateSettings="updateSettings"
-    @childModel="modelStatue"
-  />
 </template>
 
 <script setup>
-import SimpleDialog from "../../components/DialogGroup/SimpleDialog.vue"
-import AppendRecord from "../../components/DialogGroup/AppendRecord.vue"
-import UploadImg from "../../components/DialogGroup/UploadImg.vue"
-import killersStore from "../../vuex/killersStore"
+import killersStore from "../vuex/killersStore"
 import { ref, onMounted, onBeforeUnmount, reactive, computed, defineProps } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "vuex"
-// import json from "../../../python/killers.json"
 
 const store = useStore()
 const router = useRouter()
 const props = defineProps(["killer_information"])
-const displayModel = ref([false])
 const killer_information = JSON.parse(props.killer_information)
-let backgroundImage = computed(() => killer_information.backgroundImage || require("../../assets/picture/default_record_background.png"))
+let backgroundImage = computed(() => killer_information.backgroundImage || require("../assets/picture/default_record_background.png"))
 
 // 附屬品資料設定
 const add_ones_group = computed(() => store.state.killers ? store.state.killers.fbAdd_ones : [])
@@ -178,50 +140,21 @@ const add_ones_information = reactive({
   description: ""
 })
 
-// 按鈕組設定
-const items =  ref([
-{
-  label: "Base Information",
-  icon: "pi pi-cog",
-  command: () => { modelStatue(0) }
-},
-{
-  label: "Background",
-  icon: "pi pi-cog",
-  command: () => { modelStatue(4) }
-}
-])
-
-// 背景長度過濾器
-// const fillterbg = background => {
-//   if(!background) return background
-//   if( background.length > 1000 ) return background.slice(0, 1000) + "..."
-//   return background
-// }
 // 文字長度過濾器
 const filterText = (text, num) => text.slice(0, num * -1)
 
 // 資料處裡表達式
-const id = killer_information.id
-const updateSettings = (options, optionsValue) => store.dispatch("killers/UPDATEDATA", {id, options, optionsValue})
-const onUpload = (file, data) => {
-  const new_data = {
-    file: file,
-    name: data.name,
-    value: data
-  }
-  store.dispatch("killers/UPLOADIMG", new_data)
-}
-const deleteKiller = id => {
-  router.push("/personal")
-  store.dispatch("killers/DELETEROLE", id)
-}
+// const onUpload = (file, data) => {
+//   const new_data = {
+//     file: file,
+//     name: data.name,
+//     value: data
+//   }
+//   store.dispatch("killers/UPLOADIMG", new_data)
+// }
 
 // 跳轉路由器
 const routerTo = path => router.push(`${path}`)
-
-// 彈出視窗狀態控制
-const modelStatue = i => displayModel.value[i] = !displayModel.value[i]
 
 // 附屬品介紹觸發器
 const toggleAddOnes = index => {
@@ -249,9 +182,9 @@ onBeforeUnmount(() => store.unregisterModule("killers"))
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/personal/records.scss";
+@import "../assets/scss/records.scss";
 </style>
 
 <style scoped>
-@import "../../assets/css/index.css";
+@import "../assets/css/index.css";
 </style>

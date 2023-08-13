@@ -17,7 +17,6 @@
 </template>
 
 <script>
-// import axios from "axios"
 import { useRouter } from "vue-router"
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
@@ -39,9 +38,8 @@ export default {
   methods:{
     async submit(){
       try{
-        const user = firebase.auth().createUserWithEmailAndPassword(this. email, this.password)
-        console.log(user)
-        this.$router.push("/personal")
+        firebase.auth().createUserWithEmailAndPassword(this. email, this.password)
+        this.$router.push("/login")
       }catch(err){
         console.log(err)
       }
@@ -51,5 +49,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/personal/register.scss";
+@import "@/assets/scss/register.scss";
 </style>

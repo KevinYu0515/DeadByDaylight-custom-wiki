@@ -5,95 +5,6 @@
       :style="{width: '50vw'}" :model="true"
     >
       <div class="my-2">
-        <h3>Real Name</h3>
-        <div class="flex align-items-center my-2">
-          <InputText placeholder="Real Name" v-model="state.realName" />
-          <Button label="Confirm" class="mx-2"  :disabled="disable[0]" @click="updateSettings(0, 'realName', state.realName)" autofocus />
-        </div>
-      </div>
-      <hr class="inDialog">
-      <div class="flex flex-column my-2">
-        <div class="flex align-items-center">
-          <h3>Movement Speed</h3>
-          <InputSwitch class="mx-2" v-model="moveChecked" />
-          <p>Switch On if you need to edit alternative movement speed</p>
-        </div>
-        <div class="flex align-items-center">
-          <Textarea class="my-2" placeholder="Movement Speed" v-model="state.movementSpeed" :autoResize="true" rows="1" cols="20" />
-          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[2]" @click="updateSettings(2, 'movementSpeed', state.movementSpeed)" autofocus />
-        </div>
-        <div class="altmove" v-show="moveChecked">
-          <h3>Altnative Movement Speed</h3>
-          <div class="flex align-items-center">
-            <Textarea class="my-2" placeholder="Altnative Movement Speed" v-model="state.alternativeMovementSpeed" :autoResize="true" rows="1" cols="30" />
-            <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[3]" @click="updateSettings(3, 'altnativeMoveSpeed', state.alternativeMovementSpeed)" autofocus />
-          </div>
-        </div>
-      </div>
-      <hr class="inDialog">
-
-      <div class="flex flex-column my-2">
-        <div class="flex align-items-center">
-          <h3>Terror Radius</h3>
-          <InputSwitch class="mx-2" v-model="terrorChecked" />
-          <p>Switch On if you need to edit alternative Terror Radius</p>
-        </div>
-        <div class="flex align-items-center">
-          <Textarea class="my-2" placeholder="Terror Radius" v-model="state.terrorRadius" :autoResize="true" rows="1" cols="20" />
-          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[4]" @click="updateSettings(4, 'terrorRadius', state.terrorRadius)" autofocus />
-        </div>
-        <div class="altmove" v-show="terrorChecked">
-          <h3>Altnative Terror Radius</h3>
-          <div class="flex align-items-center">
-            <Textarea class="my-2" placeholder="Altnative Terror Radius" v-model="state.alternativeTerrorRadius" :autoResize="true" rows="1" cols="30" />
-            <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[5]" @click="updateSettings(5, 'altnativeTerrorRadius', state.alternativeTerrorRadius)" autofocus />
-          </div>
-        </div>
-      </div>
-      <hr class="inDialog">
-
-      <div class="my-2">
-        <h3>Height</h3>
-        <Dropdown
-            v-model.trim="state.height"
-            :options="heightOptions"
-            optionLabel="hei"
-            optionValue="hei"
-            placeholder="Height"
-            class="my-2"
-            style="width:20%"
-          />
-        <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[6]" @click="updateSettings(6, 'height', state.height)" autofocus />
-      </div>
-      <hr class="inDialog">
-
-      <div class="my-2">
-        <h3>Difficulty Rating</h3>
-        <Dropdown
-          v-model.trim="state.difficulty"
-          :options="drOptions"
-          optionLabel="dr"
-          optionValue="dr"
-          placeholder="Difficulty Rating"
-          class="my-2"
-          style="width:40%"
-        />
-        <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[7]" @click="updateSettings(7, 'difficulty', state.difficulty)" autofocus />
-      </div>
-      <hr class="inDialog">
-
-      <div class="my-2">
-        <h3>Weapon And Power</h3>
-        <div class="flex align-items-center my-1">
-          <InputText placeholder="Weapon" v-model="state.weapon" />
-          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[8]" @click="updateSettings(8, 'weapon', state.weapon)" autofocus />
-          <InputText placeholder="Power" class="mx-2" v-model="state.power" />
-          <Button label="Confirm" class="mx-2 my-2"  :disabled="disable[9]" @click="updateSettings(9, 'power', state.power)" autofocus />
-        </div>
-      </div>
-      <hr class="inDialog">
-
-      <div class="my-2">
         <h3>Perks</h3>
         <Button 
           label="Perks Upload"  
@@ -179,8 +90,6 @@ const input2 = ref(null)
 const input3 = ref(null)
 const disable = ref([false])
 const isConfirm = ref(false)
-const moveChecked = ref(false)
-const terrorChecked = ref(false)
 
 const clickInput1 = () => input1.value.click()
 const clickInput2 = () => input2.value.click()
@@ -289,7 +198,7 @@ const complete = () => {
     clearData()
     isConfirm.value = false
     disable.value = false
-    router.push("/personal")
+    router.push("/")
   }
   modelStatue(0)
 }

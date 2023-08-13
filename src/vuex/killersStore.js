@@ -99,7 +99,6 @@ export default{
         // 更新資料
         UPDATEDATA(context, {id, options, optionsValue}){
             updateDoc(doc(killersColRef, id),{ [options]: optionsValue })
-            console.log("updateSettings")
         },
 
         // 刪除資料

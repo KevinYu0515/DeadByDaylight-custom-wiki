@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router"
-import Home from "../views/Home.vue"
 import firebase from "firebase/compat/app"
 import "@/firebase"
 import "firebase/compat/auth"
@@ -9,39 +8,36 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component:Home
-  },
-  {
-    path: "/home",
-    component:Home
+    component:()=> import(/* webpackChunkName: "main" */"../@views/Main.vue"),
   },
   {
     path:"/login",
     name:"Login",
-    component:()=>import(/* webpackChunkName: "login" */"../views/Authorization/Login.vue")
+    component:()=>import(/* webpackChunkName: "login" */"../@views/Authorization/Login.vue"),
   },
   {
     path:"/register",
     name:"Register",
-    component:()=>import(/* webpackChunkName: "register" */"../views/Authorization/Register.vue")
-  },
-  {
-    path:"/personal",
-    name:"Personal",
-    component:()=> import(/* webpackChunkName: "personal" */"../views/Personal/Main.vue"),
-    meta:{ "requiresAuth": true }
+    component:()=>import(/* webpackChunkName: "register" */"../@views/Authorization/Register.vue")
   },
   {
     path:"/records",
     name:"Records",
-    component:()=> import(/* webpackChunkName: "records" */"../views/Personal/Records.vue"),
+    component:()=> import(/* webpackChunkName: "records" */"../@views/Records.vue"),
     props: (route) => route.query
   },
   {
     path:"/perks",
     name:"Perks",
-    component:()=> import(/* webpackChunkName: "perks" */"../views/Personal/Perks.vue"),
-  }
+    component:()=> import(/* webpackChunkName: "perks" */"../@views/Perks.vue"),
+  },
+  {
+    path:"/editor",
+    name:"Editor",
+    component:() => import(/* webpackChunkName: "editor" */"../@views/Editor/control.vue"),
+    props: (route) => route.params,
+    meta:{ "requiresAuth": true }
+  },
 ]
 
 const router = createRouter({
@@ -50,13 +46,21 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) =>{
-  const requiresAuth = to.matched.some( record => record.meta.requiresAuth)
-  const isAuthenticated = firebase.auth().currentUser
-  if(requiresAuth && !isAuthenticated){
-    next("/login")
-  }else{
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  if(!requiresAuth){
     next()
+    return
   }
+  firebase.auth().onAuthStateChanged(user => {
+    if(!user){
+      next("/login")
+      return
+    } 
+    else{
+      next()
+      return
+    }
+  })
 })
 
 export default router

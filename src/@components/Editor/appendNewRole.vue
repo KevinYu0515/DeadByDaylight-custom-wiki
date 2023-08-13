@@ -1,9 +1,5 @@
 <template>
-   <Dialog 
-        header="Append New Role" 
-        v-model:visible="isDisplay" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-        :style="{width: '50vw'}" :modal="true"
-    >
+  <div>
     <form @submit.prevent="handleSubmit(!v$.$invalid, state)">
         <Dropdown
             v-model="v$.newKillerLevel.$model" :class="{'p-invalid':v$.newKillerLevel.$invalid && submitted}"
@@ -52,39 +48,29 @@
             <img class="preview" height="252" width="192" :src="state.imgUrl">
         <br>
         </div>
-        </form>
-        <template #footer>
-            <Button label="Discard" icon="pi pi-trash" @click="modelStatue(1)" class="p-button-text"/>
-        </template>
-    </Dialog>
+        <Button type="back" label="Back" @click="backToKiller" class="p-button-info my-2 mx-5" />
+    </form>
+  </div>
 </template>
 
-<script>
-export default {
-    name:"AppendRole"
-}
-</script>
-
 <script setup>
-import { ref, reactive, defineProps, defineEmits, defineExpose, onUpdated } from "vue"
+import { defineEmits, defineProps, onUpdated, ref, reactive } from "vue"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
+const props = defineProps(["drOptions", "levelOptions"])
+const emits = defineEmits(["addKiller", "onUpload", "backToKiller"])
 
+const drOptions = ref([])
+const levelOptions = ref([])
 const input1 = ref(null)
 const submitted = ref(false)
 const clickInput1 = () => {
     input1.value.click()
 }
 
-const props = defineProps(["isDisplay","levelOptions","drOptions"])
-const isDisplay = ref(false)
-const levelOptions = ref(null)
-const drOptions = ref(null)
-onUpdated(() => {
-    isDisplay.value = props.isDisplay
-    levelOptions.value = props.levelOptions
-    drOptions.value = props.drOptions
-})
+const backToKiller = () => {
+    emits("backToKiller", false)
+}
 
 const state = reactive({
     newKillerName : "",
@@ -114,21 +100,14 @@ const previewImage = event => {
   })
   fileReader.readAsDataURL(files[0])
   state.imgData = files[0]
-  emits("uploadImg", files[0])
+  emits("onUpload", files[0])
 }
 
 const handleSubmit = (isFormValid, state) => {
-    console.log("submit")
     submitted.value = true
     if (!isFormValid) { return }
-    emits("setKillerDoc", state)
+    emits("addKiller", state)
     clearData()
-    modelStatue(0)
-}
-
-const modelStatue = (i, isClear) => {
-    emits("childModel", i, isClear)
-    submitted.value = false
 }
 
 const clearData = () => {
@@ -139,12 +118,12 @@ const clearData = () => {
   state.imgUrl = ""
 }
 
-const emits = defineEmits(["uploadImg", "setKillerDoc", "childModel"])
-
-defineExpose({ clearData })
-
+onUpdated(() => {
+    drOptions.value = props.drOptions
+    levelOptions.value = props.levelOptions
+})
 </script>
 
-<style scoped>
-@import "../../assets/css/index.css";
+<style>
+
 </style>

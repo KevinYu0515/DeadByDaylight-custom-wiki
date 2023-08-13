@@ -1,6 +1,9 @@
 <template>
   <DBDNavbar></DBDNavbar>
   <div class="perks flex justify-content-center align-items-center flex-column">
+    <div v-if="!perks.length">
+      <img src="../assets/picture/loading.gif" alt="loading">
+    </div>
     <div class="illustrated">
       <ul>
         <li
@@ -14,7 +17,8 @@
             <img :src="perk.icon" alt="">
           </div>
         </li>
-        <li 
+        <li
+          v-if="perks.length"
           class="list-none absolute overflow-hidden"
           :style="{'top': topCalc(perks.length), 'left': leftCalc(perks.length)}"
         >
@@ -83,12 +87,13 @@
 </template>
 
 <script setup>
-import DBDNavbar from "../../components/Navbar/DBDNavbar.vue"
-import SimpleDialog from "../../components/DialogGroup/SimpleDialog.vue"
-import AppendPerk from "../../components/DialogGroup/AppendPerk.vue"
+import DBDNavbar from "../@components/Navbar/DBDNavbar.vue"
+import SimpleDialog from "../@components/DialogGroup/SimpleDialog.vue"
+import AppendPerk from "../@components/DialogGroup/AppendPerk.vue"
 import { ref,  onMounted, computed, onBeforeUnmount } from "vue"
 import { useStore } from "vuex"
-import perksStore from "../../vuex/perksStore"
+import perksStore from "../vuex/perksStore"
+import $ from "jquery"
 
 const store = useStore()
 const displayEdit = ref([false])
@@ -97,7 +102,14 @@ const appendPerk = ref(null)
 const clickIndex = ref([])
 const perksClick = ref([])
 const isClick = ref([false])
-const perks = computed(() => store.state.perks ? store.state.perks.fbPerks : [])
+const perks = computed(() => {
+  if(store.state.perks){
+    const res = store.state.perks.fbPerks
+    $(".illustrated").css("height", `${res.length / 8 * 120}px`)
+    return res
+  }
+  return []
+})
 
 // 技能圖示排版
 const topCalc = i => {
@@ -123,7 +135,7 @@ const clickPerk = (e, n) => {
     clickIndex.value.unshift(n)
   }else{
     for(let i=0; i<perksClick.value.length;i++){
-      if(perksClick[i].name == e.name){
+      if(perksClick.value[i].name == e.name){
         perksClick.value.splice(i,1)
         clickIndex.value.splice(i,1)
       } else console.log("false")
@@ -152,7 +164,6 @@ const onUpload = perk => store.dispatch("perks/UPLOADDATA", perk)
 // 彈出視窗狀態控制
 const editStatue = i => displayEdit.value[i] = !displayEdit.value[i]
 const modelStatue = (i, isClear) => {
-  console.log(displayModel.value[i], "Test")
   displayModel.value[i] = !displayModel.value[i]
   if(isClear) appendPerk.value.clearData()
 }
@@ -167,9 +178,9 @@ onBeforeUnmount(() => store.unregisterModule("perks"))
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/personal/perks.scss";
+@import "../assets/scss/perks.scss";
 </style>
 
 <style scoped>
-@import "../../assets/css/index.css";
+@import "../assets/css/index.css";
 </style>

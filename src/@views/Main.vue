@@ -1,6 +1,6 @@
 <template>
   <DBDNavbar></DBDNavbar>
-  <div class="personal flex justify-content-center align-items-center flex-column overflow-hidden h-auto">
+  <div class="main flex justify-content-center align-items-center flex-column overflow-hidden h-auto">
     <section class="bg w-full fixed top-0 flex justify-content-center align-items-center flex-column">
       <h1 class="mainTitle mb-5">Dead By Daylight Recording Side Project</h1>
       <p class="subTitle">Recording Videos, Killers Information, Skills</p>
@@ -9,14 +9,14 @@
       <p class="subTitle">Version： DBD 6.1.0</p>
     </section>
     <section class="killer w-full z-1 px-3 py-8 flex justify-content-center align-items-center flex-column">
-      <div class="w-5">
+      <div class="w-5 flex justify-content-center">
         <Dropdown
             v-model="selectedLevel"
             :options="levelOptions"
             optionLabel="level"
             optionValue="level"
             placeholder="ALL"
-            class="mx-1 flex-1 my-2"
+            class="mx-1 flex-auto my-2"
             style="width:200px"
           />
         <InputText 
@@ -24,15 +24,11 @@
           v-model.trim="searchName"
           class="flex-auto mx-1 my-2"
         />
-        <Button
-          label="Create"  
-          class="p-button-infor mx-1 flex-auto my-2"
-          style="max-width:100%"
-          @click="modelStatue(0)" 
-        />
-        <Button label="Logout" href="javascript:void(0)" class="p-button-success mx-2 flex-auto my-2" @click="logout"></Button>   
       </div>
       <div class="container w-9 flex justify-content-center align-items-center flex-wrap h-auto pt-5">
+        <div v-if="!killers.length">
+          <img src="../assets/picture/loading.gif" alt="loading">
+        </div>
         <div 
           class="card m-2 overflow-hidden cursor-pointer relative"
           v-for="killer in nameGroup"
@@ -55,48 +51,24 @@
       </div>
     </section>
   </div>
-
-  <AppendRole
-    :isdisplay="displayModal[0]"
-    :levelOptions="levelOptions"
-    :drOptions="drOptions"
-    @childModel="modelStatue"
-    @uploadImg="onUpload"
-    @setKillerDoc="addKiller"
-    ref="appendRole"
-  />
-
-  <SimpleDialog 
-    :isDisplay="displayModal[1]" 
-    location="Append New Role" 
-    @childModel="modelStatue"
-  />
 </template>
 
 <script setup>
-import DBDNavbar from "../../components/Navbar/DBDNavbar.vue"
-import AppendRole from "../../components/DialogGroup/AppendRole.vue"
-import SimpleDialog from "../../components/DialogGroup/SimpleDialog.vue"
+import DBDNavbar from "../@components/Navbar/DBDNavbar.vue"
+
 import { ref, onMounted, onUpdated, computed, onBeforeUnmount } from "vue"
-import killersStore from "../../vuex/killersStore"
+import killersStore from "../vuex/killersStore"
 import { useRouter } from "vue-router"
 import { useStore } from "vuex"
 import $ from "jquery"
-import axios from "axios"
 
 const store = useStore()
 const router = useRouter()
-const displayModal = ref([false])
+
 const selectedLevel = ref("ALL")
 const searchName = ref("")
-const appendRole = ref(null)
 const killers = computed(() => store.state.killers ? store.state.killers.fbkillers : [])
 const levelOptions = computed(() => store.state.killers ? store.state.killers.levelOptions : [])
-const drOptions =  computed(() => store.state.killers ? store.state.killers.drOptions : [])
-
-// 資料處裡表達式
-const addKiller = role => store.dispatch("killers/ADDROLE", role)
-const onUpload = img => store.dispatch("killers/UPLOADIMG", "killersCover", img)
 
 // 等級過濾器
 const levelGroup = computed(() =>{
@@ -114,19 +86,6 @@ const nameGroup = computed(() => {
       })
     } return levelGroup.value
 })
-
-// 彈出視窗狀態控制
-const modelStatue = (i, isClear) => {
-  displayModal.value[i] = !displayModal.value[i]
-  if(isClear) appendRole.value.clearData()
-}
-
-// 登出功能
-const logout = async() => {
-  await axios.post("logout", {}, { withCredentials:true })
-  axios.defaults.headers.common["Authorization"] = ""
-  await router.push("/login")
-}
 
 // 經路由傳資料
 const passDataToRecords = role => {
@@ -194,9 +153,9 @@ onBeforeUnmount(() => store.unregisterModule("killers"))
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/personal/personal.scss";
+@import "../assets/scss/main.scss";
 </style>
 
 <style scoped>
-@import "../../assets/css/index.css";
+@import "../assets/css/index.css";
 </style>

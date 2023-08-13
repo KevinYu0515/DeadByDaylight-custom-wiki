@@ -4,14 +4,6 @@
   </div>
 </template>
 
-<script>
-
-export default {
-  name: "App",
-  components: {},
-}
-</script>
-
 <style>
 
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro&family=Space+Grotesk&display=swap");
