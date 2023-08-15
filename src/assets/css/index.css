@@ -26,10 +26,6 @@
     margin:0px 0px 20px 0px;
 }
 
-.p-dialog-header-icons{
-    visibility: hidden !important;
-}
-
 .bs{
     position: relative;
     top: 40px;

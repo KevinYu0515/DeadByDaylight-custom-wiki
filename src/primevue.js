@@ -12,9 +12,24 @@ import TabMenu from "primevue/tabmenu"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import TreeTable from "primevue/treetable"
+import Toast from "primevue/toast"
 
 export default{ 
   components:[
-    Dropdown, InputText, Button, Dialog, Textarea, Divider, SplitButton, InputSwitch, Checkbox, TabMenu, DataTable, Column, TreeTable, Sidebar
+    Toast,
+    Dropdown,
+    InputText,
+    Button,
+    Dialog,
+    Textarea,
+    Divider,
+    SplitButton,
+    InputSwitch,
+    Checkbox,
+    TabMenu,
+    DataTable,
+    Column,
+    TreeTable,
+    Sidebar
   ],
 }

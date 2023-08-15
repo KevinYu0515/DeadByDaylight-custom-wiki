@@ -5,8 +5,11 @@ import { doc, collection, onSnapshot, addDoc, updateDoc, deleteDoc } from "fireb
 export default{
     namespaced: true,
     state:{
-        fbkillers: [],
-        fbAdd_ones: [],
+        data: {
+            killersInfo: [],
+            perks: [],
+            addOnes: []
+        },
         levelOptions: [{level:"ALL"}, {level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}],
         drOptions: [{dr:"Easy"}, {dr:"Moderate"}, {dr:"Hard"}, {dr:"Very Hard"}],
         difficultyColor: {
@@ -18,10 +21,13 @@ export default{
     },
     mutations:{
         SETDATA(state, data){
-            state.fbkillers = data
+            state.data.killersInfo = data
+        },
+        SETPERK(state, data){
+            state.data.perks = data
         },
         SETADDONES(state, data){
-            state.fbAdd_ones = data
+            state.data.addOnes = data
         }
     },
     actions:{
@@ -29,76 +35,75 @@ export default{
         // 從 firebase 獲取資料
         GETDATA(context){
             onSnapshot(killersColRef, (querySnapshot) => {
-                let tmpkillers = []
+                const killers = []
                 querySnapshot.forEach((doc) => {
-                  const killer = {
+                  killers.push({
                     id: doc.id,
-                    background: doc.data().background,
-                    name: doc.data().name,
-                    movementSpeed: doc.data().movementSpeed,
-                    terrorRadius: doc.data().terrorRadius,
-                    alternativeMovementSpeed: doc.data().altnativeMoveSpeed,
-                    alternativeTerrorRadius: doc.data().altnativeTerrorRadius,
-                    height: doc.data().height,
-                    weapon: doc.data().weapon,
-                    power: doc.data().power,
-                    level: doc.data().level,
-                    cover: doc.data().cover,
-                    perks: doc.data().perks,
-                    recommendPerks: doc.data().recommendPerks,
-                    realName: doc.data().realName,
-                    backgroundImage: doc.data().bgImg,
-                    difficulty: doc.data().difficulty,
-                    add_ones_images: doc.data().add_ones_images,
-                    add_ones_names: doc.data().add_ones_names
-                  }
-                  tmpkillers.push(killer)
+                    build: doc.data().build,
+                    info: doc.data().info
+                  })
                 })
-                context.commit("SETDATA", tmpkillers)
+                context.commit("SETDATA", killers)
+            })
+        },
+
+        GETPERK(context, id){
+            onSnapshot(collection(db, `killers/${id}/perk`), (querySnapshot) => {
+                const perks = []
+                querySnapshot.forEach((doc) => {
+                  perks.push({
+                    id: doc.id,
+                    name: doc.data().name,
+                    type: doc.data().type,
+                    description: doc.data().description,
+                    image: doc.data().image
+                  })
+                })
+                context.commit("SETPERK", perks)
             })
         },
 
         GETADDONES(context, id){
-            onSnapshot(collection(db, `killers/${id}/add-ones`), (querySnapshot) => {
-                let tmpAdd_ones = []
+            onSnapshot(collection(db, `killers/${id}/addOnes`), (querySnapshot) => {
+                const AddOnes = []
                 querySnapshot.forEach((doc) => {
-                  const add_ones = {
+                  AddOnes.push({
                     id: doc.id,
-                    names: doc.data().names,
-                    descriptions: doc.data().descriptions
-                  }
-                  tmpAdd_ones.push(add_ones)
+                    name: doc.data().name,
+                    rarity: doc.data().rarity,
+                    description: doc.data().description,
+                    image: doc.data().image
+                  })
                 })
-                context.commit("SETADDONES", tmpAdd_ones)
+                context.commit("SETADDONES", AddOnes)
             })
         },
 
         // 上傳圖片至 firebase 儲存庫
         UPLOADIMG(context, img){
             const storageRef = r(storage, `${img.file}/${img.name}`)
-            uploadBytes(storageRef, img.value).then((snapshot) => {
+            uploadBytes(storageRef, img.value).then(() => {
                 console.log("Uploaded a blob or file!")
-                console.log(snapshot)
             })
         },
 
-        // 增加資料至 firebase
-        ADDROLE(context, role){
-            addDoc(killersColRef, {
-                name: role.newKillerName,
-                level: role.newKillerLevel,
-                cover: role.imgUrl,
-                difficulty: role.newKillerDR,
-                perks: [null],
-                recommendPerks: [null],
-                add_ones_images: [null],
-                add_ones_names: [null]
-            })
+        ADDROLE(context, data){
+            data.info.name = [data.info.name]
+            addDoc(killersColRef, data)
+        },
+
+        ADDPERK(context, {id, data}){
+            addDoc(collection(killersColRef, id, "perk"), data)
+        },
+
+        ADDADDONES(context, {id, data}){
+            addDoc(collection(killersColRef, id, "addOnes"), data)
         },
 
         // 更新資料
-        UPDATEDATA(context, {id, options, optionsValue}){
-            updateDoc(doc(killersColRef, id),{ [options]: optionsValue })
+        UPDATEDATA(context, {killerID, data, option = "info", id}){
+            if(option !== "info") updateDoc(doc(killersColRef, killerID, option, id), data)
+            else updateDoc(doc(killersColRef, killerID), data)
         },
 
         // 刪除資料

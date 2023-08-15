@@ -38,12 +38,12 @@
           <a @click="passDataToRecords(killer)">
             <span class="bloodHover absolute block z-1"></span>
             <div class="imgBox absolute top-0 left-0 w-full h-full">
-                <img class="absolute top-0 left-0 w-full h-full" :src="killer.cover" alt="killer"/>
+                <img class="absolute top-0 left-0 w-full h-full" :src="killer.info.cover" alt="killer"/>
             </div>
             <div class="content absolute top-0 left-0 w-full h-full flex justify-content-center align-items-center z-1">
               <div class="p-5">
-                <h3 style="padding-bottom:20px">{{killer.name}}</h3>
-                <p class="difficulty" :style="{'color':difficulty(killer)}">{{killer.difficulty}}</p>
+                <h3 style="padding-bottom:20px">{{killer.info.name[0]}}</h3>
+                <p class="difficulty" :style="{'color':difficulty(killer)}">{{killer.info.difficulty}}</p>
               </div>
             </div>
           </a>
@@ -67,12 +67,12 @@ const router = useRouter()
 
 const selectedLevel = ref("ALL")
 const searchName = ref("")
-const killers = computed(() => store.state.killers ? store.state.killers.fbkillers : [])
+const killers = computed(() => store.state.killers ? store.state.killers.data.killersInfo : [])
 const levelOptions = computed(() => store.state.killers ? store.state.killers.levelOptions : [])
 
 // 等級過濾器
 const levelGroup = computed(() =>{
-  if (selectedLevel.value !== "ALL") return killers.value.filter((item) => item.level == selectedLevel.value)
+  if (selectedLevel.value !== "ALL") return killers.value.filter((item) => item.info.rank == selectedLevel.value)
   return killers.value
 })
 
@@ -80,7 +80,7 @@ const levelGroup = computed(() =>{
 const nameGroup = computed(() => {
   if (searchName.value) {
       return killers.value.filter((item) => {
-        let name = item.name.toLowerCase()
+        let name = item.info.name[0].toLowerCase()
         let keyword = searchName.value.toLowerCase()
         return name.indexOf(keyword) !== -1
       })
@@ -88,18 +88,20 @@ const nameGroup = computed(() => {
 })
 
 // 經路由傳資料
-const passDataToRecords = role => {
+const passDataToRecords = data => {
   router.push({
     path:"/records",
     name:"Records",
-    query:{ killer_information: JSON.stringify(role) }
+    params:{ 
+        killer_information: JSON.stringify(data) 
+      }
   })
 }
 
 // 難易度顏色配置
 const difficulty = role => {
   const levelColorMap = store.state.killers.difficultyColor
-  return levelColorMap[role.difficulty]
+  return levelColorMap[role.info.difficulty]
 }
 
 // 生命週期

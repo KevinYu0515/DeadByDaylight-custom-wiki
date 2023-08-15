@@ -24,7 +24,7 @@ const routes = [
     path:"/records",
     name:"Records",
     component:()=> import(/* webpackChunkName: "records" */"../@views/Records.vue"),
-    props: (route) => route.query
+    props: (route) => route.params
   },
   {
     path:"/perks",
@@ -35,7 +35,6 @@ const routes = [
     path:"/editor",
     name:"Editor",
     component:() => import(/* webpackChunkName: "editor" */"../@views/Editor/control.vue"),
-    props: (route) => route.params,
     meta:{ "requiresAuth": true }
   },
 ]

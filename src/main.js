@@ -10,6 +10,7 @@ import "swiper/swiper-bundle.css"
 import store from "./vuex/store"
 import VueCropper from "vue-cropper"
 import axios from "axios"
+import ToastService from "primevue/toastservice"
 
 import "primevue/resources/themes/saga-blue/theme.css"
 import "primevue/resources/primevue.min.css"                                                                                    
@@ -18,7 +19,7 @@ import "vue-cropper/dist/index.css"
 
 const app = createApp(App)
 
-app.use(router).use(PrimeVue).use(store).use(VueCropper)
+app.use(router).use(PrimeVue).use(store).use(VueCropper).use(ToastService)
     .component("Swiper", Swiper)
     .component("SwiperSlide", SwiperSlide)
 

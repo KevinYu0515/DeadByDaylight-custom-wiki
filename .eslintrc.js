@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   env: {
-    node: true
+    node: true,
   },
   extends: [
     'plugin:vue/vue3-essential',
@@ -23,6 +23,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     "quotes":['error',"double"],
     "semi":[1,"never"],
-    "vue/no-mutating-props":0
+    "vue/no-mutating-props":0,
+    "no-undef": 0
   }
 }

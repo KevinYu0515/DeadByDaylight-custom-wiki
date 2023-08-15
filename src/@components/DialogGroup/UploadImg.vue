@@ -21,7 +21,7 @@
 import { defineProps, defineEmits, computed, ref } from "vue"
 import { useRouter } from "vue-router"
 
-import Cropper from "../Cropper.vue"
+import Cropper from "../tools/Cropper.vue"
 
 const router = useRouter()
 const props = defineProps(["title", "option", "isDisplay"])

@@ -1,13 +1,13 @@
 <template>
   <section v-show="!create" class="row flex-wrap" style="display: flex;">
     <div v-if="!killers.length">
-      <img src="../../assets/picture/loading.gif" alt="loading">
+      <img src="@/assets/picture/loading.gif" alt="loading">
     </div>
     <div v-for="(killer, index) in killers" :key="index" class="killer_block col-3">
-      <img class="cover" :src="killer.cover" @click="btnToDetails(index)">
+      <img class="cover" :src="killer.info.cover" @click="btnToDetails(killer.id, index)">
     </div>
     <div class="killer_block"  @click="btnToAppend">
-      <img class="plus" src="../../assets/icon/plus.png">
+      <img class="plus" src="@/assets/icon/plus.png">
     </div>
   </section>
   <section v-show="create">
@@ -22,26 +22,26 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onBeforeUnmount, defineEmits} from "vue"
+import { computed, ref, onMounted, onBeforeUnmount } from "vue"
 import { useStore } from "vuex"
-import appendNewRole from "../../@components/Editor/appendNewRole.vue"
-import killersStore from "../../vuex/killersStore"
+import appendNewRole from "./appendNewRole.vue"
+import killersStore from "../../../vuex/killersStore"
 
 const create = ref(false)
 const store = useStore()
 const drOptions =  computed(() => store.state.killers ? store.state.killers.drOptions : [])
 const levelOptions = computed(() => store.state.killers ? store.state.killers.levelOptions : [])
-const killers = computed(() => store.state.killers ? store.state.killers.fbkillers : [] )
+const killers = computed(() => store.state.killers ? store.state.killers.data.killersInfo : [] )
 
 // 資料處裡表達式
-const addKiller = role => {
-  store.dispatch("killers/ADDROLE", role)
+const addKiller = data => {
+  store.dispatch("killers/ADDROLE", data)
   create.value = !create.value
 }
 const onUpload = img => store.dispatch("killers/UPLOADIMG", "killersCover", img)
 
-const btnToDetails = index => {
-  emits("feedbackIndex", index, 1)
+const btnToDetails = (id, index) => {
+  emits("feedbackIndex", id, index)
 }
 
 const btnToAppend = () => {

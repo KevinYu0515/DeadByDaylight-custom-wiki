@@ -1,13 +1,24 @@
 <template>
   <div class="user_info_block">
-    <div class="w-2">
-      <Button label="Logout" href="javascript:void(0)" class="p-button-success my-2" @click="logout"></Button>   
-      <span class="name">{{ user_name }}</span>
+    <div class="mx-5 flex flex-wrap align-items-center justify-content-center gap-3">
+      <Button icon="pi pi-home" class="p-button-success mx-2" @click="backToMain()" title="Return Main" /> 
+      <Button icon="pi pi-sign-out" class="p-button-success mx-2" @click="logout()" title="Logout" />   
+      <span class="mx-2">
+        <i class="pi pi-user mx-2" style="color: slateblue"></i>
+        {{ user_name }}
+      </span>
     </div>
   </div>
   <div class="control_block">
     <ul class="control_list">
-      <li v-for="(item, index) in control_items" :key="index" class="control_item" :class="{'click': (controlIndex === index)}" @click="changePanel(index)">{{ item }}</li>
+      <li
+        v-for="(item, index) in control_items" 
+        :key="index" class="control_item"
+        :class="{'click': controlIndex === index, 'disabled': killerIndex === null && index === 1}"
+        @click="changePanel(index)"
+      >
+        {{ item }}
+      </li>
     </ul>
   </div>
   <div class="info_block">
@@ -17,31 +28,37 @@
         ></all>
     </template>
     <template v-if="(controlIndex === 1)">
-      <detail :killerIndex="killerIndex"></detail>
+      <detail
+        :killerIndex="killerIndex"
+        :killerID="killerID"
+      ></detail>
     </template>
   </div>
 </template>
 
 <script setup>
-import all from "./_all.vue"
-import detail from "./_details.vue"
+import all from "./all/_all.vue"
+import detail from "./details/_details.vue"
 import { useRouter } from "vue-router"
-import { ref, defineProps, onMounted } from "vue"
+import { ref, onMounted, onBeforeMount, computed } from "vue"
 import "@/firebase"
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
+import { useStore } from "vuex"
+import accountStore from "../../vuex/accountStore"
 
-
-const props = defineProps(["user"])
-const user_name = ref(props.user)
+const user_name = computed(() => store.state.account ? store.state.account.data.email : null)
 const router = useRouter()
 const controlIndex = ref(0)
 const killerIndex = ref(null)
+const killerID = ref(null)
 const control_items = ["All Killers", "Killers Details", "History", "Posters"]
+const store = useStore()
 
-const onFeedbackIndex = (killer_index, control_index) => {
-  controlIndex.value = control_index
-  killerIndex.value = killer_index
+const onFeedbackIndex = (id, index) => {
+  killerID.value = id
+  killerIndex.value = index
+  controlIndex.value = 1
 }
 
 // 登出功能
@@ -51,9 +68,18 @@ const logout = async() => {
   await router.push("/")
 }
 
+const backToMain = () => {
+  router.push("/")
+}
+
 const changePanel = index => {
   controlIndex.value = index
 }
+
+onBeforeMount(() => {
+  store.registerModule("account", accountStore)
+  store.dispatch("account/GETDATA")
+})
 
 onMounted(() => {
   controlIndex.value = 0
@@ -103,16 +129,16 @@ onMounted(() => {
   width: 100vw;
   min-height: 50px;
   background-color: #BBDFC5; 
-  .name{
-    float: right;
-    padding: 20px;
-    text-align: center;
-    vertical-align: middle;
-  }
 }
 .info_block{
   width: 100vw;
   height: 100vh;
   background-color: #60935D;
+}
+
+.disabled{
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: .2;
 }
 </style>

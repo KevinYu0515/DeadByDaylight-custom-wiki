@@ -49,13 +49,7 @@ const submit = async () => {
 
 onMounted(() => {
   const userData = JSON.parse(localStorage.getItem("user"))
-  if(userData){
-    router.push({
-      path: "/editor",
-      name: "Editor",
-      params:{ user: userData.email }
-    })
-  }
+  if(userData) router.push("/editor")
 })
 
 </script>

@@ -170,7 +170,6 @@ const v$ = useVuelidate(rules, state)
 
 const handleSubmit = (isFormValid, state) => {
     submitted.value = true
-    console.log(state)
     if (!isFormValid) { return }
     emits("setPerkDoc", state)
     modelStatue(0, true)
