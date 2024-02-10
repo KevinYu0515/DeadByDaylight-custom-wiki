@@ -35,7 +35,7 @@
           :key="killer"
           :data-role="killer.name"
         >
-          <a @click="passDataToRecords(killer)">
+          <router-link to="/records/Information" @click="passDataToRecords(killer.id)">
             <span class="bloodHover absolute block z-1"></span>
             <div class="imgBox absolute top-0 left-0 w-full h-full">
                 <img class="absolute top-0 left-0 w-full h-full" :src="killer.info.cover" alt="killer"/>
@@ -46,7 +46,7 @@
                 <p class="difficulty" :style="{'color':difficulty(killer)}">{{killer.info.difficulty}}</p>
               </div>
             </div>
-          </a>
+          </router-link>
         </div>
       </div>
     </section>
@@ -54,110 +54,93 @@
 </template>
 
 <script setup>
-import DBDNavbar from "../@components/Navbar/DBDNavbar.vue"
+import DBDNavbar from "../@components/Navbar/DBDNavbar.vue";
 
-import { ref, onMounted, onUpdated, computed, onBeforeUnmount } from "vue"
-import killersStore from "../vuex/killersStore"
-import { useRouter } from "vue-router"
-import { useStore } from "vuex"
-import $ from "jquery"
+import { ref, onMounted, onUpdated, computed } from "vue";
+import { useStore } from "vuex";
+import $ from "jquery";
 
-const store = useStore()
-const router = useRouter()
-
-const selectedLevel = ref("ALL")
-const searchName = ref("")
-const killers = computed(() => store.state.killers ? store.state.killers.data.killersInfo : [])
-const levelOptions = computed(() => store.state.killers ? store.state.killers.levelOptions : [])
+const store = useStore();
+const selectedLevel = ref("ALL");
+const searchName = ref("");
+const killers = computed(() => store.state.killers ? store.state.killers.data.killersInfo : []);
+const levelOptions = computed(() => store.state.killers ? store.state.killers.levelOptions : []);
 
 // 等級過濾器
 const levelGroup = computed(() =>{
-  if (selectedLevel.value !== "ALL") return killers.value.filter((item) => item.info.rank == selectedLevel.value)
-  return killers.value
-})
+  if (selectedLevel.value !== "ALL") return killers.value.filter((item) => item.info.rank == selectedLevel.value);
+  return killers.value;
+});
 
 // 名稱過濾器
 const nameGroup = computed(() => {
   if (searchName.value) {
       return killers.value.filter((item) => {
-        let name = item.info.name[0].toLowerCase()
-        let keyword = searchName.value.toLowerCase()
-        return name.indexOf(keyword) !== -1
-      })
-    } return levelGroup.value
-})
+        let name = item.info.name[0].toLowerCase();
+        let keyword = searchName.value.toLowerCase();
+        return name.indexOf(keyword) !== -1;
+      });
+    } return levelGroup.value;
+});
 
 // 經路由傳資料
-const passDataToRecords = data => {
-  router.push({
-    path:"/records",
-    name:"Records",
-    params:{ 
-        killer_information: JSON.stringify(data) 
-      }
-  })
-}
+const passDataToRecords = id => {
+  store.commit("killers/SETID", id);
+};
 
 // 難易度顏色配置
 const difficulty = role => {
-  const levelColorMap = store.state.killers.difficultyColor
-  return levelColorMap[role.info.difficulty]
-}
+  const levelColorMap = store.state.killers.difficultyColor;
+  return levelColorMap[role.info.difficulty];
+};
 
 // 生命週期
 onMounted(() => {
-  store.registerModule("killers", killersStore)
-  store.dispatch("killers/GETDATA")
+  store.dispatch("killers/GETDATA");
 }),
 
 onMounted(() => {
-  const text = document.querySelector(".mainTitle")
-  const factor = 30
+  const text = document.querySelector(".mainTitle");
+  const factor = 30;
   function shadowMove(e){
-    const { offsetWidth: width, offsetHeight: height } = text
-    let { offsetX: x, offsetY: y } = e
+    const { offsetWidth: width, offsetHeight: height } = text;
+    let { offsetX: x, offsetY: y } = e;
     if(this !== e.target){
-      x = x + e.target.offsetLeft
-      y = y + e.target.offsetTop
+      x = x + e.target.offsetLeft;
+      y = y + e.target.offsetTop;
     }
-    const xShadow = parseInt(x / width * factor - (factor / 2))
-    const yShadow = parseInt(y / height * factor - (factor / 2))
-    text.style.textShadow = `${xShadow}px ${yShadow}px 0 gray`
+    const xShadow = parseInt(x / width * factor - (factor / 2));
+    const yShadow = parseInt(y / height * factor - (factor / 2));
+    text.style.textShadow = `${xShadow}px ${yShadow}px 0 gray`;
   }
-  text.addEventListener("mousemove", shadowMove)
-})
+  text.addEventListener("mousemove", shadowMove);
+});
 
 onUpdated(() => {
   $(document).ready(function(){
     $(".card").on("mousein", function(e){
-      var x = e.pageX - $(this).offset().left
-      var y = e.pageY - $(this).offset().top
-      $(this).find("span").css({top:y, left:x})
-    })
+      var x = e.pageX - $(this).offset().left;
+      var y = e.pageY - $(this).offset().top;
+      $(this).find("span").css({top:y, left:x});
+    });
     $(".card").on("mouseout", function(e){
-      var x = e.pageX - $(this).offset().left
-      var y = e.pageY - $(this).offset().top
-      $(this).find("span").css({top:y, left:x})
-    })
-  })
-})
+      var x = e.pageX - $(this).offset().left;
+      var y = e.pageY - $(this).offset().top;
+      $(this).find("span").css({top:y, left:x});
+    });
+  });
+});
 
 onUpdated(() => {
-  let background = document.querySelector(".bg")
+  let background = document.querySelector(".bg");
   window.addEventListener("scroll", () => {
-    let value = 1 + window.scrollY / -600
-    background.style.opacity = value
-  })
-})
-
-onBeforeUnmount(() => store.unregisterModule("killers"))
+    let value = 1 + window.scrollY / -600;
+    background.style.opacity = value;
+  });
+});
 
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/scss/main.scss";
-</style>
-
-<style scoped>
-@import "../assets/css/index.css";
 </style>

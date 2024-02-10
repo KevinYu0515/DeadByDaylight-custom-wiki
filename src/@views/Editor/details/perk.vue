@@ -78,42 +78,42 @@
 </template>
 
 <script setup>
-import { ref, reactive, onUpdated, computed } from "vue"
-import useVuelidate from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
-import { cloneDeep } from "lodash-es"
-const props = defineProps(["perks", "selected"])
-const emits = defineEmits(["selectItems", "uploadData", "addPerk"])
-const perks = ref([])
-const selected = ref(true)
-const visibleRight = ref(false)
-const selectedProduct = ref()
-const expandedRowGroups = ref()
-const isAppendVisible = ref(false)
-const isAppendType = ref("Self")
-const input1 = ref(null)
-const clickInput1 = () => input1.value.click()
+import { ref, reactive, onUpdated, computed, defineProps, defineEmits } from "vue";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import { cloneDeep } from "lodash-es";
+const props = defineProps(["perks", "selected"]);
+const emits = defineEmits(["selectItems", "uploadData", "addPerk"]);
+const perks = ref([]);
+const selected = ref(true);
+const visibleRight = ref(false);
+const selectedProduct = ref();
+const expandedRowGroups = ref();
+const isAppendVisible = ref(false);
+const isAppendType = ref("Self");
+const input1 = ref(null);
+const clickInput1 = () => input1.value.click();
 
 const state = reactive({
   image: "",
   description: "",
   name: "",
   type: ""
-})
+});
 
 const rules = {
   description: { required },
   name: { required }
-}
+};
 
-const v$ = useVuelidate(rules, state)
+const v$ = useVuelidate(rules, state);
 
 const selectPerks = reactive({
   id: "",
   image: "",
   name: "",
   description: ""
-})
+});
 
 const perks_table = computed(() => {
   const list = perks.value
@@ -125,62 +125,62 @@ const perks_table = computed(() => {
                         name: data.name || "NULL",
                         image: data.image,
                         description: data.description
-                      }
-                    })
-  if(!list.some(data => data.type === "self")) list.push({type: "self", id: "0x1"})
-  if(!list.some(data => data.type === "recommend")) list.push({type: "recommend", id: "0x2"})
+                      };
+                    });
+  if(!list.some(data => data.type === "self")) list.push({type: "self", id: "0x1"});
+  if(!list.some(data => data.type === "recommend")) list.push({type: "recommend", id: "0x2"});
   list.sort((x, y) => {
-    let compare = 0
-    if(x.type > y.type) compare = -1
-    return compare
-  })
-  return list
-})
+    let compare = 0;
+    if(x.type > y.type) compare = -1;
+    return compare;
+  });
+  return list;
+});
 
 const onRowSelect = event => {
-  selectPerks.id = event.data.id
-  selectPerks.image = event.data.image
-  selectPerks.name = event.data.name
-  selectPerks.description = event.data.description
-  visibleRight.value = true
-  emits("selectItems", visibleRight.value, selectPerks)
-}
+  selectPerks.id = event.data.id;
+  selectPerks.image = event.data.image;
+  selectPerks.name = event.data.name;
+  selectPerks.description = event.data.description;
+  visibleRight.value = true;
+  emits("selectItems", visibleRight.value, selectPerks);
+};
 
 const onRowUnselect = () => {
-  selectPerks.id = ""
-  selectPerks.image = ""
-  selectPerks.name = ""
-  selectPerks.description = ""
-  visibleRight.value = false
-  emits("selectItems", visibleRight.value, selectPerks)
-}
+  selectPerks.id = "";
+  selectPerks.image = "";
+  selectPerks.name = "";
+  selectPerks.description = "";
+  visibleRight.value = false;
+  emits("selectItems", visibleRight.value, selectPerks);
+};
 
 const appendNewPerks = res => {
-  isAppendVisible.value = !isAppendVisible.value
-  isAppendType.value = res.replace(/\b\w/g, (match) => match.toUpperCase())
-}
+  isAppendVisible.value = !isAppendVisible.value;
+  isAppendType.value = res.replace(/\b\w/g, (match) => match.toUpperCase());
+};
 
 const preview = event => {
-  const files = event.target.files
-  const filename = files[0].name
+  const files = event.target.files;
+  const filename = files[0].name;
   if (filename.lastIndexOf(".") <= 0){
-    return alert("Please add a valid file!")
+    return alert("Please add a valid file!");
   }
-  const fileReader = new FileReader()
-  fileReader.addEventListener("load",() => state.image = fileReader.result)
-  fileReader.readAsDataURL(files[0])
-}
+  const fileReader = new FileReader();
+  fileReader.addEventListener("load",() => state.image = fileReader.result);
+  fileReader.readAsDataURL(files[0]);
+};
 
 const handleSubmit = (isFormValid, state) => {
-  if (!isFormValid) { return }
-  state.type = isAppendType.value.toLowerCase()
-  emits("addPerk", state)
-  isAppendVisible.value = false
-}
+  if (!isFormValid) { return; }
+  state.type = isAppendType.value.toLowerCase();
+  emits("addPerk", state);
+  isAppendVisible.value = false;
+};
 
 onUpdated(() => {
-  perks.value = cloneDeep(props.perks)
-  selected.value = props.selected
-  if(selected.value === false) onRowUnselect()
-})
+  perks.value = cloneDeep(props.perks);
+  selected.value = props.selected;
+  if(selected.value === false) onRowUnselect();
+});
 </script>

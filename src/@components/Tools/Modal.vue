@@ -4,8 +4,10 @@
       <transition name="drop-in">
         <div class="vue-modal-inner">
           <div class="vue-modal-content">
+            <button class="close-button" type="button" @click="close">
+              <i class="fi fi-br-cross-small"></i>
+            </button>
             <slot />
-            <button type="button" @click="close">Close</button>
           </div>
         </div>
       </transition>
@@ -14,7 +16,7 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted } from "vue"
+import { onMounted, onUnmounted } from "vue";
 export default {
   props: {
     open: {
@@ -24,22 +26,23 @@ export default {
   },
   setup(_, { emit }) {
     const close = () => {
-      emit("close")
-    }
+      emit("close");
+    };
     const handleKeyup = (event) => {
       if (event.keyCode === 27) {
-        close()
+        close();
       }
-    }
+    };
 
-    onMounted(() => document.addEventListener("keyup", handleKeyup))
-    onUnmounted(() => document.removeEventListener("keyup", handleKeyup))
+    onMounted(() => document.addEventListener("keyup", handleKeyup));
+    onUnmounted(() => document.removeEventListener("keyup", handleKeyup));
 
-    return { close }
+    return { close };
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
+@import url('https://cdn-uicons.flaticon.com/2.1.0/uicons-bold-rounded/css/uicons-bold-rounded.css');
 @import "@/assets/scss/modal.scss";
 </style>

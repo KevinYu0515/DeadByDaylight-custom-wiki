@@ -37,53 +37,53 @@
 </template>
 
 <script setup>
-import all from "./all/_all.vue"
-import detail from "./details/_details.vue"
-import { useRouter } from "vue-router"
-import { ref, onMounted, onBeforeMount, computed } from "vue"
-import "@/firebase"
-import firebase from "firebase/compat/app"
-import "firebase/compat/auth"
-import { useStore } from "vuex"
-import accountStore from "../../vuex/accountStore"
+import all from "@/@views/Editor/all/_all.vue";
+import detail from "@/@views/Editor/details/_details.vue";
+import { useRouter } from "vue-router";
+import { ref, onMounted, onBeforeMount, computed } from "vue";
+import "@/firebase";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import { useStore } from "vuex";
+import accountStore from "../../vuex/accountStore";
 
-const user_name = computed(() => store.state.account ? store.state.account.data.email : null)
-const router = useRouter()
-const controlIndex = ref(0)
-const killerIndex = ref(null)
-const killerID = ref(null)
-const control_items = ["All Killers", "Killers Details", "History", "Posters"]
-const store = useStore()
+const user_name = computed(() => store.state.account ? store.state.account.data.email : null);
+const router = useRouter();
+const controlIndex = ref(0);
+const killerIndex = ref(null);
+const killerID = ref(null);
+const control_items = ["All Killers", "Killers Details", "History", "Posters"];
+const store = useStore();
 
 const onFeedbackIndex = (id, index) => {
-  killerID.value = id
-  killerIndex.value = index
-  controlIndex.value = 1
-}
+  killerID.value = id;
+  killerIndex.value = index;
+  controlIndex.value = 1;
+};
 
 // 登出功能
 const logout = async() => {
-  window.localStorage.removeItem("user")
-  await firebase.auth().signOut()
-  await router.push("/")
-}
+  window.localStorage.removeItem("user");
+  await firebase.auth().signOut();
+  await router.push("/");
+};
 
 const backToMain = () => {
-  router.push("/")
-}
+  router.push("/");
+};
 
 const changePanel = index => {
-  controlIndex.value = index
-}
+  controlIndex.value = index;
+};
 
 onBeforeMount(() => {
-  store.registerModule("account", accountStore)
-  store.dispatch("account/GETDATA")
-})
+  store.registerModule("account", accountStore);
+  store.dispatch("account/GETDATA");
+});
 
 onMounted(() => {
-  controlIndex.value = 0
-})
+  controlIndex.value = 0;
+});
 
 </script>
 

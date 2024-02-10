@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import Navbar from "./Navbar.vue"
-import Footer from "../src/components/Footer/Footer.vue"
+import Navbar from "./Navbar.vue";
+import Footer from "../src/components/Footer/Footer.vue";
 export default {
   components:{ Navbar, Footer },
   data: () => ({
@@ -45,10 +45,10 @@ export default {
   }),
   methods: {
     jump: function (msg) {
-      this.$router.push({ path: msg })
+      this.$router.push({ path: msg });
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

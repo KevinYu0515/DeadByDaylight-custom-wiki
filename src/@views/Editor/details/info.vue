@@ -67,95 +67,95 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, onUpdated } from "vue"
-import useVuelidate from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
-import { cloneDeep } from "lodash-es"
-const info = ref(null)
-const isAppendVisible = ref(false)
+import { computed, reactive, ref, onUpdated, defineProps, defineEmits } from "vue";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import { cloneDeep } from "lodash-es";
+const info = ref(null);
+const isAppendVisible = ref(false);
 const columns = ref([
     { field: "type", header: "Type" },
     { field: "value", header: "Value" }
-])
-const drOptions = computed(() => props.drOptions)
-const emits = defineEmits(["updateInfo", "addInfo"])
+]);
+const drOptions = computed(() => props.drOptions);
+const emits = defineEmits(["updateInfo", "addInfo"]);
 const props = defineProps({
     info: Object, 
     drOptions: Array
-})
+});
 const infoTable = computed(() => {
-    if(info.value === null) return null
-    const result = []
+    if(info.value === null) return null;
+    const result = [];
     for(let data of Object.entries(info.value)){
-        data[0] = data[0].charAt(0).toUpperCase() + data[0].slice(1)
-        if(data[0] === "Cover" || data[0] === "Lore") continue
+        data[0] = data[0].charAt(0).toUpperCase() + data[0].slice(1);
+        if(data[0] === "Cover" || data[0] === "Lore") continue;
         else if(typeof(data[1]) === "object"){
             for(let _data of Object.entries(data[1])){
                 result.push({
                     type: `${data[0]}(${_data[0]})`,
                     value: _data[1]
-                })
+                });
             }
         }
         else{
             result.push({
                 type: data[0],
                 value: data[1]
-            })
+            });
         }
     }
-    return result
-})
+    return result;
+});
 
 const state = reactive({
   name: "",
   subname: "",
   value: ""
-})
+});
 
 const rules = {
   value: { required },
   name: { required }
-}
+};
 
-const v$ = useVuelidate(rules, state)
+const v$ = useVuelidate(rules, state);
 
 const onCellEditComplete = (event) => {
-  let { data, newValue, field } = event
-  data.type = data.type.replace(/\b\w/g, (match) => match.toLowerCase())
+  let { data, newValue, field } = event;
+  data.type = data.type.replace(/\b\w/g, (match) => match.toLowerCase());
   if(field === "value" && newValue){
       if (newValue.trim().length > 0){
           if(data.type.includes("(") && data.type.includes(")")){
-            const index1 = data.type.indexOf("(")
-            const index2 = data.type.indexOf(")")
-            data[field] = newValue
-            info.value[data.type.slice(0, index1)][data.type.slice(index1 + 1, index2)] = newValue
+            const index1 = data.type.indexOf("(");
+            const index2 = data.type.indexOf(")");
+            data[field] = newValue;
+            info.value[data.type.slice(0, index1)][data.type.slice(index1 + 1, index2)] = newValue;
           }
           else{
-            data[field] = newValue
-            info.value[data.type] = newValue
+            data[field] = newValue;
+            info.value[data.type] = newValue;
           }
       }
-      else event.preventDefault()
-      emits("updateInfo", {info: info.value})
+      else event.preventDefault();
+      emits("updateInfo", {info: info.value});
   }
-}
+};
 
 const handleSubmit = (isFormValid, state) => {
-  if (!isFormValid) { return }
-  state.name = state.name.replace(/\b\w/g, (match) => match.toLowerCase())
-  if(state.name === "name") info.value[state.name].push(state.value)
+  if (!isFormValid) { return; }
+  state.name = state.name.replace(/\b\w/g, (match) => match.toLowerCase());
+  if(state.name === "name") info.value[state.name].push(state.value);
   else if(state.subname){
-    const keys = Object.keys(info.value).map(data => data.replace(/\b\w/g, (match) => match.toLowerCase()))
-    if(keys.some(data => data === state.name)) info.value[state.name][state.subname] = state.value
-    else info.value[state.name] = {[state.subname]: state.value}
+    const keys = Object.keys(info.value).map(data => data.replace(/\b\w/g, (match) => match.toLowerCase()));
+    if(keys.some(data => data === state.name)) info.value[state.name][state.subname] = state.value;
+    else info.value[state.name] = {[state.subname]: state.value};
   }
-  else info.value[state.name] = state.value
-  emits("updateInfo", {info: info.value})
-  isAppendVisible.value = false
-}
+  else info.value[state.name] = state.value;
+  emits("updateInfo", {info: info.value});
+  isAppendVisible.value = false;
+};
 
 onUpdated(() => {
-  info.value = cloneDeep(props.info)
-})
+  info.value = cloneDeep(props.info);
+});
 </script>

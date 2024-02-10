@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { ref } from "vue"
+import { ref } from "vue";
 export default {
   name:"WarningDialog",
   props:{ isDisplay:{ type: Boolean, default: false },
@@ -37,14 +37,14 @@ export default {
         },
   emits:["childModel"],
   setup(){
-    const input1 = ref(null)
-    const clickInput1 = () => input1.value.click()
-    return { input1, clickInput1 }
+    const input1 = ref(null);
+    const clickInput1 = () => input1.value.click();
+    return { input1, clickInput1 };
   },
   methods:{
     modelStatue(i, isClear) {
-      this.$emit("childModel", i, isClear)
+      this.$emit("childModel", i, isClear);
     },
   },
-}
+};
 </script>

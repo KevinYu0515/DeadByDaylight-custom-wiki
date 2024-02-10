@@ -1,8 +1,8 @@
 /* eslint-disable quotes */
 module.exports = {
-    // publicPath: process.env.NODE_ENV === 'production'?'/website-1.0/':'/',
+    publicPath: process.env.NODE_ENV === 'production'?'/website-1.0/':'/',
     productionSourceMap: false,
-    publicPath: './',
+    // publicPath: './',
     outputDir: 'dist',
     assetsDir: 'assets',
     devServer: {
@@ -11,4 +11,4 @@ module.exports = {
         https: true,
         open: true
     },
-}
+};

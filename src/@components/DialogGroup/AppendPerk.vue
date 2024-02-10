@@ -107,50 +107,50 @@ export default {
     data() {
       return{
         usefulOptions: ([{level:"T0"}, {level:"T1"}, {level:"T2"}, {level:"T3"}, {level:"T4"}])
-      }
+      };
     }
-}
+};
 </script>
 
 <script setup>
-import { ref, reactive, defineProps, defineEmits, defineExpose, onUpdated } from "vue"
-import useVuelidate from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
+import { ref, reactive, defineProps, defineEmits, defineExpose, onUpdated } from "vue";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
-const props = defineProps(["isDisplay","isEdit","perkData","perkIndex","perkList"])
-const isDisplay = ref(null)
-const isEdit = ref(null)
-const disable = ref([false])
-const perkIndex = ref(null)
-const perkData = ref(null)
-const perkName = ref(null)
-const perkID = ref(null)
-const perkList = ref(null)
-const defaulted = ref(false)
+const props = defineProps(["isDisplay","isEdit","perkData","perkIndex","perkList"]);
+const isDisplay = ref(null);
+const isEdit = ref(null);
+const disable = ref([false]);
+const perkIndex = ref(null);
+const perkData = ref(null);
+const perkName = ref(null);
+const perkID = ref(null);
+const perkList = ref(null);
+const defaulted = ref(false);
 
 onUpdated(()=>{
-  isDisplay.value = props.isDisplay
-  isEdit.value = props.isEdit
+  isDisplay.value = props.isDisplay;
+  isEdit.value = props.isEdit;
   if(isEdit.value){
-    perkData.value = props.perkData
-    perkList.value = props.perkList
-    perkIndex.value = props.perkIndex
-    perkName.value = perkData.value.name
-    perkID.value = perkData.value.id
+    perkData.value = props.perkData;
+    perkList.value = props.perkList;
+    perkIndex.value = props.perkIndex;
+    perkName.value = perkData.value.name;
+    perkID.value = perkData.value.id;
     if(!defaulted.value){
-      state.newPerkName = perkData.value.name
-      state.newPerkInfor = perkData.value.illustrate
-      state.newPerkUseful = perkData.value.usefulness
-      defaulted.value = true
+      state.newPerkName = perkData.value.name;
+      state.newPerkInfor = perkData.value.illustrate;
+      state.newPerkUseful = perkData.value.usefulness;
+      defaulted.value = true;
     }
   }
-})
+});
 
-const input1 = ref(null)
-const submitted = ref(false)
+const input1 = ref(null);
+const submitted = ref(false);
 const clickInput1 = () => {
-  input1.value.click()
-}
+  input1.value.click();
+};
 
 const state = reactive({
     newPerkName: "",
@@ -158,68 +158,64 @@ const state = reactive({
     newPerkUseful: "",
     perkData: null,
     perkUrl: ""
-})
+});
 
 const rules = {
   newPerkName: { required },
   newPerkInfor: { required },
   newPerkUseful: { required }
-}
+};
 
-const v$ = useVuelidate(rules, state)
+const v$ = useVuelidate(rules, state);
 
 const handleSubmit = (isFormValid, state) => {
-    submitted.value = true
-    if (!isFormValid) { return }
-    emits("setPerkDoc", state)
-    modelStatue(0, true)
-}
+    submitted.value = true;
+    if (!isFormValid) { return; }
+    emits("setPerkDoc", state);
+    modelStatue(0, true);
+};
 
 const previewImage = event => {
-  const files = event.target.files
-  let filename = files[0].name
+  const files = event.target.files;
+  let filename = files[0].name;
   if (filename.lastIndexOf(".") <= 0){
-    return alert("Please add a valid file!")
+    return alert("Please add a valid file!");
   }
-  const fileReader = new FileReader()
+  const fileReader = new FileReader();
   fileReader.addEventListener("load",()=>{
-    state.perkUrl = fileReader.result
-  })
-  fileReader.readAsDataURL(files[0])
-  state.perkData = files[0]
-  emits("uploadImg", files[0])
-}
+    state.perkUrl = fileReader.result;
+  });
+  fileReader.readAsDataURL(files[0]);
+  state.perkData = files[0];
+  emits("uploadImg", files[0]);
+};
 
 const modelStatue = (i, isClear) =>{
-  emits("childModel", i, isClear)
-  submitted.value = false
-}
+  emits("childModel", i, isClear);
+  submitted.value = false;
+};
 
 const clearData = () => {
   state.newPerkInfor = "",
   state.newPerkName = "",
   state.newPerkUseful = "",
   state.perkData = null,
-  state.perkUrl = ""
-}
+  state.perkUrl = "";
+};
 
 const updatePerk = (id, dis, options, optionsValue) => {
-  emits("updatePerk", id, options, optionsValue)
-  disable.value[dis] = true
-}
+  emits("updatePerk", id, options, optionsValue);
+  disable.value[dis] = true;
+};
 
 const complete = (perk, list) => {
-  emits("complete", perkIndex.value)
-  emits("replace", perk, list)
-  disable.value = [false]
-  defaulted.value = false
-}
+  emits("complete", perkIndex.value);
+  emits("replace", perk, list);
+  disable.value = [false];
+  defaulted.value = false;
+};
 
-const emits = defineEmits(["uploadImg", "childModel", "setPerkDoc", "updatePerk", "replace", "complete"])
-defineExpose({ clearData })
+const emits = defineEmits(["uploadImg", "childModel", "setPerkDoc", "updatePerk", "replace", "complete"]);
+defineExpose({ clearData });
 
 </script>
-
-<style scoped>
-@import "../../assets/css/index.css";
-</style>

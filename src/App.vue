@@ -1,8 +1,19 @@
 <template>
   <div class="app">
-    <router-view />
+    <router-view :key="store.state.killers.data.character_id"/>
   </div>
 </template>
+
+<script setup>
+import { onBeforeMount } from "vue";
+import { useStore } from "vuex";
+import killersStore from "@/vuex/killersStore";
+
+const store = useStore();
+onBeforeMount(() => {
+  if(!store.state.killers) store.registerModule("killers", killersStore);
+});
+</script>
 
 <style>
 

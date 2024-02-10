@@ -54,24 +54,24 @@
 </template>
 
 <script setup>
-import { onUpdated, ref, reactive } from "vue"
-import useVuelidate from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
-import { Timestamp } from "@firebase/firestore"
-const props = defineProps(["drOptions", "levelOptions"])
-const emits = defineEmits(["addKiller", "onUpload", "backToKiller"])
+import { onUpdated, ref, reactive, defineProps, defineEmits } from "vue";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import { Timestamp } from "@firebase/firestore";
+const props = defineProps(["drOptions", "levelOptions"]);
+const emits = defineEmits(["addKiller", "onUpload", "backToKiller"]);
 
-const drOptions = ref([])
-const levelOptions = ref([])
-const input1 = ref(null)
-const submitted = ref(false)
+const drOptions = ref([]);
+const levelOptions = ref([]);
+const input1 = ref(null);
+const submitted = ref(false);
 const clickInput1 = () => {
-  input1.value.click()
-}
+  input1.value.click();
+};
 
 const backToKiller = () => {
-  emits("backToKiller", false)
-}
+  emits("backToKiller", false);
+};
 
 const state = reactive({
   build: "",
@@ -91,7 +91,7 @@ const state = reactive({
     power: "",
     weapon: ""
   }
-})
+});
 
 const rules = {
   info: {
@@ -99,42 +99,42 @@ const rules = {
     name: { required },
     difficulty: { required }
   }
-}
+};
 
-const v$ = useVuelidate(rules, state)
+const v$ = useVuelidate(rules, state);
 
 const previewImage = event => {
-  const files = event.target.files
-  let filename = files[0].name
+  const files = event.target.files;
+  let filename = files[0].name;
   if (filename.lastIndexOf(".") <= 0){
-    return alert("Please add a valid file!")
+    return alert("Please add a valid file!");
   }
-  const fileReader = new FileReader()
+  const fileReader = new FileReader();
   fileReader.addEventListener("load",()=>{
-    state.info.cover = fileReader.result
-  })
-  fileReader.readAsDataURL(files[0])
-  emits("onUpload", files[0])
-}
+    state.info.cover = fileReader.result;
+  });
+  fileReader.readAsDataURL(files[0]);
+  emits("onUpload", files[0]);
+};
 
 const handleSubmit = (isFormValid, state) => {
-  submitted.value = true
-  if (!isFormValid) { return }
-  state.build = Timestamp.fromDate(new Date())
-  console.log(state.build)
-  emits("addKiller", state)
-  clearData()
-}
+  submitted.value = true;
+  if (!isFormValid) { return; }
+  state.build = Timestamp.fromDate(new Date());
+  console.log(state.build);
+  emits("addKiller", state);
+  clearData();
+};
 
 const clearData = () => {
-  state.name = ""
-  state.difficulty = ""
-  state.cover = ""
-  state.rank = ""
-}
+  state.name = "";
+  state.difficulty = "";
+  state.cover = "";
+  state.rank = "";
+};
 
 onUpdated(() => {
-  drOptions.value = props.drOptions
-  levelOptions.value = props.levelOptions
-})
+  drOptions.value = props.drOptions;
+  levelOptions.value = props.levelOptions;
+});
 </script>

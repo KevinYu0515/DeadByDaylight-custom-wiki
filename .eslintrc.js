@@ -21,9 +21,8 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    "semi": ['error', "always"],
     "quotes":['error',"double"],
-    "semi":[1,"never"],
-    "vue/no-mutating-props":0,
-    "no-undef": 0
+    "vue/no-mutating-props":0
   }
 }

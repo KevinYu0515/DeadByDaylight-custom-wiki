@@ -19,38 +19,38 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from "vue"
-import { useRouter } from "vue-router"
-import Navbar from "../../@components/Navbar/DBDNavbar.vue"
-import "@/firebase"
-import firebase from "firebase/compat/app"
-import "firebase/compat/auth"
+import { onMounted, reactive } from "vue";
+import { useRouter } from "vue-router";
+import Navbar from "../../@components/Navbar/DBDNavbar.vue";
+import "@/firebase";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
 
 const user = reactive({
   email: "",
   password: ""
-})
+});
 
-const router = useRouter()
-const jump = (msg) => { router.push(msg) }
+const router = useRouter();
+const jump = (msg) => { router.push(msg); };
 const submit = async () => {
   try{
-    await firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-    window.localStorage.setItem("user", JSON.stringify(user))
+    await firebase.auth().signInWithEmailAndPassword(user.email, user.password);
+    window.localStorage.setItem("user", JSON.stringify(user));
     router.push({
       path: "/editor",
       name: "Editor",
       params:{ user: user.email }
-    })
+    });
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
-}
+};
 
 onMounted(() => {
-  const userData = JSON.parse(localStorage.getItem("user"))
-  if(userData) router.push("/editor")
-})
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if(userData) router.push("/editor");
+});
 
 </script>
 

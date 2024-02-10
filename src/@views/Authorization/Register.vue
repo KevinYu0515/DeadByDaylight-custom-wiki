@@ -17,35 +17,35 @@
 </template>
 
 <script>
-import { useRouter } from "vue-router"
-import firebase from "firebase/compat/app"
-import "firebase/compat/auth"
+import { useRouter } from "vue-router";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
 
 export default {
   setup(){
-    const router = useRouter()
-    const back = (msg) => {  router.push(msg) }
-    return { back }
+    const router = useRouter();
+    const back = (msg) => {  router.push(msg); };
+    return { back };
   },
 
   data() {
     return{ 
       email:"",
       password:""
-    }
+    };
   },
 
   methods:{
     async submit(){
       try{
-        firebase.auth().createUserWithEmailAndPassword(this. email, this.password)
-        this.$router.push("/login")
+        firebase.auth().createUserWithEmailAndPassword(this. email, this.password);
+        this.$router.push("/login");
       }catch(err){
-        console.log(err)
+        console.log(err);
       }
     },
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

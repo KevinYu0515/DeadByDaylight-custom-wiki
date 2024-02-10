@@ -22,44 +22,44 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onBeforeUnmount } from "vue"
-import { useStore } from "vuex"
-import appendNewRole from "./appendNewRole.vue"
-import killersStore from "../../../vuex/killersStore"
+import { computed, ref, onMounted, defineEmits } from "vue";
+import { useStore } from "vuex";
+import appendNewRole from "./appendNewRole.vue";
+import killersStore from "../../../vuex/killersStore";
 
-const create = ref(false)
-const store = useStore()
-const drOptions =  computed(() => store.state.killers ? store.state.killers.drOptions : [])
-const levelOptions = computed(() => store.state.killers ? store.state.killers.levelOptions : [])
-const killers = computed(() => store.state.killers ? store.state.killers.data.killersInfo : [] )
+const create = ref(false);
+const store = useStore();
+const drOptions =  computed(() => store.state.killers ? store.state.killers.drOptions : []);
+const levelOptions = computed(() => store.state.killers ? store.state.killers.levelOptions : []);
+const killers = computed(() => store.state.killers ? store.state.killers.data.killersInfo : [] );
 
 // 資料處裡表達式
 const addKiller = data => {
-  store.dispatch("killers/ADDROLE", data)
-  create.value = !create.value
-}
-const onUpload = img => store.dispatch("killers/UPLOADIMG", "killersCover", img)
+  store.dispatch("killers/ADDROLE", data);
+  create.value = !create.value;
+};
+const onUpload = img => store.dispatch("killers/UPLOADIMG", "killersCover", img);
 
 const btnToDetails = (id, index) => {
-  emits("feedbackIndex", id, index)
-}
+  emits("feedbackIndex", id, index);
+};
 
 const btnToAppend = () => {
-  create.value = !create.value
-}
+  create.value = !create.value;
+};
 
 const btnToKiller = res => {
-  create.value = res
-}
+  create.value = res;
+};
 
-const emits = defineEmits(["feedbackIndex"])
+const emits = defineEmits(["feedbackIndex"]);
 
 onMounted(() => {
-  store.registerModule("killers", killersStore)
-  store.dispatch("killers/GETDATA")
-})
+  if(store.state.killers) store.unregisterModule("killers");
+  store.registerModule("killers", killersStore);
+  store.dispatch("killers/GETDATA");
+});
 
-onBeforeUnmount(() => store.unregisterModule("killers"))
 </script>
 
 <style lang="scss" scoped>

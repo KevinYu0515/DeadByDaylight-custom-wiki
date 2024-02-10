@@ -76,111 +76,98 @@
 </template>
 
 <script setup>
-import { ref, onUpdated, computed, reactive } from "vue"
-import useVuelidate from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
-const props = defineProps(["addOnes", "tabIndex", "selected"])
-const emits = defineEmits(["selectItems", "lastIndex", "addAddOnes"])
-const isAppendType = ref("Common")
-const isAppendVisible = ref(false)
-const addOnes = ref([])
-const expandedRowGroups = ref()
-const selectedProduct = ref()
-const visibleRight = ref(false)
-const input1 = ref()
-const clickInput1 = () => input1.value.click()
-const selected = ref(null)
+import { ref, onUpdated, computed, reactive, defineProps, defineEmits } from "vue";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+const props = defineProps(["addOnes", "tabIndex", "selected"]);
+const emits = defineEmits(["selectItems", "lastIndex", "addAddOnes"]);
+const isAppendType = ref("Common");
+const isAppendVisible = ref(false);
+const addOnes = ref([]);
+const expandedRowGroups = ref();
+const selectedProduct = ref();
+const visibleRight = ref(false);
+const input1 = ref();
+const clickInput1 = () => input1.value.click();
+const selected = ref(null);
 const selectOnes = reactive({
     id: "",
     image: "",
     name: "",
     description: ""
-})
+});
 
 const state = reactive({
   image: "",
   description: "",
   name: "",
   rarity: ""
-})
+});
 
 const rules = {
   description: { required },
   name: { required }
-}
+};
 
-const v$ = useVuelidate(rules, state)
+const v$ = useVuelidate(rules, state);
 
 const add_ones_table = computed(() => {
-    const list = addOnes.value.map(data => {
-        return {
-            id: data.id,
-            rarity: data.rarity,
-            name: data.name,
-            image: data.image,
-            description: data.description
-        }
-    })
-    if(!list.some(data => data.rarity === "common")) list.push({rarity: "common", id: "0x0"})
-    if(!list.some(data => data.rarity === "uncommon")) list.push({rarity: "uncommon" , id: "0x1"})
-    if(!list.some(data => data.rarity === "rare")) list.push({rarity: "rare", id: "0x2"})
-    if(!list.some(data => data.rarity === "very rare")) list.push({rarity: "very rare", id: "0x3"})
-    if(!list.some(data => data.rarity === "ultra rare")) list.push({rarity: "ultra rare", id: "0x4"})
-    const map = {
-      common: [],
-      uncommon: [],
-      rare: [],
-      "very rare": [],
-      "ultra rare": []
+  if(Object.keys(addOnes.value).length !== 0){
+    const result = [];
+    let idx = 0;
+    for(const [key, value] of Object.entries(addOnes.value)){
+      if(Object.keys(value).length === 0) result.push({rarity: key, id: `0x${idx++}`});
+      else result.push(...addOnes.value[key]);
     }
-    for(let i = 0; i < list.length; i++) map[list[i].rarity].push(list[i])
-    return [...map["common"], ...map["uncommon"], ...map["rare"], ...map["very rare"], ...map["ultra rare"]] 
-})
+    return result;
+  }
+  return [];
+});
 
 const onRowSelect = (event) => {
-    selectOnes.id = event.data.id
-    selectOnes.image = event.data.image
-    selectOnes.name = event.data.name
-    selectOnes.description = event.data.description
-    visibleRight.value = true
-    emits("selectItems", visibleRight.value, selectOnes)
-}
+    selectOnes.id = event.data.id;
+    selectOnes.image = event.data.image;
+    selectOnes.name = event.data.name;
+    selectOnes.description = event.data.description;
+    visibleRight.value = true;
+    emits("selectItems", visibleRight.value, selectOnes);
+};
 
 const onRowUnselect = () => {
-    selectOnes.id = ""
-    selectOnes.image = ""
-    selectOnes.name = ""
-    selectOnes.description = ""
-    visibleRight.value = false
-    emits("selectItems", visibleRight.value, selectOnes)
-}
+    selectOnes.id = "";
+    selectOnes.image = "";
+    selectOnes.name = "";
+    selectOnes.description = "";
+    visibleRight.value = false;
+    emits("selectItems", visibleRight.value, selectOnes);
+};
 
 const appendNewAddOnes = res => {
-  isAppendVisible.value = !isAppendVisible.value
-  isAppendType.value = res.replace(/\b\w/g, (match) => match.toUpperCase())
-}
+  isAppendVisible.value = !isAppendVisible.value;
+  isAppendType.value = res.replace(/\b\w/g, (match) => match.toUpperCase());
+};
 
 const handleSubmit = (isFormValid, state) => {
-  if (!isFormValid) { return }
-  state.rarity = isAppendType.value.toLowerCase()
-  emits("addAddOnes", state)
-  isAppendVisible.value = false
-}
+  if (!isFormValid) { return; }
+  state.rarity = isAppendType.value.toLowerCase();
+  emits("addAddOnes", state);
+  isAppendVisible.value = false;
+};
 
 const preview = event => {
-  const files = event.target.files
-  const filename = files[0].name
+  const files = event.target.files;
+  const filename = files[0].name;
   if (filename.lastIndexOf(".") <= 0){
-    return alert("Please add a valid file!")
+    return alert("Please add a valid file!");
   }
-  const fileReader = new FileReader()
-  fileReader.addEventListener("load",() => state.image = fileReader.result)
-  fileReader.readAsDataURL(files[0])
-}
+  const fileReader = new FileReader();
+  fileReader.addEventListener("load",() => state.image = fileReader.result);
+  fileReader.readAsDataURL(files[0]);
+};
 
 onUpdated(() => {
-    addOnes.value = props.addOnes
-    selected.value = props.selected
-    if(!selected.value) onRowUnselect()
-})
+    addOnes.value = props.addOnes;
+    selected.value = props.selected;
+    if(!selected.value) onRowUnselect();
+});
 </script>

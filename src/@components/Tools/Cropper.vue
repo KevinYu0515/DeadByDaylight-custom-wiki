@@ -84,61 +84,61 @@
           enlarge: 1,          //图片根据截图框输出比例倍数
           mode: "230px 150px"  //图片默认渲染方式
         }
-      }
+      };
     },
     methods: {
       //初始化函数
       imgLoad (msg) {
-        console.log("工具初始化函数====="+msg)
+        console.log("工具初始化函数====="+msg);
       },
       //图片缩放
       changeScale (num) {
-        num = num || 1
-        this.$refs.cropper.changeScale(num)
+        num = num || 1;
+        this.$refs.cropper.changeScale(num);
       },
       //向左旋转
       rotateLeft () {
-        this.$refs.cropper.rotateLeft()
+        this.$refs.cropper.rotateLeft();
       },
       //向右旋转
       rotateRight () {
-        this.$refs.cropper.rotateRight()
+        this.$refs.cropper.rotateRight();
       },
       //实时预览函数
       realTime (data) {
-        this.previews = data
+        this.previews = data;
       },
       //选择图片
       selectImg (e) {
-        let file = e.target.files[0]
+        let file = e.target.files[0];
         if (!/\.(jpg|jpeg|png|JPG|PNG)$/.test(e.target.value)) {
           this.$message({
             message: "图片类型要求：jpeg、jpg、png",
             type: "error"
-          })
-          return false
+          });
+          return false;
         }
-        let reader = new FileReader()
+        let reader = new FileReader();
         reader.onload = (e) => {
-          let data
-          if (typeof e.target.result === "object") data = window.URL.createObjectURL(new Blob([e.target.result]))
-          else data = e.target.result
-          this.option.img = data
-        }
-        reader.readAsDataURL(file)
+          let data;
+          if (typeof e.target.result === "object") data = window.URL.createObjectURL(new Blob([e.target.result]));
+          else data = e.target.result;
+          this.option.img = data;
+        };
+        reader.readAsDataURL(file);
       },
       uploadImg (type) {
-        const _this = this
+        const _this = this;
         if (type === "blob") {
           this.$refs.cropper.getCropBlob(data => {
-            const file = new File([data], _this.Name, {type: "img/png"})
-            console.log(file)
-            _this.$emit("uploadImgSuccess", file, _this.killerOption)
-            })
+            const file = new File([data], _this.Name, {type: "img/png"});
+            console.log(file);
+            _this.$emit("uploadImgSuccess", file, _this.killerOption);
+            });
           }
         }
     },
-  }
+  };
   </script>
   
   <style scoped lang="scss">

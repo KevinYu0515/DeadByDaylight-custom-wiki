@@ -87,100 +87,96 @@
 </template>
 
 <script setup>
-import DBDNavbar from "../@components/Navbar/DBDNavbar.vue"
-import SimpleDialog from "../@components/DialogGroup/SimpleDialog.vue"
-import AppendPerk from "../@components/DialogGroup/AppendPerk.vue"
-import { ref,  onMounted, computed, onBeforeUnmount } from "vue"
-import { useStore } from "vuex"
-import perksStore from "../vuex/perksStore"
-import $ from "jquery"
+import DBDNavbar from "../@components/Navbar/DBDNavbar.vue";
+import SimpleDialog from "@/@components/DialogGroup/SimpleDialog.vue";
+import AppendPerk from "@/@components/DialogGroup/AppendPerk.vue";
+import { ref,  onMounted, computed, onBeforeUnmount } from "vue";
+import { useStore } from "vuex";
+import perksStore from "../vuex/perksStore";
+import $ from "jquery";
 
-const store = useStore()
-const displayEdit = ref([false])
-const displayModel = ref([false])
-const appendPerk = ref(null)
-const clickIndex = ref([])
-const perksClick = ref([])
-const isClick = ref([false])
+const store = useStore();
+const displayEdit = ref([false]);
+const displayModel = ref([false]);
+const appendPerk = ref(null);
+const clickIndex = ref([]);
+const perksClick = ref([]);
+const isClick = ref([false]);
 const perks = computed(() => {
   if(store.state.perks){
-    const res = store.state.perks.fbPerks
-    $(".illustrated").css("height", `${res.length / 8 * 120}px`)
-    return res
+    const res = store.state.perks.fbPerks;
+    $(".illustrated").css("height", `${res.length / 8 * 120}px`);
+    return res;
   }
-  return []
-})
+  return [];
+});
 
 // 技能圖示排版
 const topCalc = i => {
-  let index = 200
-  if(i <= 7) index += (i % 2) * 55
-  else index += (i % 2) * 55 + (2 * Math.floor(i / 16)) * 55
-  index = index.toString() + "%"
-  return index
-}
+  let index = 200;
+  if(i <= 7) index += (i % 2) * 55;
+  else index += (i % 2) * 55 + (2 * Math.floor(i / 16)) * 55;
+  index = index.toString() + "%";
+  return index;
+};
 
 const leftCalc = i => {
-  let index = 80
-  index += i % 16 * 13
-  index = index.toString() + "%"
-  return index
-}
+  let index = 80;
+  index += i % 16 * 13;
+  index = index.toString() + "%";
+  return index;
+};
 
 // 技能點擊
 const clickPerk = (e, n) => {
-  isClick.value[n] = !isClick.value[n]
+  isClick.value[n] = !isClick.value[n];
   if(isClick.value[n]){
-    perksClick.value.unshift(e)
-    clickIndex.value.unshift(n)
+    perksClick.value.unshift(e);
+    clickIndex.value.unshift(n);
   }else{
     for(let i=0; i<perksClick.value.length;i++){
       if(perksClick.value[i].name == e.name){
-        perksClick.value.splice(i,1)
-        clickIndex.value.splice(i,1)
-      } else console.log("false")
+        perksClick.value.splice(i,1);
+        clickIndex.value.splice(i,1);
+      } else console.log("false");
     }
   }
-}
+};
 
 // 替換技能資料
 const replacePerk = (perk, perks) => {
   for(let i=0; i<perksClick.value.length;i++){
-    if(perksClick.value[i] == perk) perksClick.value.splice(i,1,perks[clickIndex.value[i]])
+    if(perksClick.value[i] == perk) perksClick.value.splice(i,1,perks[clickIndex.value[i]]);
   }
-}
+};
 
 // 清除所選技能
 const clearPerksClick = () => {
-  isClick.value = [false]
-  perksClick.value = []
-}
+  isClick.value = [false];
+  perksClick.value = [];
+};
 
 // 資料處理表達式
-const addPerk = perkData => store.dispatch("perks/ADDDATA", perkData)
-const updatePerk = (id, options ,optionsValue) => store.dispatch("perks/UPDATEDATA", {id, options, optionsValue})
-const onUpload = perk => store.dispatch("perks/UPLOADDATA", perk)
+const addPerk = perkData => store.dispatch("perks/ADDDATA", perkData);
+const updatePerk = (id, options ,optionsValue) => store.dispatch("perks/UPDATEDATA", {id, options, optionsValue});
+const onUpload = perk => store.dispatch("perks/UPLOADDATA", perk);
 
 // 彈出視窗狀態控制
-const editStatue = i => displayEdit.value[i] = !displayEdit.value[i]
+const editStatue = i => displayEdit.value[i] = !displayEdit.value[i];
 const modelStatue = (i, isClear) => {
-  displayModel.value[i] = !displayModel.value[i]
-  if(isClear) appendPerk.value.clearData()
-}
+  displayModel.value[i] = !displayModel.value[i];
+  if(isClear) appendPerk.value.clearData();
+};
 
 // 生命週期
 onMounted(() => {
-  store.registerModule("perks", perksStore)
-  store.dispatch("perks/GETDATA")
-})
-onBeforeUnmount(() => store.unregisterModule("perks"))
+  store.registerModule("perks", perksStore);
+  store.dispatch("perks/GETDATA");
+});
+onBeforeUnmount(() => store.unregisterModule("perks"));
 
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/scss/perks.scss";
-</style>
-
-<style scoped>
-@import "../assets/css/index.css";
 </style>

@@ -81,96 +81,96 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onBeforeMount, onUpdated, computed, reactive } from "vue"
-import killersStore from "../../../vuex/killersStore"
-import perksStore from "../../../vuex/perksStore"
-import { useRouter } from "vue-router"
-import { useStore } from "vuex"
-import Perk from "./perk.vue"
-import Info from "./info.vue"
-import AddOnes from "./add_ones.vue"
-import Lore from "./lore.vue"
-import Settings from "./settings.vue"
-import $ from "jquery"
-import { cloneDeep } from "lodash-es"
-import { useToast } from "primevue/usetoast"
+import { ref, onBeforeMount, onUpdated, computed, reactive, defineProps } from "vue";
+import killersStore from "../../../vuex/killersStore";
+import perksStore from "../../../vuex/perksStore";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import Perk from "./perk.vue";
+import Info from "./info.vue";
+import AddOnes from "./add_ones.vue";
+import Lore from "./lore.vue";
+import Settings from "./settings.vue";
+import $ from "jquery";
+import { cloneDeep } from "lodash-es";
+import { useToast } from "primevue/usetoast";
 
-const store = useStore()
-const toast = useToast()
-const tabIndex = ref(0)
-const props = defineProps({"killerIndex": Number, "killerID": String})
-const visibleRight = ref(null)
-const router = useRouter()
+const store = useStore();
+const toast = useToast();
+const tabIndex = ref(0);
+const props = defineProps({"killerIndex": Number, "killerID": String});
+const visibleRight = ref(null);
+const router = useRouter();
 const selectOnes = reactive({
   id: "",
   image: "",
   name: "",
   description: ""
-})
-const killer = computed(() => store.state.killers ? store.state.killers.data.killersInfo[props.killerIndex] : null)
-const perks = computed(() => store.state.killers ? store.state.killers.data.perks : [])
-const addOnes = computed(() => store.state.killers ? store.state.killers.data.addOnes : [])
-const drOptions = computed(() => store.state.killers ? store.state.killers.drOptions : [])
+});
+const killer = computed(() => store.state.killers ? store.state.killers.data.killersInfo[props.killerIndex] : null);
+const perks = computed(() => store.state.killers ? store.state.killers.data.perks : []);
+const addOnes = computed(() => store.state.killers ? store.state.killers.data.addOnes : {});
+const drOptions = computed(() => store.state.killers ? store.state.killers.drOptions : []);
 const items = ref([
   {
       label: "Perk",
       icon: "pi pi-fw pi-home",
       command: () => {
-        tabIndex.value = 0
+        tabIndex.value = 0;
       }
   },
   {
       label: "Info",
       icon: "pi pi-fw pi-calendar",
       command: () => {
-        tabIndex.value = 1
+        tabIndex.value = 1;
       }
   },
   {
       label: "Add-Ones",
       icon: "pi pi-th-large",
       command: () => {
-        tabIndex.value = 2
+        tabIndex.value = 2;
       }
   },
   {
       label: "Lore",
       icon: "pi pi-bookmark",
       command: () => {
-        tabIndex.value = 3
+        tabIndex.value = 3;
       }
   },
   {
       label: "Settings",
       icon: "pi pi-fw pi-file",
       command: () => {
-        tabIndex.value = 4
+        tabIndex.value = 4;
       }
   }
-])
+]);
 
 const Onselect = (isVisible, selectItems) => {
-  visibleRight.value = isVisible
-  selectOnes.id = selectItems.id
-  selectOnes.image = selectItems.image
-  selectOnes.name = selectItems.name
-  selectOnes.description = selectItems.description
-}
+  visibleRight.value = isVisible;
+  selectOnes.id = selectItems.id;
+  selectOnes.image = selectItems.image;
+  selectOnes.name = selectItems.name;
+  selectOnes.description = selectItems.description;
+};
 
 const updateInfo = (data, isLore) => {
   if(isLore){
-    const info = cloneDeep(killer.value.info)
-    info.lore = data
-    data = {info: info}
+    const info = cloneDeep(killer.value.info);
+    info.lore = data;
+    data = {info: info};
   }
   store.dispatch("killers/UPDATEDATA", {
     killerID: killer.value.id,
     data
-  })
-  toast.add({ severity: "success", summary: "修改通知", detail: "修改成功", life: 3000 })
-}
+  });
+  toast.add({ severity: "success", summary: "修改通知", detail: "修改成功", life: 3000 });
+};
 
-const uploadData = perk => store.dispatch("perks/UPLOADDATA", perk)
+const uploadData = perk => store.dispatch("perks/UPLOADDATA", perk);
 
 const updateData = data => {
   store.dispatch("killers/UPDATEDATA", {
@@ -178,51 +178,48 @@ const updateData = data => {
     id: data.id,
     option: tabIndex.value == 0 ? "perk" : "addOnes",
     data,
-  })
-  visibleRight.value = false
-  toast.add({ severity: "success", summary: "修改通知", detail: "修改成功", life: 3000 })
-}
+  });
+  visibleRight.value = false;
+  toast.add({ severity: "success", summary: "修改通知", detail: "修改成功", life: 3000 });
+};
 
 const addPerk = data => {
   store.dispatch("killers/ADDPERK", {
     id: killer.value.id, 
     data
-  })
-  toast.add({ severity: "success", summary: "新增通知", detail: "新增成功", life: 3000 })
-}
+  });
+  toast.add({ severity: "success", summary: "新增通知", detail: "新增成功", life: 3000 });
+};
 
 const addAddOnes = data => {
   store.dispatch("killers/ADDADDONES", {
     id: killer.value.id,
     data
-  })
-  toast.add({ severity: "success", summary: "新增通知", detail: "新增成功", life: 3000 })
-}
+  });
+  toast.add({ severity: "success", summary: "新增通知", detail: "新增成功", life: 3000 });
+};
 
 const deleteKiller = () => {
-  router.push("/")
-  store.dispatch("killers/DELETEROLE", killer.value.id)
-}
+  router.push("/");
+  store.dispatch("killers/DELETEROLE", killer.value.id);
+};
 
 
 onBeforeMount(() => {
-  store.registerModule("killers", killersStore)
-  store.registerModule("perks", perksStore)
-  store.dispatch("killers/GETDATA")
-  store.dispatch("killers/GETPERK", props.killerID)
-  store.dispatch("killers/GETADDONES", props.killerID)
-})
+  if(store.state.killers) store.unregisterModule("killers");
+  if(store.state.perks) store.unregisterModule("perks");
+  store.registerModule("killers", killersStore);
+  store.registerModule("perks", perksStore);
+  store.dispatch("killers/GETDATA");
+  store.dispatch("killers/GETPERK", props.killerID);
+  store.dispatch("killers/GETADDONES", props.killerID);
+});
 
 onUpdated(() => {
-  if(tabIndex.value !== 2 && tabIndex.value !== 0) visibleRight.value = false
-  const close  = $("button[aria-label='close']")
-  if(close) close.onClick = () => visibleRight.value = false
-})
-
-onBeforeUnmount(() => {
-  store.unregisterModule("killers")
-  store.unregisterModule("perks")
-})
+  if(tabIndex.value !== 2 && tabIndex.value !== 0) visibleRight.value = false;
+  const close  = $("button[aria-label='close']");
+  if(close) close.onClick = () => visibleRight.value = false;
+});
 
 </script>
 

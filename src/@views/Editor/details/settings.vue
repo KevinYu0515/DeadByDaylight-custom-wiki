@@ -14,10 +14,11 @@
 </template>
 
 <script setup>
-import moment from "moment"
-const props = defineProps(["build"])
-const emits = defineEmits(["delete"])
+import { defineProps, defineEmits } from "vue";
+import moment from "moment";
+const props = defineProps(["build"]);
+const emits = defineEmits(["delete"]);
 
-const Date = moment.unix(props.build.seconds).add(props.build.nanoseconds / 1000000, "milliseconds")
-const Fordate = Date.format("YYYY-MM-DD HH:mm:ss.SSS")
+const Date = moment.unix(props.build.seconds).add(props.build.nanoseconds / 1000000, "milliseconds");
+const Fordate = Date.format("YYYY-MM-DD HH:mm:ss.SSS");
 </script>

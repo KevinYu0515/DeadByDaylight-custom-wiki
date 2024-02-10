@@ -17,16 +17,16 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue"
-const props = defineProps(["lore"])
-const emits = defineEmits(["updateData"])
-const lore = ref(null)
+import { onMounted, ref, defineProps, defineEmits } from "vue";
+const props = defineProps(["lore"]);
+const emits = defineEmits(["updateData"]);
+const lore = ref(null);
 
 const updateData = (() => {
-  emits("updateData", lore.value, true)
-})
+  emits("updateData", lore.value, true);
+});
 
 onMounted(() => {
-  lore.value = props.lore
-})
+  lore.value = props.lore;
+});
 </script>
