@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import "@/assets/scss/records/lore.scss";
+import "@/assets/scss/character/lore.scss";
 import { defineProps, ref, onBeforeMount, onMounted } from "vue";
 const props = defineProps(["character_data"]);
 const character_data = ref(null);

@@ -22,7 +22,7 @@ const routes = [
   {
     path:"/records/:record_option",
     name: "Record_option",
-    component:()=> import(/* webpackChunkName: "records" */ "@/@views/records/Records.vue"),
+    component:()=> import(/* webpackChunkName: "records" */ "@/@views/character/Character.vue"),
   },
   {
     path:"/perks",

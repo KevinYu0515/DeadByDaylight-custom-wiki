@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import "@/assets/scss/records/perks.scss";
+import "@/assets/scss/character/perks.scss";
 import { ref, computed, defineProps, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 const store = useStore();

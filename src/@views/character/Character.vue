@@ -66,12 +66,12 @@
 </template>
 
 <script setup>
-import Information from "@/@views/records/Information.vue";
-import Lore from "@/@views/records/Lore.vue";
-import Perks from "@/@views/records/Perks.vue";
-import Power from "@/@views/records/Power.vue";
-import Addones from "@/@views/records/Addones.vue";
-import "@/assets/scss/records/records.scss";
+import Information from "@/@views/character/Information.vue";
+import Lore from "@/@views/character/Lore.vue";
+import Perks from "@/@views/character/Perks.vue";
+import Power from "@/@views/character/Power.vue";
+import Addones from "@/@views/character/Addones.vue";
+import "@/assets/scss/character/character.scss";
 import { onBeforeMount, onMounted, computed, ref, defineProps } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";

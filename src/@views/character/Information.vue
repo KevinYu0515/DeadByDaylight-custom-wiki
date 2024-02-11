@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import "@/assets/scss/records/information.scss";
+import "@/assets/scss/character/information.scss";
 import { onBeforeMount, defineProps, ref } from "vue";
 const props = defineProps(["character_data"]);
 const character_data = ref(null);

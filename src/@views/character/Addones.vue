@@ -25,7 +25,7 @@
 
 <script setup>
 import Modal from "@/@components/Tools/Modal.vue";
-import "@/assets/scss/records/addones.scss";
+import "@/assets/scss/character/addones.scss";
 import { computed, defineProps, onBeforeMount, ref} from "vue";
 import { useStore } from "vuex";
 const store = useStore();
