@@ -1,0 +1,102 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    scroll-behavior: smooth;
+}
+
+.default {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #f5f5f5;
+    font-size: 18vw;
+    font-weight: 700;
+}
+
+:root{
+    --difficulty:yellow;
+    --videoBackground: "wraith";
+    --gray-50: rgba(226, 226, 226, .5) !important;
+    --gray-100: rgb(226, 226, 226) !important;
+    --gray-150: rgba(115, 99, 114, .5) !important;
+    --gray-200: rgb(115, 99, 114) !important;
+    --red-200: #921C1C !important;
+    --yellow-100: #E2CE97 !important;
+    --green-100: #556b2f !important;
+    --black-200: #001427 !important;
+    --addones-common:#5a4332;
+    --addones-uncommon:#a7892a;
+    --addones-rare:#13611c;
+    --addones-veryrare:#542465;
+    --addones-ultrarare: #921C1C;
+    --more-icon-position-top: 0;
+    --more-icon-position-side: 0;
+}
+
+.difficulty{
+    letter-spacing: 1px;
+    font-weight: 900;
+    color: var(--difficulty);
+}
+
+.inDialog{ 
+    width: 90%;
+    height: 2px;
+    background-color:rgb(161, 156, 156);
+    opacity: .2;
+    margin: 20px 0;
+    border:none;
+}
+
+.outDialog{ 
+    width: 100%;
+    height: 2px;
+    background-color:black;
+    border:none;
+    margin:0px 0px 20px 0px;
+}
+
+.bs{
+    position: relative;
+    top: 40px;
+    width: 110px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.videoFigure{
+    position: absolute;
+    opacity: .3;
+    background-size: cover;
+    left:0;
+    bottom: 0;
+    width: 400px;
+    height: 95%;
+}
+
+.more-icon{
+    position: fixed;
+    font-size: 2rem;
+    opacity: .5;
+    color: var(--yellow-100);
+    animation: moveUpDown 2s ease-in-out infinite alternate; /* 应用动画 */
+}
+
+@keyframes moveUpDown {
+  0% {
+    padding-top: 50px; /* 起始位置 */
+  }
+  100% {
+    padding-top: 0; /* 结束位置 */
+  }
+}

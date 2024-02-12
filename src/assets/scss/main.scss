@@ -1,0 +1,84 @@
+.main{
+    background: darkslategrey;
+    min-height: 800px;
+    .bg{
+        height: 90vh;
+        box-sizing: border-box;
+        background: url(@/assets/picture/mainBG.png);
+        background-position: center;
+        background-position-y: 50px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        opacity: .75;
+        .mainTitle{
+            font-size: 4rem;
+            color: antiquewhite;
+            font-family: 'Amaranth';
+        }
+        .subTitle{
+            font-size: 1.5rem;
+            color: antiquewhite;
+            font-family: 'Amaranth';
+        }
+    }
+    .killer{
+        background-color: darkslategrey;
+        margin-top: 90vh ;
+        .container{    
+            .card{
+                width: 190px;
+                height: 260px;
+                transition: .2s;
+                opacity: .5;
+                @media screen and (max-width:860px) {
+                    width: 130px;
+                    height: 200px;
+                }
+                @media screen and (max-width:615px) {
+                    width: 100px;
+                    height: 150px;
+                }
+                &:hover{
+                    opacity: .95;
+                }
+                span{
+                    width: 0px;
+                    height: 0px;
+                    opacity: .95;
+                    transform: translate(-50%, -50%);
+                    transition: width .3s, height .3s;
+                }
+                &:hover span{
+                    background:url(@/assets/picture/splash.png);
+                    background-size: cover;
+                    width: 500px;
+                    height: 500px;
+                }
+                .imgBox{
+                    img{
+                        object-fit: cover;
+                    }
+                }
+                .content div{
+                    color:aliceblue;
+                    visibility: hidden;
+                    opacity: 0;
+                    transform: translateY(100px);
+                    transition: .2s;
+                    h3{
+                        letter-spacing: 1px;
+                    }
+                    p{
+                        font-size: larger;
+                        color:rgb(241, 224, 43);
+                    } 
+                }
+                &:hover .content div{
+                    visibility: visible;
+                    opacity: 1;
+                    transform: translateY(0px);
+                }
+            }
+        }
+    }
+}

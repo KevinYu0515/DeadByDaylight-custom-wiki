@@ -1,0 +1,45 @@
+.navbar{
+    width: 100%;
+    height: 80px;
+    box-shadow: 0 0 20px 10px rgba(0,0,0,1);
+    box-sizing: border-box;
+    z-index: 1000;
+    transition: .5s;
+    background: url(@/assets/picture/fog.gif);
+    background-position-y: 300px;
+    background-size: cover;
+    @media screen and (max-width:1200px) {
+        background-position: bottom;
+    }
+    -moz-transform:scaleY(-1);
+    -webkit-transform:scaleY(-1);
+    -o-transform:scaleY(-1);
+    transform:scaleY(-1);
+    ul{
+        -moz-transform:scaleY(-1);
+        -webkit-transform:scaleY(-1);
+        -o-transform:scaleY(-1);
+        transform:scaleY(-1);
+        li{
+            a{
+                cursor: pointer;
+                color:rgb(20, 106, 72);
+                height:50px;
+                line-height: 50px;
+                display: inline-block;
+                text-decoration: none;
+                font-size: 1.4em;
+                padding: 0 15px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                font-family: 'Permanent Marker';
+                &:hover{
+                    color:rgb(189, 174, 174);
+                }
+            }
+            a.router-link-exact-active{
+                color: #e73727;
+            }
+        }
+    }
+}

@@ -1,0 +1,97 @@
+.perks{
+    max-width: 100%;
+    height: auto;
+    min-height: 800px;
+    background-color: darkslategrey;
+    .illustrated{
+        width: 100%;
+        background-color: darkslategrey;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        transform: translateX(0px) translateY(10px);
+        ul{
+            position: absolute;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 150px;
+            li{
+                width: 150px;
+                height: 150px;
+                margin: -80px;
+                .bg{
+                    transition: .3s;
+                    opacity: .2;
+                    &:hover{
+                        opacity: .7;
+                    }
+                }
+            }
+            .active .bg{
+                opacity: 1;
+            }
+        }
+    }
+    .illustrated::-webkit-scrollbar{
+        display: none;
+    }
+
+    .infor{
+        max-width:100%;
+        height:auto;
+        border-width: 10px;
+
+        h1{
+            letter-spacing: 2px;
+            color:darkgoldenrod;
+            font-family: 'Carter One';
+        }
+        .nonePerks{
+            letter-spacing: 2px;
+            font-size: 5vw;
+            color:blanchedalmond;
+            font-family: 'Carter One';
+        }
+        .inforBox{
+            width:100%;
+            height:auto;
+            h1{
+                letter-spacing: 2px;
+                color:rgb(182, 20, 20);
+                font-size: 4rem;
+                font-family: 'Rubik Wet Paint';
+                @media screen and (max-width:1200px) {
+                    font-size: 3rem;
+                }
+            }
+            img{
+                width: 10%;
+                height: auto;
+                @media screen and (max-width:1200px) {
+                    width:15%;
+                    height:auto;
+                }
+            }
+            .text{
+                h2{
+                    letter-spacing: 2px;
+                    color:darkgoldenrod;
+                    font-family: 'Amaranth', 'Noto Sans TC';
+                }
+                p{
+                    font-size: large;
+                    color: aliceblue;
+                    padding: 10px 0;
+                    word-spacing: 2px;
+                    letter-spacing: 1px;
+                    font-weight: 600;
+                    font-family: 'Amaranth', 'Noto Sans TC';
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                    @media screen and (max-width:1200px) {
+                        font-size: small;
+                    }
+                }
+            }
+        }
+    }
+}

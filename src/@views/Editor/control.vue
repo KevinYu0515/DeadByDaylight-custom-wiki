@@ -1,0 +1,144 @@
+<template>
+  <div class="user_info_block">
+    <div class="mx-5 flex flex-wrap align-items-center justify-content-center gap-3">
+      <Button icon="pi pi-home" class="p-button-success mx-2" @click="backToMain()" title="Return Main" /> 
+      <Button icon="pi pi-sign-out" class="p-button-success mx-2" @click="logout()" title="Logout" />   
+      <span class="mx-2">
+        <i class="pi pi-user mx-2" style="color: slateblue"></i>
+        {{ user_name }}
+      </span>
+    </div>
+  </div>
+  <div class="control_block">
+    <ul class="control_list">
+      <li
+        v-for="(item, index) in control_items" 
+        :key="index" class="control_item"
+        :class="{'click': controlIndex === index, 'disabled': killerIndex === null && index === 1}"
+        @click="changePanel(index)"
+      >
+        {{ item }}
+      </li>
+    </ul>
+  </div>
+  <div class="info_block">
+    <template v-if="(controlIndex === 0)">
+        <all 
+          @feedback-index="onFeedbackIndex"
+        ></all>
+    </template>
+    <template v-if="(controlIndex === 1)">
+      <detail
+        :killerIndex="killerIndex"
+        :killerID="killerID"
+      ></detail>
+    </template>
+  </div>
+</template>
+
+<script setup>
+import all from "@/@views/Editor/all/_all.vue";
+import detail from "@/@views/Editor/details/_details.vue";
+import { useRouter } from "vue-router";
+import { ref, onMounted, onBeforeMount, computed } from "vue";
+import "@/firebase";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import { useStore } from "vuex";
+import accountStore from "../../vuex/accountStore";
+
+const user_name = computed(() => store.state.account ? store.state.account.data.email : null);
+const router = useRouter();
+const controlIndex = ref(0);
+const killerIndex = ref(null);
+const killerID = ref(null);
+const control_items = ["All Killers", "Killers Details", "History", "Posters"];
+const store = useStore();
+
+const onFeedbackIndex = (id, index) => {
+  killerID.value = id;
+  killerIndex.value = index;
+  controlIndex.value = 1;
+};
+
+// 登出功能
+const logout = async() => {
+  window.localStorage.removeItem("user");
+  await firebase.auth().signOut();
+  await router.push("/");
+};
+
+const backToMain = () => {
+  router.push("/");
+};
+
+const changePanel = index => {
+  controlIndex.value = index;
+};
+
+onBeforeMount(() => {
+  store.registerModule("account", accountStore);
+  store.dispatch("account/GETDATA");
+});
+
+onMounted(() => {
+  controlIndex.value = 0;
+});
+
+</script>
+
+<style lang="scss" scoped>
+.control_block{
+  position: absolute;
+  left: 0;
+  width: 15vw;
+  height: 100vh;
+  background-color: #254441;
+  padding-right: 100px;
+  .control_list{
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 30px;
+    .control_item{
+      width: 100%;
+      line-height: 30px;
+      font-size: 20px;
+      color: #BBDFC5;
+      cursor: pointer;
+      &:hover{
+        color:brown;
+      }
+    }
+    .click{
+      color: brown;
+    }
+  }
+}
+.user_info_block{
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-content: center;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100vw;
+  min-height: 50px;
+  background-color: #BBDFC5; 
+}
+.info_block{
+  width: 100vw;
+  height: 100vh;
+  background-color: #60935D;
+}
+
+.disabled{
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: .2;
+}
+</style>

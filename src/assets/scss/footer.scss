@@ -1,0 +1,105 @@
+.footer{
+    position: relative;
+    height: auto;
+    width:100%;
+    min-height: 200px;
+    background: #002984;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    .box_container{
+        margin-top: 40px;
+        display: flex;
+        flex-direction: row;
+
+        .box{
+            position: relative;
+            width: 100px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin:50px 50px 80px 30px;
+            transform: scale(80%);
+
+            .percent{
+                position:relative;
+                width: 130px;
+                height: 130px;
+
+                svg{
+                    position: relative;
+                    width:130px;
+                    height:130px;
+
+                    circle{
+                        width:75px;
+                        height:75px;
+                        fill:none;
+                        stroke-width: 10;
+                        stroke:#000;
+                        transform: translate(5px,5px);
+                        stroke-dasharray: 380;
+                        stroke-dashoffset: 380;
+                        stroke-linecap: round;
+                    }
+
+                    circle:nth-child(1){
+                        stroke-dashoffset: 0;
+                        stroke:#e2fdff;
+                    }
+                }
+
+                #circle1 circle:nth-child(2){
+                    stroke-dashoffset: calc(380 - (380 * 30)/100);
+                    stroke:#788bff;
+                }
+
+                #circle2 circle:nth-child(2){
+                    stroke-dashoffset: calc(380 - (380 * 35)/100);
+                    stroke:#788bff;
+                }
+                #circle3 circle:nth-child(2){
+                    stroke-dashoffset: calc(380 - (380 * 35)/100);
+                    stroke:#788bff;
+                }
+            }
+
+            .number{
+                position:absolute;
+                font-family:'Fredoka One', cursive;
+                top:0;
+                left:0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color:#e2fdff;
+                cursor: pointer;
+                &:hover{
+                    color:#c60af0;
+                }
+
+                h2{
+                    font-size: 50px;
+                    span{
+                        font-size: 13px;
+                    }
+                }
+            }
+            
+            .text{
+                font-family:'Fredoka One', cursive;
+                padding: 10px 0 0;
+                color:#5465ff;
+                font-size: 15px;
+                font-weight: 400;
+                letter-spacing: 1px;
+            }
+        }
+    }
+}

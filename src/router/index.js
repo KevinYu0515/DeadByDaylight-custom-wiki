@@ -1,0 +1,63 @@
+import { createRouter, createWebHistory } from "vue-router";
+import firebase from "firebase/compat/app";
+import "@/firebase";
+import "firebase/compat/auth";
+
+const routes = [
+  {
+    path: "/",
+    name: "Home",
+    component:()=> import("@/@views/Main.vue"),
+  },
+  {
+    path:"/login",
+    name:"Login",
+    component:()=>import("@/@views/Authorization/Login.vue"),
+  },
+  {
+    path:"/register",
+    name:"Register",
+    component:()=>import("@/@views/Authorization/Register.vue")
+  },
+  {
+    path:"/records/:record_option",
+    name: "Record_option",
+    component:()=> import("@/@views/character/Character.vue"),
+  },
+  {
+    path:"/perks",
+    name:"Perks",
+    component:()=> import("@/@views/Perks.vue"),
+  },
+  {
+    path:"/editor",
+    name:"Editor",
+    component:() => import("@/@views/Editor/control.vue"),
+    meta:{ "requiresAuth": true }
+  },
+];
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
+});
+
+router.beforeEach((to, from, next) =>{
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  if(!requiresAuth){
+    next();
+    return;
+  }
+  firebase.auth().onAuthStateChanged(user => {
+    if(!user){
+      next("/login");
+      return;
+    } 
+    else{
+      next();
+      return;
+    }
+  });
+});
+
+export default router;
