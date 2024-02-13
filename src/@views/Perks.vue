@@ -5,48 +5,32 @@
       <img src="../assets/picture/loading.gif" alt="loading">
     </div>
     <div class="illustrated">
-      <ul>
-        <li
-          class="list-none absolute overflow-hidden cursor-pointer"
-          :class="{'item': !isClick[index], 'active': isClick[index]}"
-          v-for="(perk, index) in perks"
-          :key="index"
-          :style="{'top': topCalc(index), 'left': leftCalc(index)}"
-        >
-          <div class="bg w-full h-full" @click="clickPerk(perk, index)" :title="perk.name">
-            <img :src="perk.icon" alt="">
-          </div>
-        </li>
-        <li
-          v-if="perks.length"
-          class="list-none absolute overflow-hidden"
-          :style="{'top': topCalc(perks.length), 'left': leftCalc(perks.length)}"
-        >
-          <div class="bg w-full h-full cursor-pointer" @click="modelStatue(0, false)" title="Add New perks">
-            <img src="@/assets/icon/IconHelp.png" alt=""/>
-          </div>
-        </li>
-      </ul>
+      <div class="scroll">
+        <n-grid :cols="16" v-for="_ in 2" :key="_">
+          <n-grid-item v-for="(perk, idx) in perks" :key="idx">
+            <div
+              class="bg w-full h-full"
+              :class="{'item': !isClick[idx], 'active': isClick[idx]}"
+              @click="clickPerk(perk, idx)" 
+              :title="perk.name"
+              
+            >
+              <img class="w-full" :src="perk.icon" alt="">
+            </div>
+          </n-grid-item>
+        </n-grid>
+      </div>
     </div>
-
-    <AppendPerk
-      :isDisplay="displayModel[0]"
-      @childModel="modelStatue"
-      @uploadImg="onUpload"
-      @setPerkDoc="addPerk"
-      ref="appendPerk"
-    />
-    <SimpleDialog :isDisplay="displayModel[1]" location="Append New perk" @childModel="modelStatue"/>
 
     <div class="infor flex justify-content-center align-items-center flex-column p-5">
       <h1>Perks INFORMATION</h1>
       <hr class="outDialog">
-      <div v-if="perksClick.length > 0" class="my-2">
-        <Button @click="clearPerksClick" class="p-button-success mx-2">已選：{{perksClick.length}}</Button>
-        <Button label="Clear" icon="pi pi-times" @click="clearPerksClick" class="p-button-infor mx-2"/>
+      <div v-if="perksCount !== 0" class="my-2">
+        <n-button class="mx-2" type="tertiary" @click="clearPerksClick">{{ perksCount }}</n-button>
+        <n-button class="mx-2" type="tertiary" @click="clearPerksClick">Clear All</n-button>
       </div>
-      <div class="nonePerks p-8" v-if="perksClick.length == 0">Please Click Perks Above</div>
-      <div 
+      <div class="nonePerks p-8" v-if="perksCount == 0">Please Click Perks Above</div>
+      <div
         class="inforBox flex justify-content-center align-items-center" 
         v-else 
         v-for="(perk, index) in perksClick" 
@@ -58,74 +42,24 @@
           <h2>{{perk.name}}</h2>
           <p> {{perk.illustrate}} </p>
         </div>
-        <Button 
-          label="Edit"  
-          class="p-button-warning bs"
-          style="max-width:100%"
-          @click="editStatue(index);" 
-        /> 
-
-        <AppendPerk
-          :isEdit="displayEdit[index]"
-          :perkData="perk"
-          :perkIndex="index"
-          :perkList="perks"
-          @updatePerk="updatePerk"
-          @complete="editStatue"
-          @replace="replacePerk"
-        />
-
-        <SimpleDialog
-          :isDisplay2="displayModel[2]"
-          title="Warning"
-          content="該資料不可為空"
-          @childModel="modelStatue"
-        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { NGrid, NGridItem, NButton } from "naive-ui";
 import DBDNavbar from "@/@components/Navbar/DBDNavbar.vue";
-import SimpleDialog from "@/@components/DialogGroup/SimpleDialog.vue";
-import AppendPerk from "@/@components/DialogGroup/AppendPerk.vue";
-import { ref,  onMounted, computed, onBeforeUnmount } from "vue";
+import { ref, onMounted, computed, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
-import perksStore from "../vuex/perksStore";
-import $ from "jquery";
+import perksStore from "@/vuex/perksStore";
 
 const store = useStore();
-const displayEdit = ref([false]);
-const displayModel = ref([false]);
-const appendPerk = ref(null);
 const clickIndex = ref([]);
 const perksClick = ref([]);
 const isClick = ref([false]);
-const perks = computed(() => {
-  if(store.state.perks){
-    const res = store.state.perks.fbPerks;
-    $(".illustrated").css("height", `${res.length / 8 * 120}px`);
-    return res;
-  }
-  return [];
-});
-
-// 技能圖示排版
-const topCalc = i => {
-  let index = 200;
-  if(i <= 7) index += (i % 2) * 55;
-  else index += (i % 2) * 55 + (2 * Math.floor(i / 16)) * 55;
-  index = index.toString() + "%";
-  return index;
-};
-
-const leftCalc = i => {
-  let index = 80;
-  index += i % 16 * 13;
-  index = index.toString() + "%";
-  return index;
-};
+const perks = computed(() => store.state.perks ? store.state.perks.fbPerks : []);
+const perksCount = computed(() => perksClick.value.length ? `已選 ${perksClick.value.length}` : 0);
 
 // 技能點擊
 const clickPerk = (e, n) => {
@@ -143,29 +77,10 @@ const clickPerk = (e, n) => {
   }
 };
 
-// 替換技能資料
-const replacePerk = (perk, perks) => {
-  for(let i=0; i<perksClick.value.length;i++){
-    if(perksClick.value[i] == perk) perksClick.value.splice(i,1,perks[clickIndex.value[i]]);
-  }
-};
-
 // 清除所選技能
 const clearPerksClick = () => {
   isClick.value = [false];
   perksClick.value = [];
-};
-
-// 資料處理表達式
-const addPerk = perkData => store.dispatch("perks/ADDDATA", perkData);
-const updatePerk = (id, options ,optionsValue) => store.dispatch("perks/UPDATEDATA", {id, options, optionsValue});
-const onUpload = perk => store.dispatch("perks/UPLOADDATA", perk);
-
-// 彈出視窗狀態控制
-const editStatue = i => displayEdit.value[i] = !displayEdit.value[i];
-const modelStatue = (i, isClear) => {
-  displayModel.value[i] = !displayModel.value[i];
-  if(isClear) appendPerk.value.clearData();
 };
 
 // 生命週期
@@ -174,7 +89,6 @@ onMounted(() => {
   store.dispatch("perks/GETDATA");
 });
 onBeforeUnmount(() => store.unregisterModule("perks"));
-
 </script>
 
 <style lang="scss" scoped>

@@ -13,13 +13,9 @@
         </div>
         <ul class="select-items list-none mt-5">
           <li v-for="(item, index) in left_bar_items" :key="index" class="flex align-items-center justify-content-evenly py-1 cursor-pointer">
-            <template v-if="currentPath !== `/records/${item.fullname}`">
-              <img class="w-3rem" src="@/assets/icon/IconHelp.png" alt=""/>
-            </template>
-            <template v-else>
-              <img class="w-3rem" src="@/assets/icon/Loading_killer.png" alt=""/>
-            </template>
-            <router-link :to="`/records/${item.fullname}`" class="no-underline">
+            <img v-show="currentPath !== `/character/${item.fullname}`" class="w-3rem" src="@/assets/icon/IconHelp.png" alt=""/>
+            <img v-show="currentPath === `/character/${item.fullname}`" class="w-3rem" src="@/assets/icon/Loading_killer.png" alt=""/>
+            <router-link :to="`/character/${item.fullname}`" class="no-underline">
               <div class="option-box flex align-items-center justify-content-star pl-3 text-xl font-bold">
                 {{ item.name }}
               </div>
@@ -29,7 +25,7 @@
       </div>
       <div class="px-3 w-9rem flex align-items-center flex-column">
         <n-button class="my-2" type="tertiary" @click="showOtherKillers = !showOtherKillers;">Other Characters</n-button>
-        <n-button class="my-2" type="tertiary" @click="routerTo('/')">Back Home</n-button>
+        <n-button class="my-2" type="tertiary" @click="routerTo('/characters')">Back Home</n-button>
       </div>
     </div>
     <ul class="route absolute list-none">

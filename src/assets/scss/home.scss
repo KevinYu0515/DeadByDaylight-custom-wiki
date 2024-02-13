@@ -1,64 +1,39 @@
-.home {
-  position: relative;
-  background: linear-gradient(90deg, #5cc8f6, #47b1df, #466bee, #5c71f6);
-  height: 90vh;
-  width: 100%;
-  display: flex;
-  margin: 0;
-  overflow: hidden;
-
-  #content {
+#landing-container{
+    position: relative;
     max-width: 100%;
-    margin: 200px 5vw 100px 8vw;
-    text-align: left;
-
-    h1 {
-      font-family: "Source Sans Pro", sans-serif;
-      color: #002984;
-      line-height: 2.5em;
-      font-weight: bold;
-      letter-spacing: 1px;
-      font-size: 3vmin;
-
-      span {
-        font-weight: 700;
-        color: #466bee;
-        font-size: 4rem;
-        @media screen and (max-width: 1200px) {
-          font-size: 3rem;
+    height: 100vh;
+    margin-top: 80px;
+    .banner{
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        padding: 0 100px;
+        background: url("@/assets/picture/HomeBG.jpg");
+        background-position: center;
+        background-size: cover;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .content{
+            max-width: 550px;
+            h2{
+                text-transform: uppercase;
+                font-weight: 400;
+                font-size: 2rem;
+                letter-spacing: 5px;
+                color: var(--gray-100);
+                span{
+                    font-weight: 800;
+                }
+            }
+            p{
+                font-size: 1rem;
+                font-weight: 300;
+                letter-spacing: 2px;
+                line-height: 2rem;
+                color: var(--gray-100);
+                margin: 15px 0 35px; 
+            }
         }
-        @media screen and (max-width: 900px) {
-          font-size: 2rem;
-        }
-      }
     }
-    p {
-      font-family: "Source Sans Pro", sans-serif;
-      color: white;
-      font-size: 1.2rem;
-      line-height: 1.5em;
-      word-spacing: 2px;
-      margin-bottom: 5px;
-      @media screen and (max-width: 1200px) {
-        font-size: 1rem;
-      }
-      @media screen and (max-width: 900px) {
-        font-size: .8rem;
-      }
-    }
-  }
-
-  img {
-    width: 50vw;
-    height: auto;
-    margin: 140px 100px 100px 0px;
-    border-color: rgb(251, 253, 255);
-    border-style: solid;
-    padding: 3px;
-    @media screen and (max-width: 900px) {
-      width: 45vw;
-      height: auto;
-      margin: 180px 80px 100px 0px;
-    }
-  }
 }

@@ -3,31 +3,35 @@
     height: auto;
     min-height: 800px;
     background-color: darkslategrey;
+    margin-top: 80px;
     .illustrated{
         width: 100%;
+        height: auto;
         background-color: darkslategrey;
         overflow-x: scroll;
         overflow-y: hidden;
         transform: translateX(0px) translateY(10px);
-        ul{
-            position: absolute;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 150px;
-            li{
-                width: 150px;
-                height: 150px;
-                margin: -80px;
+        .scroll{
+            display: flex;
+            width: 200%;
+            .n-grid{
+                animation: animate 40s linear infinite;
+                animation-delay: -40s;
+                &:nth-child(2){
+                    animation: animate2 40s linear infinite;
+                    animation-delay: -20s;
+                }
                 .bg{
                     transition: .3s;
                     opacity: .2;
+                    cursor: pointer;
                     &:hover{
                         opacity: .7;
                     }
                 }
-            }
-            .active .bg{
-                opacity: 1;
+                .active{
+                    opacity: 1;
+                }
             }
         }
     }
@@ -93,5 +97,23 @@
                 }
             }
         }
+    }
+}
+
+@keyframes animate{
+    0%{
+        transform: translateX(100%);
+    }
+    100%{
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes animate2{
+    0%{
+        transform: translateX(0%);
+    }
+    100%{
+        transform: translateX(-200%);
     }
 }

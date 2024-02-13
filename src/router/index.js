@@ -7,7 +7,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component:()=> import("@/@views/Main.vue"),
+    component:()=> import("@/@views/Home.vue"),
   },
   {
     path:"/login",
@@ -20,7 +20,12 @@ const routes = [
     component:()=>import("@/@views/Authorization/Register.vue")
   },
   {
-    path:"/records/:record_option",
+    path:"/characters",
+    name:"Characters",
+    component:()=> import("@/@views/character/Main.vue")
+  },
+  {
+    path:"/character/:record_option",
     name: "Record_option",
     component:()=> import("@/@views/character/Character.vue"),
   },
