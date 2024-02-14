@@ -1,12 +1,10 @@
 <template>
   <div class="user_info_block">
     <div class="mx-5 flex flex-wrap align-items-center justify-content-center gap-3">
-      <Button icon="pi pi-home" class="p-button-success mx-2" @click="backToMain()" title="Return Main" /> 
-      <Button icon="pi pi-sign-out" class="p-button-success mx-2" @click="logout()" title="Logout" />   
-      <span class="mx-2">
-        <i class="pi pi-user mx-2" style="color: slateblue"></i>
-        {{ user_name }}
-      </span>
+      <n-button :render-icon="renderHomeIcon" type="primary" class="mx-1" @click="backToMain()">Return Home</n-button>
+      <n-button :render-icon="renderLogOutIcon" type="primary" class="mx-1" @click="logout()">Logout</n-button>
+      <n-icon size="20"><person /></n-icon>
+      <span>{{ user_name }}</span>
     </div>
   </div>
   <div class="control_block">
@@ -37,15 +35,17 @@
 </template>
 
 <script setup>
-import all from "@/@views/Editor/all/_all.vue";
-import detail from "@/@views/Editor/details/_details.vue";
+import { NButton, NIcon } from "naive-ui";
+import all from "@/@views/editor/all/_all.vue";
+import detail from "@/@views/editor/details/_details.vue";
+import { Home as HomeIcon, LogOut as LogOutIcon, Person } from '@vicons/ionicons5'
 import { useRouter } from "vue-router";
-import { ref, onMounted, onBeforeMount, computed } from "vue";
+import { ref, onMounted, onBeforeMount, computed, h } from "vue";
 import "@/firebase";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { useStore } from "vuex";
-import accountStore from "../../vuex/accountStore";
+import accountStore from "@/vuex/accountStore";
 
 const user_name = computed(() => store.state.account ? store.state.account.data.email : null);
 const router = useRouter();
@@ -54,6 +54,18 @@ const killerIndex = ref(null);
 const killerID = ref(null);
 const control_items = ["All Killers", "Killers Details", "History", "Posters"];
 const store = useStore();
+const renderHomeIcon = () => {
+  return h(NIcon, null, {
+            default: () => h(HomeIcon)
+          })
+}
+const renderLogOutIcon = () => {
+  return h(NIcon, null, {
+            default: () => h(LogOutIcon)
+          })
+}
+
+
 
 const onFeedbackIndex = (id, index) => {
   killerID.value = id;
@@ -77,7 +89,7 @@ const changePanel = index => {
 };
 
 onBeforeMount(() => {
-  store.registerModule("account", accountStore);
+  if(!store.state.account) store.registerModule("account", accountStore);
   store.dispatch("account/GETDATA");
 });
 

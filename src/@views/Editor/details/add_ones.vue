@@ -76,11 +76,13 @@
 </template>
 
 <script setup>
-import { ref, onUpdated, computed, reactive, defineProps, defineEmits } from "vue";
+import { ref, onUpdated, computed, reactive } from "vue";
+import { useStore } from "vuex";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-const props = defineProps(["addOnes", "tabIndex", "selected"]);
+const props = defineProps(["tabIndex", "selected"]);
 const emits = defineEmits(["selectItems", "lastIndex", "addAddOnes"]);
+const store = useStore();
 const isAppendType = ref("Common");
 const isAppendVisible = ref(false);
 const expandedRowGroups = ref();
@@ -88,11 +90,12 @@ const selectedProduct = ref();
 const visibleRight = ref(false);
 const input1 = ref();
 const clickInput1 = () => input1.value.click();
+const addOnes = computed(() => store.state.character ? store.state.character.data.addOnes : {});
 const selectOnes = reactive({
-    id: "",
-    image: "",
-    name: "",
-    description: ""
+  id: "",
+  image: "",
+  name: "",
+  description: ""
 });
 
 const state = reactive({
@@ -110,12 +113,12 @@ const rules = {
 const v$ = useVuelidate(rules, state);
 
 const add_ones_table = computed(() => {
-  if(Object.keys(props.addOnes).length !== 0){
+  if(Object.keys(addOnes.value).length !== 0){
     const result = [];
     let idx = 0;
-    for(const [key, value] of Object.entries(props.addOnes)){
+    for(const [key, value] of Object.entries(addOnes.value)){
       if(Object.keys(value).length === 0) result.push({rarity: key, id: `0x${idx++}`});
-      else result.push(...props.addOnes[key]);
+      else result.push(...addOnes.value[key]);
     }
     return result;
   }

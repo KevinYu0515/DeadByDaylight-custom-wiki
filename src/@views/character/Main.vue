@@ -107,14 +107,6 @@ onUpdated(() => {
     });
   });
 });
-
-onUpdated(() => {
-  let background = document.querySelector(".bg");
-  window.addEventListener("scroll", () => {
-    let value = 1 + window.scrollY / -600;
-    background.style.opacity = value;
-  });
-});
 </script>
 
 <style scoped lang="scss">

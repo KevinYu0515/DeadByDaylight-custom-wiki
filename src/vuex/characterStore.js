@@ -90,11 +90,15 @@ export default{
         },
 
         // 上傳圖片至 firebase 儲存庫
-        UPLOADIMG(context, img){
-            const storageRef = r(storage, `${img.file}/${img.name}`);
-            uploadBytes(storageRef, img.value).then(() => {
-                console.log("Uploaded a blob or file!");
-            });
+        UPLOADIMG(context, {folder, img}){
+            try {
+                const storageRef = r(storage, `${folder}/${img.name}`);
+                uploadBytes(storageRef, img.value).then(() => {
+                    console.log("Uploaded a blob or file!");
+                });
+            } catch (error) {
+                console.log(error);
+            }
         },
 
         ADDROLE(context, data){
@@ -112,13 +116,18 @@ export default{
 
         // 更新資料
         UPDATEDATA(context, {killerID, data, option = "info", id}){
-            if(option !== "info") updateDoc(doc(killersColRef, killerID, option, id), data);
-            else updateDoc(doc(killersColRef, killerID), data);
+            if(option !== "info"){
+                updateDoc(doc(killersColRef, killerID, option, id), data);
+            }else updateDoc(doc(killersColRef, killerID), data);
         },
 
         // 刪除資料
         DELETEROLE(context, id){
             deleteDoc(doc(killersColRef, id));
+        },
+
+        DELETEPERK(context, {characterID, perkID}){
+            deleteDoc(doc(killersColRef, characterID, "perk", perkID));
         }
     }
 };

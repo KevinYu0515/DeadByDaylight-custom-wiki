@@ -2,12 +2,12 @@
     max-width: 100%;
     height: auto;
     min-height: 800px;
-    background-color: darkslategrey;
+    background-color: var(--black-200);
     margin-top: 80px;
     .illustrated{
         width: 100%;
         height: auto;
-        background-color: darkslategrey;
+        background-color: var(--black-200);
         overflow-x: scroll;
         overflow-y: hidden;
         transform: translateX(0px) translateY(10px);
@@ -52,7 +52,7 @@
         .nonePerks{
             letter-spacing: 2px;
             font-size: 5vw;
-            color:blanchedalmond;
+            color:var(--gray-100);
             font-family: 'Carter One';
         }
         .inforBox{
@@ -83,7 +83,7 @@
                 }
                 p{
                     font-size: large;
-                    color: aliceblue;
+                    color: var(--gray-100);
                     padding: 10px 0;
                     word-spacing: 2px;
                     letter-spacing: 1px;

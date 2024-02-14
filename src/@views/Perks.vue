@@ -2,7 +2,7 @@
   <DBDNavbar></DBDNavbar>
   <div class="perks flex justify-content-center align-items-center flex-column">
     <div v-if="!perks.length">
-      <img src="../assets/picture/loading.gif" alt="loading">
+      <img src="@/assets/picture/loading.gif" alt="loading">
     </div>
     <div class="illustrated">
       <div class="scroll">

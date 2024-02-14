@@ -67,22 +67,20 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, onUpdated, defineProps, defineEmits } from "vue";
+import { computed, reactive, ref } from "vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import { cloneDeep } from "lodash-es";
+import { useStore } from "vuex";
 const isAppendVisible = ref(false);
 const columns = ref([
     { field: "type", header: "Type" },
     { field: "value", header: "Value" }
 ]);
 const refInfo = ref({});
-const drOptions = computed(() => props.drOptions);
 const emits = defineEmits(["updateInfo", "addInfo"]);
-const props = defineProps({
-    info: Object, 
-    drOptions: Array
-});
+const store = useStore();
+const character_id = computed(() => store.state.character ? store.state.character.data.character_id : "");
+const info = computed(() => store.state.character ? store.state.character.data.killersInfo.find(killer => killer.id === character_id.value) : null);
 const infoTable = computed(() => {
     if(refInfo.value === null) return null;
     const result = [];
@@ -154,8 +152,4 @@ const handleSubmit = (isFormValid, state) => {
   emits("updateInfo", {info: refInfo.value});
   isAppendVisible.value = false;
 };
-
-onUpdated(() => {
-  refInfo.value = cloneDeep(props.info);
-});
 </script>

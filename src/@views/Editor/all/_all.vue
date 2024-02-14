@@ -22,9 +22,9 @@
 </template>
 
 <script setup>
-import { computed, ref, onBeforeMount, defineEmits } from "vue";
+import { computed, ref, onBeforeMount } from "vue";
 import { useStore } from "vuex";
-import appendNewRole from "./appendNewRole.vue";
+import appendNewRole from "@/@views/editor/all/appendNewRole.vue";
 
 const create = ref(false);
 const store = useStore();
@@ -37,7 +37,10 @@ const addKiller = data => {
   store.dispatch("character/ADDROLE", data);
   create.value = !create.value;
 };
-const onUpload = img => store.dispatch("character/UPLOADIMG", "killersCover", img);
+const onUpload = img => store.dispatch("character/UPLOADIMG", {
+  folder: "newkillersCover", 
+  img
+});
 
 const btnToDetails = (id, index) => {
   emits("feedbackIndex", id, index);

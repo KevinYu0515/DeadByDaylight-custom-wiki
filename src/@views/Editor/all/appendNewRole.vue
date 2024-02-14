@@ -1,76 +1,77 @@
 <template>
   <div>
-    <form @submit.prevent="handleSubmit(!v$.$invalid, state)">
-        <Dropdown
-          v-model="v$.info.rank.$model" :class="{'p-invalid':v$.info.rank.$invalid && submitted}"
-          :options="levelOptions"
-          optionLabel="level"
-          optionValue="level"
-          placeholder="ALL"
-          class="mx-1 my-1"
-          style="width:200px"
-        />
-        <small v-if="(v$.info.rank.$invalid && submitted) || v$.info.rank.$pending.$response" class="p-error">
-          {{v$.info.rank.required.$message.replace('Value', 'Rank')}}
-        </small>
-        <InputText 
-          placeholder="KillerName"
-          class="mx-1 my-1"
-          v-model="v$.info.name.$model" :class="{'p-invalid':v$.info.name.$invalid && submitted}"
-          required
-        />
-        <small v-if="(v$.info.name.$invalid && submitted) || v$.info.name.$pending.$response" class="p-error">
-          {{v$.info.name.required.$message.replace('Value', 'Name')}}
-        </small>
-        <Dropdown
-          v-model="v$.info.difficulty.$model" :class="{'p-invalid':v$.info.difficulty.$invalid && submitted}"
-          :options="drOptions"
-          optionLabel="dr"
-          optionValue="dr"
-          placeholder="Difficutly Rating"
-          class="mx-1 my-1"
-          style="width:200px"
-        />
-        <small v-if="(v$.info.difficulty.$invalid && submitted) || v$.info.difficulty.$pending.$response" class="p-error">
-          {{v$.info.difficulty.required.$message.replace('Value', 'Difficulty Rating')}}
-        </small>
-        <br/>
-        <hr class="inDialog">
-        <Button 
-          label="Upload Cover"  
-          class="p-button-warning my-2 col-fixed"
-          style="max-width:100%; margin-right:30px;"
-          @click="clickInput1"
-        />
-        <input type="file" name="file" ref="input1" style="display:none" @change="previewImage" accept="image/*" required/>
-        <Button type="submit" label="Submit" class="my-2" />
-        <div v-if="state.info.cover">
-          <img class="preview" height="252" width="192" :src="state.info.cover">
-        <br>
-        </div>
-        <Button type="back" label="Back" @click="backToKiller" class="p-button-info my-2 mx-5" />
-    </form>
+    <n-form
+      ref="formRef"
+      inline
+      :label-width="80"
+      :model="state"
+      :rules="rules"
+      :size="size"
+    >
+      <n-form-item label="Rank" path="info.rank">
+        <n-dropdown
+          trigger="click"
+          :options="newLevelOptions"
+          @select="handleSelect_level"
+        >
+          <n-button type="tertiary">{{ selectedLevel }}</n-button>
+        </n-dropdown>
+      </n-form-item>
+      <n-form-item label="Difficulty" path="info.difficulty">
+        <n-dropdown
+          trigger="click"
+          :options="newDrOptions"
+          @select="handleSelect_difficulty"
+        >
+          <n-button type="tertiary">{{ selectedDifficulty }}</n-button>
+        </n-dropdown>
+      </n-form-item>
+      <n-form-item label="Name" path="info.name">
+        <n-input placeholder="Character Name" v-model:value="state.info.name"/>
+      </n-form-item>
+      <n-form-item label="cover" path="info.cover">
+        <n-upload
+          list-type="image-card"
+          @change="uploadCover"
+        >
+          Upload Cover
+        </n-upload>
+      </n-form-item>
+      <n-form-item>
+        <n-button type="tertiary" @click="handleValidateClick">Submit</n-button>
+      </n-form-item>
+    </n-form>
+    <n-button type="tertiary" @click="backToKiller">Back</n-button>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, defineEmits } from "vue";
-import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { NForm, NFormItem, NButton, NInput, NDropdown, NUpload } from "naive-ui";
+import { ref, reactive, computed } from "vue";
 import { Timestamp } from "@firebase/firestore";
+import { useStore } from "vuex";
 
 defineProps(["drOptions", "levelOptions"]);
-const emits = defineEmits(["addKiller", "onUpload", "backToKiller"]);
-
-const input1 = ref(null);
+const emit = defineEmits(["addKiller", "onUpload", "backToKiller"]);
+const store = useStore();
+const formRef = ref(null);
+const size = ref("medium");
 const submitted = ref(false);
-const clickInput1 = () => {
-  input1.value.click();
-};
+const selectedLevel = ref("ALL");
+const selectedDifficulty = ref("Easy");
+const newLevelOptions = computed(() => {
+  return store.state.character.levelOptions.map(item => ({
+    "label": item.level,
+    "key": item.level
+  }));
+});
 
-const backToKiller = () => {
-  emits("backToKiller", false);
-};
+const newDrOptions = computed(() => {
+  return store.state.character.drOptions.map(item => ({
+    "label": item.dr,
+    "key": item.dr
+  }));
+});
 
 const state = reactive({
   build: "",
@@ -91,38 +92,61 @@ const state = reactive({
     weapon: ""
   }
 });
-
 const rules = {
   info: {
-    rank: { required },
-    name: { required },
-    difficulty: { required }
+    rank: {
+      required: true,
+      message: "Please choose the rank",
+      trigger: "blur"
+    },
+    name: {
+      required: true,
+      message: "Please input your name",
+      trigger: "blur"
+    },
+    difficulty: {
+      required: true,
+      message: "Please choose the difficulty",
+      trigger: "blur"
+    }
   }
 };
 
-const v$ = useVuelidate(rules, state);
+const handleSelect_level = key => {
+  selectedLevel.value = key;
+  state.info.rank = key;
+};
 
-const previewImage = event => {
-  const files = event.target.files;
-  let filename = files[0].name;
-  if (filename.lastIndexOf(".") <= 0){
-    return alert("Please add a valid file!");
-  }
-  const fileReader = new FileReader();
-  fileReader.addEventListener("load",()=>{
-    state.info.cover = fileReader.result;
+const handleSelect_difficulty = key => {
+  selectedDifficulty.value = key;
+  state.info.difficulty = key;
+};
+
+const handleValidateClick = e => {
+  e.preventDefault();
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      submitted.value = true;
+      state.build = Timestamp.fromDate(new Date());
+      console.log(state.build);
+      emit("addKiller", state);
+      clearData();
+      console.log("success");
+    } else {
+      console.log("error", errors);
+    }
   });
-  fileReader.readAsDataURL(files[0]);
-  emits("onUpload", files[0]);
-};
+}
 
-const handleSubmit = (isFormValid, state) => {
-  submitted.value = true;
-  if (!isFormValid) { return; }
-  state.build = Timestamp.fromDate(new Date());
-  console.log(state.build);
-  emits("addKiller", state);
-  clearData();
+const uploadCover = item => {
+  console.log(item);
+  const file = item.fileList[0].file;
+  const fileReader = new FileReader();
+  fileReader.addEventListener("load",() => {
+    state.info.cover = fileReader.result
+  });
+  fileReader.readAsDataURL(file);
+  emit("onUpload", file);
 };
 
 const clearData = () => {
@@ -130,5 +154,9 @@ const clearData = () => {
   state.difficulty = "";
   state.cover = "";
   state.rank = "";
+};
+
+const backToKiller = () => {
+  emit("backToKiller", false);
 };
 </script>
