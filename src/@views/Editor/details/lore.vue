@@ -4,8 +4,8 @@
     placeholder="Here to type character lore"
     type="textarea"
     :autosize="{
-      minRows: 20,
-      maxRows: 25
+      minRows: 15,
+      maxRows: 22
     }"
   />
   <n-button

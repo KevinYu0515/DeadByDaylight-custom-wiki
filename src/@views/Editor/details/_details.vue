@@ -1,46 +1,14 @@
 <template>
   <section>
-    <div class="content mb-5 relative">
+    <div class="content">
       <n-tabs type="segment" animated>
-        <n-tab-pane v-for="(item, idx) in tabs_navigation" :key="idx" :name="item.name" :tab="item.tabs">
-          <keep-alive>
-            <component :is="tabsComponent[item.name]" :characterID="killerID"></component>
-          </keep-alive>
-        </n-tab-pane>
+          <n-tab-pane v-for="(item, idx) in tabs_navigation" :key="idx" :name="item.name" :tab="item.tabs">
+            <keep-alive>
+              <component :is="tabsComponent[item.name]" :characterID="killerID"></component>
+            </keep-alive>
+          </n-tab-pane>
       </n-tabs>
     </div>
-      <!-- <div aria-label="perks" v-show="(tabIndex === 0)">
-        <Perk
-          :perks="perks"
-          :selected="visibleRight"
-          @select-items="Onselect"
-          @upload-data="uploadData"
-          @add-perk="addPerk"
-        ></Perk>
-      </div> -->
-
-      <!-- <div aria-label="info" v-show="(tabIndex === 1)">
-        <Info
-          :info="killer.info"
-          :drOptions="drOptions"
-          @update-info = "updateInfo"
-        ></Info>
-      </div> -->
-
-      <!-- <div aria-label="addOnes" v-show="(tabIndex === 2)">
-        <AddOnes
-          :addOnes="addOnes"
-          :selected="visibleRight"
-          @select-items="Onselect"
-          @add-addOnes="addAddOnes"
-        ></AddOnes>
-      </div> -->
-      <!-- <div aria-label="background" v-show="(tabIndex === 3)">
-        <Lore
-          :lore="killer.info.lore"
-          @update-data="updateInfo"
-        ></Lore>
-      </div> -->
   </section>
 </template>
 
@@ -89,29 +57,6 @@ const tabs_navigation = [
   }
 ];
 
-// const updateInfo = (data, isLore) => {
-//   if(isLore){
-//     const info = cloneDeep(killer.value.info);
-//     info.lore = data;
-//     data = {info: info};
-//   }
-//   store.dispatch("character/UPDATEDATA", {
-//     killerID: killer.value.id,
-//     data
-//   });
-//   // toast.add({ severity: "success", summary: "修改通知", detail: "修改成功", life: 3000 });
-// };
-
-// const uploadData = perk => store.dispatch("perks/UPLOADDATA", perk);
-
-// const addAddOnes = data => {
-//   store.dispatch("character/ADDADDONES", {
-//     id: killer.value.id,
-//     data
-//   });
-//   // toast.add({ severity: "success", summary: "新增通知", detail: "新增成功", life: 3000 });
-// };
-
 onBeforeMount(() => {
   if(!store.state.perks) store.registerModule("perks", perksStore);
   store.dispatch("character/GETDATA");
@@ -125,9 +70,6 @@ onUpdated(() => {
   const close  = $("button[aria-label='close']");
   if(close) close.onClick = () => visibleRight.value = false;
 });
-
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -139,8 +81,10 @@ section{
   .content{
     width: 100%;
     height: auto;
+    max-height: 650px;
     padding: 10px;
     background-color: var(--green-100);
+    overflow-y: scroll;
   }
 }
 

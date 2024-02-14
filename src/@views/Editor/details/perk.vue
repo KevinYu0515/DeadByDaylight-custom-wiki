@@ -15,7 +15,7 @@
     positive-text="Confirm"
     negative-text="Cancel"
     @positive-click="handleValidatePerkForm"
-    @negative-click="onNegativeClick"
+    @negative-click="showModal = false;"
   >
     <template #header>
       <div class="mx-2">Edit Perk</div>
@@ -52,7 +52,7 @@
     positive-text="Confirm"
     negative-text="Cancel"
     @positive-click="addNewPerkForm"
-    @negative-click="onNegativeClick"
+    @negative-click="showModal = false;"
   >
     <template #header>
       <div class="mx-2">Add New Perk</div>
@@ -112,36 +112,6 @@ const choosePerk = ref({
   "name": "",
   "description": "",
 });
-const editPerk = id => {
-  showModal.value = true;
-  choosePerk.value = cloneDeep(perks.value.find(item => item.id === id));
-}
-const deletePerk = id => {
-  store.dispatch("character/DELETEPERK", {
-    characterID: props.characterID,
-    perkID: id
-  });
-}
-const handleValidatePerkForm = () => {
-  perkFormRef.value?.validate((errors) => {
-    if (!errors) {
-      store.dispatch("character/UPDATEDATA", {
-        killerID: props.characterID,
-        id: choosePerk.value.id,
-        option: "perk",
-        data: choosePerk.value,
-      });
-      showModal.value = false;
-    } else {
-      console.log(errors);
-    }
-  });
-}
-const onNegativeClick = () => {
-  console.log("Cancel");
-  showModal.value = false;
-}
-
 const columns = [
   {
     title: "Name",
@@ -243,4 +213,30 @@ const addNewPerkForm = () => {
     }
   })
 };
+
+const editPerk = id => {
+  showModal.value = true;
+  choosePerk.value = cloneDeep(perks.value.find(item => item.id === id));
+}
+const deletePerk = id => {
+  store.dispatch("character/DELETEPERK", {
+    characterID: props.characterID,
+    perkID: id
+  });
+}
+const handleValidatePerkForm = () => {
+  perkFormRef.value?.validate((errors) => {
+    if (!errors) {
+      store.dispatch("character/UPDATEDATA", {
+        killerID: props.characterID,
+        id: choosePerk.value.id,
+        option: "perk",
+        data: choosePerk.value,
+      });
+      showModal.value = false;
+    } else {
+      console.log(errors);
+    }
+  });
+}
 </script>

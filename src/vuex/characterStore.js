@@ -128,6 +128,10 @@ export default{
 
         DELETEPERK(context, {characterID, perkID}){
             deleteDoc(doc(killersColRef, characterID, "perk", perkID));
+        },
+
+        DELETEADDONES(context, {characterID, addonesID}){
+            deleteDoc(doc(killersColRef, characterID, "addOnes", addonesID));
         }
     }
 };

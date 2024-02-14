@@ -1,155 +1,193 @@
 <template>
-  <DataTable 
-    :value="infoTable" 
-    editMode="cell" 
-    @cell-edit-complete="onCellEditComplete" 
-    tableClass="editable-cells-table" 
-    tableStyle="max-width: 100%"
-    scrollable
-    scrollHeight="65vh"
+  <n-data-table
+    :columns="columns"
+    :data="data"
+    :pagination="pagination"
+  />
+  <n-button type="primary" size="large" class="my-2" @click="showAddModal = true">
+    Add New Information
+  </n-button>
+  <n-modal
+    v-model:show="showAddModal"
+    :mask-closable="false"
+    preset="dialog"
+    positive-text="Confirm"
+    negative-text="Cancel"
+    @positive-click="addNewInfo"
+    @negative-click="showAddModal = false"
   >
-    <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">
-        <template #body="{ data, field }">
-            {{ data[field] }}
-        </template>
-        <template #editor="{ data, field }">
-            <template v-if="field !== 'type' && data.type === 'Difficulty'">
-                <Dropdown
-                    v-model="data[field]"
-                    :options="drOptions"
-                    optionLabel="dr"
-                    optionValue="dr"
-                    :value="data[field]"
-                    class="mx-1 my-1"
-                    style="width:200px"
-                />
-            </template>
-            <template v-else-if="field !== 'type'">
-                <InputText v-model="data[field]" autofocus />
-            </template>
-            <template v-else>
-                {{ data[field] }}
-            </template>
-        </template>
-    </Column>
-    <template #footer>
-      <Button label="Add New Information" @click="isAppendVisible = true" class="p-button-text"/>
+    <template #header>
+      <div class="mx-2">Add New Information</div>
     </template>
-  </DataTable>
-  <Dialog
-    :header="`Add 「New」 Information`"
-    v-model:visible="isAppendVisible" :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
-    :style="{width: '50vw'}" :model="true"
-  >
-    <form @submit.prevent="handleSubmit(!v$.$invalid, state)">
-      <div class="flex flex-column">
-          <div class="flex flex-column">
-            <label class="font-bold">Information Name</label>
-            <div class="flex">
-              <InputText class="my-3" v-model="v$.name.$model" placeholder="name" autofocus />
-              <small v-if="(v$.name.$invalid && submitted) || v$.name.$pending.$response" class="p-error">
-                {{v$.name.required.$message.replace('Value', 'Usefulness')}}
-              </small>
-              <InputText class="my-3 mx-2" v-model="state.subname" placeholder="subname" autofocus />
-            </div>
-          </div>
-          <div class="flex flex-column">
-            <label class="font-bold">Information Value</label>
-            <InputText class="my-3" v-model="v$.value.$model" placeholder="value" autofocus />
-            <small v-if="(v$.value.$invalid && submitted) || v$.value.$pending.$response" class="p-error">
-              {{v$.value.required.$message.replace('Value', 'Usefulness')}}
-            </small>
-          </div>
-      </div>
-      <Button type="submit"  label="Submit" class="mt-2" />
-    </form>
-  </Dialog>
+      <n-form
+        ref="infoFormRef"
+        label-placement="left"
+        require-mark-placement="right-hanging"
+        size="medium"
+        label-width="auto"
+        :model="newInfo"
+        :rules="rules"
+      >
+        <n-form-item label="Name" path="name">
+          <n-input v-model:value="newInfo.name" placeholder="Information Name" />
+        </n-form-item>
+        <n-form-item label="Description" path="description">
+          <n-input 
+            v-model:value="newInfo.description"
+            placeholder="Information Description"
+            type="textarea"
+            :autosize="{
+              minRows: 15,
+              maxRows: 20
+            }"
+          />
+        </n-form-item>
+      </n-form>
+  </n-modal>
 </template>
 
 <script setup>
-import { computed, reactive, ref } from "vue";
-import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { NDataTable, NButton, NModal, NForm, NFormItem, NInput } from "naive-ui";
+import { computed, h, reactive, ref } from "vue";
 import { useStore } from "vuex";
-const isAppendVisible = ref(false);
-const columns = ref([
-    { field: "type", header: "Type" },
-    { field: "value", header: "Value" }
-]);
-const refInfo = ref({});
-const emits = defineEmits(["updateInfo", "addInfo"]);
+import { cloneDeep } from "lodash-es";
 const store = useStore();
-const character_id = computed(() => store.state.character ? store.state.character.data.character_id : "");
-const info = computed(() => store.state.character ? store.state.character.data.killersInfo.find(killer => killer.id === character_id.value) : null);
-const infoTable = computed(() => {
-    if(refInfo.value === null) return null;
-    const result = [];
-    for(let data of Object.entries(refInfo.value)){
-        data[0] = data[0].charAt(0).toUpperCase() + data[0].slice(1);
-        if(data[0] === "Cover" || data[0] === "Lore") continue;
-        else if(typeof(data[1]) === "object"){
-            for(let _data of Object.entries(data[1])){
-                result.push({
-                    type: `${data[0]}(${_data[0]})`,
-                    value: _data[1]
-                });
-            }
-        }
-        else{
-            result.push({
-                type: data[0],
-                value: data[1]
-            });
-        }
-    }
-    return result;
+const info = computed(() => {
+  if(store.state.character) { 
+    return cloneDeep(store.state.character.data.killersInfo.find(item => item.id === props.characterID).info)
+  }
+  return {};
 });
+const showAddModal = ref(false);
+const infoFormRef = ref(null);
+const props = defineProps({
+  characterID: {
+    type: String,
+    default: ""
+  }
+})
 
-const state = reactive({
+const newInfo = reactive({
   name: "",
-  subname: "",
-  value: ""
-});
+  description: ""
+})
 
 const rules = {
-  value: { required },
-  name: { required }
-};
-
-const v$ = useVuelidate(rules, state);
-
-const onCellEditComplete = (event) => {
-  let { data, newValue, field } = event;
-  data.type = data.type.replace(/\b\w/g, (match) => match.toLowerCase());
-  if(field === "value" && newValue){
-      if (newValue.trim().length > 0){
-          if(data.type.includes("(") && data.type.includes(")")){
-            const index1 = data.type.indexOf("(");
-            const index2 = data.type.indexOf(")");
-            data[field] = newValue;
-            refInfo.value[data.type.slice(0, index1)][data.type.slice(index1 + 1, index2)] = newValue;
-          }
-          else{
-            data[field] = newValue;
-            refInfo.value[data.type] = newValue;
-          }
-      }
-      else event.preventDefault();
-      emits("updateInfo", {info: refInfo.value});
+  name: {
+    required: true,
+    message: "Please input information name",
+    trigger: "blur"
+  },
+  description: {
+    required: true,
+    message: "Please input information description",
+    trigger: "blur"
   }
+}
+
+const columns = [
+  {
+    title: "Name",
+    key: "name"
+  },
+  {
+    title: "Value",
+    key: "value",
+    render (row) {
+      return h(NInput, {
+        value: row.value,
+        onUpdateValue (v) {
+          info.value[row.data_key] = v;
+          store.dispatch("character/UPDATEDATA", {
+            killerID: props.characterID,
+            data: {"info": info.value}
+          });
+        }
+      })
+    }
+  },
+  {
+    title: "Delete",
+    key: "delete",
+    render(row) {
+      return h(
+        NButton,
+        {
+          type: "error",
+          strong: true,
+          size: "small",
+          onClick: () => deleteInfo(row)
+        },
+        { default: () => "Delete" }
+      );
+    }
+  }
+];
+
+const formatKey = key => {
+    if(key.toUpperCase() === "DLC") return key.toUpperCase();
+    key = key.replace(/([A-Z])/g, " $1").trim();
+    return key.charAt(0).toUpperCase() + key.slice(1);
 };
 
-const handleSubmit = (isFormValid, state) => {
-  if (!isFormValid) { return; }
-  state.name = state.name.replace(/\b\w/g, (match) => match.toLowerCase());
-  if(state.name === "name") refInfo.value[state.name].push(state.value);
-  else if(state.subname){
-    const keys = Object.keys(refInfo.value).map(data => data.replace(/\b\w/g, (match) => match.toLowerCase()));
-    if(keys.some(data => data === state.name)) refInfo.value[state.name][state.subname] = state.value;
-    else refInfo.value[state.name] = {[state.subname]: state.value};
+const data = computed(() => {
+  const _filter = [];
+  for(const [root_key, root_value] of Object.entries(info.value)){
+    if(typeof(root_value) === "object"){
+        Object.entries(root_value).forEach(([key, value]) => {
+          _filter.push({
+            name: `${formatKey(root_key)}(${key})`,
+            value: value.toString(),
+            data_key: root_key
+          });
+        });
+    }
+    else if(!["cover", "lore", "difficulty"].includes(root_key)){
+      _filter.push({
+        name: formatKey(root_key),
+        value: root_value.toString(),
+        data_key: root_key
+      });
+    }
   }
-  else refInfo.value[state.name] = state.value;
-  emits("updateInfo", {info: refInfo.value});
-  isAppendVisible.value = false;
-};
+  return _filter;
+});
+
+const pagination = reactive({
+  page: 1,
+  pageSize: 7,
+  showSizePicker: true,
+  pageSizes: [3, 5, 7],
+  onChange: (page) => {
+    pagination.page = page
+  },
+  onUpdatePageSize: (pageSize) => {
+    pagination.pageSize = pageSize
+    pagination.page = 1
+  }
+})
+
+const deleteInfo = item => { 
+  delete info.value[item.data_key];
+  console.log(info.value);
+  store.dispatch("character/UPDATEDATA", {
+    killerID: props.characterID,
+    data: {"info": info.value}
+  });
+}
+
+const addNewInfo = () => {
+  infoFormRef.value?.validate((errors) => {
+    if(!errors){
+      info.value[newInfo.name] = newInfo.description;
+      store.dispatch("character/UPDATEDATA", {
+        killerID: props.characterID,
+        data: {"info": info.value}
+      });
+      showAddModal.value = false;
+    }else{
+      console.log(errors);
+    }
+  })
+}
 </script>
