@@ -1,14 +1,21 @@
 <template>
-  <section v-show="!create" class="row flex-wrap" style="display: flex;">
-    <div v-if="!killers.length">
-      <img src="@/assets/picture/loading.gif" alt="loading">
-    </div>
-    <div v-for="(killer, index) in killers" :key="index" class="killer_block col-3">
-      <img class="cover" :src="killer.info.cover" @click="btnToDetails(killer.id, index)">
-    </div>
-    <div class="killer_block"  @click="btnToAppend">
-      <img class="plus" src="@/assets/icon/plus.png">
-    </div>
+  <section v-show="!create" class="row flex-wrap">
+    <template v-if="killers.length === 0">
+      <n-skeleton class="mx-2" v-for="_ in 3" :key="_" height="100px" width="100px" />
+    </template>
+    <template v-else>
+      <div
+        v-for="(killer, index) in killers"
+        :key="index"
+        class="killer_block col-3"
+        @click="btnToDetails(killer.id, index)"
+      >
+        <img class="cover" :src="killer.info.cover">
+      </div>
+      <div class="killer_block"  @click="btnToAdd">
+        <img class="plus" src="@/assets/icon/plus.png">
+      </div>
+    </template>
   </section>
   <section v-show="create">
     <append-new-role
@@ -22,6 +29,7 @@
 </template>
 
 <script setup>
+import { NSkeleton } from "naive-ui";
 import { computed, ref, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import appendNewRole from "@/@views/editor/all/appendNewRole.vue";
@@ -31,6 +39,7 @@ const store = useStore();
 const drOptions =  computed(() => store.state.character ? store.state.character.drOptions : []);
 const levelOptions = computed(() => store.state.character ? store.state.character.levelOptions : []);
 const killers = computed(() => store.state.character ? store.state.character.data.killersInfo : [] );
+const emit = defineEmits(["feedbackIndex"]);
 
 // 資料處裡表達式
 const addKiller = data => {
@@ -42,19 +51,17 @@ const onUpload = img => store.dispatch("character/UPLOADIMG", {
   img
 });
 
-const btnToDetails = (id, index) => {
-  emits("feedbackIndex", id, index);
-};
-
-const btnToAppend = () => {
-  create.value = !create.value;
+const btnToDetails = id => {
+  emit("feedbackIndex", id);
 };
 
 const btnToKiller = res => {
   create.value = res;
 };
 
-const emits = defineEmits(["feedbackIndex"]);
+const btnToAdd = () => {
+  create.value = true;
+}
 
 onBeforeMount(() => {
   store.dispatch("character/GETDATA");
@@ -67,6 +74,7 @@ section{
     position: absolute;
     top: 100px;
     left: 300px;
+    display: flex;
     .killer_block{
         position: relative;
         width: 100px;

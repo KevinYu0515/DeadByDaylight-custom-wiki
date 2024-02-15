@@ -12,7 +12,7 @@
       <li
         v-for="(item, index) in control_items" 
         :key="index" class="control_item"
-        :class="{'click': controlIndex === index, 'disabled': killerIndex === null && index === 1}"
+        :class="{'click': controlIndex === index, 'disabled': killerID === null && index === 1}"
         @click="changePanel(index)"
       >
         {{ item }}
@@ -20,17 +20,16 @@
     </ul>
   </div>
   <div class="info_block">
-    <template v-if="(controlIndex === 0)">
+    <keep-alive>
+      <template v-if="(controlIndex === 0)">
         <all 
           @feedback-index="onFeedbackIndex"
         ></all>
-    </template>
-    <template v-if="(controlIndex === 1)">
-      <detail
-        :killerIndex="killerIndex"
-        :killerID="killerID"
-      ></detail>
-    </template>
+      </template>
+      <template v-else-if="(controlIndex === 1)">
+        <detail/>
+      </template>
+    </keep-alive>
   </div>
 </template>
 
@@ -50,9 +49,8 @@ import accountStore from "@/vuex/accountStore";
 const user_name = computed(() => store.state.account ? store.state.account.data.email : null);
 const router = useRouter();
 const controlIndex = ref(0);
-const killerIndex = ref(null);
 const killerID = ref(null);
-const control_items = ["All Killers", "Killers Details", "History", "Posters"];
+const control_items = ["All Characters", "Character Details", "History", "Posters"];
 const store = useStore();
 const renderHomeIcon = () => {
   return h(NIcon, null, {
@@ -65,12 +63,13 @@ const renderLogOutIcon = () => {
           })
 }
 
-
-
-const onFeedbackIndex = (id, index) => {
+const onFeedbackIndex = async id => {
   killerID.value = id;
-  killerIndex.value = index;
   controlIndex.value = 1;
+  store.commit("character/SETID", id);
+  await store.dispatch("character/GETPERK", id);
+  await store.dispatch("character/GETADDONES", id);
+  await store.dispatch("character/GETPERKBUILD", id);
 };
 
 // 登出功能

@@ -1,26 +1,34 @@
 <template>
-  <n-input 
-    v-model:value="info.lore"
-    placeholder="Here to type character lore"
-    type="textarea"
-    :autosize="{
-      minRows: 15,
-      maxRows: 22
-    }"
-  />
-  <n-button
-    type="primary"
-    class="my-2"
-    @click="updateData()"
-  >Save</n-button>
+  <template v-if="info.lore.length === 0">
+    <n-skeleton height="300px" width="100%" :sharp="false" />
+  </template>
+  <template v-else>
+    <n-input 
+      v-model:value="lore"
+      placeholder="Here to type character lore"
+      type="textarea"
+      @change="disabled = false"
+      :autosize="{
+        minRows: 15,
+        maxRows: 22
+      }"
+    />
+    <n-button
+      type="primary"
+      class="my-2"
+      :disabled="disabled"
+      @click="updateData()"
+    >Save</n-button>
+  </template>
 </template>
 
 <script setup>
-import { NButton, NInput } from "naive-ui"
-import { computed } from "vue";
+import { NButton, NInput, NSkeleton } from "naive-ui"
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { cloneDeep } from "lodash-es";
 const store = useStore();
+const disabled = ref(true);
 const props = defineProps({
   characterID: {
     type: String,
@@ -33,10 +41,13 @@ const info = computed(() => {
   }
   return {"lore": ""}
 });
+const lore = ref(info.value.lore);
 const updateData = (() => {
+  info.value.lore = lore.value;
   store.dispatch("character/UPDATEDATA", {
     killerID: props.characterID,
     data: {"info": info.value}
   });
+  disabled.value = true;
 });
 </script>

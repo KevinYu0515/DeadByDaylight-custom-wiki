@@ -70,7 +70,7 @@
             overflow-y: scroll;
         }
         .swiper-area{
-            max-width: 1052px;
+            max-width: 1169px;
             height: 100%;
             padding: 0 20px;
             .swiper{
@@ -131,7 +131,9 @@
                         }
                     }
                     .build-box{
-                        transform: scale(.8);
+                        width: 100px;
+                        height: 100px;
+                        margin: 0 10px;
                     }
                 }
             }

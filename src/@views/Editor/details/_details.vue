@@ -4,7 +4,7 @@
       <n-tabs type="segment" animated>
           <n-tab-pane v-for="(item, idx) in tabs_navigation" :key="idx" :name="item.name" :tab="item.tabs">
             <keep-alive>
-              <component :is="tabsComponent[item.name]" :characterID="killerID"></component>
+              <component :is="tabsComponent[item.name]" :characterID="characterID"></component>
             </keep-alive>
           </n-tab-pane>
       </n-tabs>
@@ -14,10 +14,9 @@
 
 <script setup>
 import { NTabs, NTabPane } from "naive-ui";
-import { ref, onBeforeMount, onUpdated } from "vue";
+import { ref, onBeforeMount } from "vue";
 import perksStore from "@/vuex/perksStore";
 import { useStore } from "vuex";
-import $ from "jquery";
 import Perk from "@/@views/editor/details/perk.vue";
 import Info from "@/@views/editor/details//info.vue";
 import AddOnes from "@/@views/editor/details//add_ones.vue";
@@ -31,9 +30,7 @@ const tabsComponent = {
   Settings
 }
 const store = useStore();
-const tabIndex = ref(0);
-const props = defineProps({"killerIndex": Number, "killerID": String});
-const visibleRight = ref(null);
+const characterID = ref(store.state.character.data.character_id);
 const tabs_navigation = [
   {
       name: "Perk",
@@ -59,16 +56,6 @@ const tabs_navigation = [
 
 onBeforeMount(() => {
   if(!store.state.perks) store.registerModule("perks", perksStore);
-  store.dispatch("character/GETDATA");
-  store.commit("character/SETID", props.killerID);
-  store.dispatch("character/GETPERK", props.killerID);
-  store.dispatch("character/GETADDONES", props.killerID);
-});
-
-onUpdated(() => {
-  if(tabIndex.value !== 2 && tabIndex.value !== 0) visibleRight.value = false;
-  const close  = $("button[aria-label='close']");
-  if(close) close.onClick = () => visibleRight.value = false;
 });
 </script>
 

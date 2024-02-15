@@ -1,12 +1,33 @@
 <template>
-  <n-data-table
-    :columns="columns"
-    :data="data"
-    :pagination="pagination"
-  />
-  <n-button type="primary" size="large" class="my-2" @click="showAddModal = true">
-    Add New Information
-  </n-button>
+  <template v-if="Object.keys(info).length === 0">
+    <n-skeleton height="300px" width="100%" :sharp="false" />
+  </template>
+  <template v-else>
+    <n-input 
+      v-model:value="overview"
+      placeholder="Here to type character overview"
+      type="textarea"
+      @change="disabled = false"
+      :autosize="{
+        minRows: 5,
+        maxRows: 10
+      }"
+    />
+    <n-button
+      type="primary"
+      class="my-2"
+      :disabled="disabled"
+      @click="updateOverview()"
+    >Save</n-button>
+    <n-data-table
+      :columns="columns"
+      :data="data"
+      :pagination="pagination"
+    />
+    <n-button type="primary" size="large" class="my-2" @click="showAddModal = true">
+      Add New Information
+    </n-button>
+  </template>
   <n-modal
     v-model:show="showAddModal"
     :mask-closable="false"
@@ -47,26 +68,27 @@
 </template>
 
 <script setup>
-import { NDataTable, NButton, NModal, NForm, NFormItem, NInput } from "naive-ui";
+import { NDataTable, NButton, NModal, NForm, NFormItem, NInput, NSkeleton } from "naive-ui";
 import { computed, h, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { cloneDeep } from "lodash-es";
 const store = useStore();
-const info = computed(() => {
-  if(store.state.character) { 
-    return cloneDeep(store.state.character.data.killersInfo.find(item => item.id === props.characterID).info)
-  }
-  return {};
-});
-const showAddModal = ref(false);
-const infoFormRef = ref(null);
 const props = defineProps({
   characterID: {
     type: String,
     default: ""
   }
 })
-
+const info = computed(() => {
+  if(store.state.character) { 
+    return cloneDeep(store.state.character.data.killersInfo.find(item => item.id === props.characterID).info)
+  }
+  return {};
+});
+const disabled = ref(true);
+const overview = ref(info.value.overview);
+const showAddModal = ref(false);
+const infoFormRef = ref(null);
 const newInfo = reactive({
   name: "",
   description: ""
@@ -83,6 +105,15 @@ const rules = {
     message: "Please input information description",
     trigger: "blur"
   }
+}
+
+const updateOverview = () => {
+  info.value["overview"] = overview.value;
+  store.dispatch("character/UPDATEDATA", {
+    killerID: props.characterID,
+    data: {"info": info.value}
+  });
+  disabled.value = true;
 }
 
 const columns = [
@@ -185,6 +216,8 @@ const addNewInfo = () => {
         data: {"info": info.value}
       });
       showAddModal.value = false;
+      newInfo.name = "";
+      newInfo.description = "";
     }else{
       console.log(errors);
     }

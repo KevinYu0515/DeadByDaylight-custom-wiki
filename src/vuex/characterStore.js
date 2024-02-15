@@ -8,6 +8,7 @@ export default{
         data: {
             killersInfo: [],
             perks: [],
+            perkBuild: [],
             addOnes: {},
             character_id: ""
         },
@@ -26,6 +27,9 @@ export default{
         },
         SETPERK(state, data){
             state.data.perks = data;
+        },
+        SETPERKBUILD(state, data){
+            state.data.perkBuild = data;
         },
         SETADDONES(state, data){
             state.data.addOnes = data;
@@ -65,6 +69,19 @@ export default{
                 });
                 context.commit("SETPERK", perks);
             });
+        },
+
+        GETPERKBUILD(context, id){
+            onSnapshot(collection(db, `killers/${id}/perkBuild`), querySnapshot => {
+                const perkBuild = [];
+                querySnapshot.forEach(doc => {
+                    perkBuild.push({
+                        buildName: doc.data().buildName,
+                        perks: doc.data().perks
+                    })
+                })
+                context.commit("SETPERKBUILD", perkBuild);
+            })
         },
 
         GETADDONES(context, id){
@@ -108,6 +125,10 @@ export default{
 
         ADDPERK(context, {id, data}){
             addDoc(collection(killersColRef, id, "perk"), data);
+        },
+
+        ADDPERKBUILD(context, {id, data}){
+            addDoc(collection(killersColRef, id, "perkBuild"), data);
         },
 
         ADDADDONES(context, {id, data}){

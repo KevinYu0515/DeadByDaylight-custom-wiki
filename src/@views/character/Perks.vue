@@ -25,7 +25,7 @@
                         :slidesPerView="1"
                         :spaceBetween="30"
                         :centered-slides="true"
-                        :loop="true"
+                        :loop="false"
                     >
                         <swiper-slide v-for="(builds, idx) in perks_builds" :key="idx">
                             <div class="build-container" v-for="(build, idx) in builds" :key="idx">
@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                                 <span class="build-box" v-for="(item, idx) in build.perks" :key="idx">
-                                    <img src="@/assets/icon/IconHelp.png" alt="" :title="item.name">
+                                    <img class="w-full h-full" :src="item.image" alt="" :title="item.name">
                                 </span>
                             </div>
                         </swiper-slide>
@@ -54,92 +54,28 @@ const store = useStore();
 const props = defineProps(["character_data"]);
 const chooseItem = ref("perksBuild");
 const perks = computed(() => store.state.character ? store.state.character.data.perks : []);
-const perks_builds = [[
-    {
-        "name": "Generic Build",
-        "perks": [
-            {
-                "image": "",
-                "name": "Discordance"
-            },
-            {
-                "image": "",
-                "name": "Tinkerer"
-            },
-            {
-                "image": "",
-                "name": "Eruption"
-            },
-            {
-                "image": "",
-                "name": "Pop Goes The Weasel"
+const perks_builds = computed(() => {
+    const perks_builds_data = [];
+    if(store.state.character){
+        const tmp_build = [];
+        store.state.character.data.perkBuild.forEach((build, idx) => {
+            if(idx % 3 == 0){
+                perks_builds_data.push(tmp_build);
+                tmp_build.splice(0, tmp_build.length);
             }
-        ]
-    },
-    {
-        "name": "Passive Slowdown Build",
-        "perks": [
-            {
-                "image": "",
-                "name": "Discordance"
-            },
-            {
-                "image": "",
-                "name": "Tinkerer"
-            },
-            {
-                "image": "",
-                "name": "Eruption"
-            },
-            {
-                "image": "",
-                "name": "Pop Goes The Weasel"
-            }
-        ]
-    },
-    {
-        "name": "Hex Build",
-        "perks": [
-            {
-                "image": "",
-                "name": "Discordance"
-            },
-            {
-                "image": "",
-                "name": "Tinkerer"
-            },
-            {
-                "image": "",
-                "name": "Eruption"
-            },
-            {
-                "image": "",
-                "name": "Pop Goes The Weasel"
-            }
-        ]
-    }],[
-    {
-        "name": "Build with Basic Perks",
-        "perks": [
-            {
-                "image": "",
-                "name": "Discordance"
-            },
-            {
-                "image": "",
-                "name": "Tinkerer"
-            },
-            {
-                "image": "",
-                "name": "Eruption"
-            },
-            {
-                "image": "",
-                "name": "Pop Goes The Weasel"
-            }
-        ]
-    }]
-];
+            tmp_build.push({
+                name: build.buildName,
+                perks: build.perks.map(item => {
+                    return {
+                        name: item.perkname,
+                        image: item.perkImage
+                    }
+                })
+            })
+        })
+    }
+    return perks_builds_data;
+});
 
 const showDetails = item => {
     chooseItem.value = item;
@@ -147,6 +83,7 @@ const showDetails = item => {
 
 onBeforeMount(() => {
     store.dispatch("character/GETPERK", props.character_data.id);
+    store.dispatch("character/GETPERKBUILD", props.character_data.id);
 });
 
 </script>

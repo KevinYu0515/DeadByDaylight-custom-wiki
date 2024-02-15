@@ -85,7 +85,7 @@ const clearPerksClick = () => {
 
 // 生命週期
 onMounted(() => {
-  store.registerModule("perks", perksStore);
+  if(!store.state.perks) store.registerModule("perks", perksStore);
   store.dispatch("perks/GETDATA");
 });
 onBeforeUnmount(() => store.unregisterModule("perks"));

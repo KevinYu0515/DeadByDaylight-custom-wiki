@@ -1,10 +1,15 @@
 <template>
-  <template v-for="(item, idx) in items" :key="idx">
-    <n-data-table
-      :columns="item.columns"
-      :data="item.data"
-    />
-    <n-button @click="showNewAddOnesForm(item.rarity)" class="my-2">Add More {{ item.rarity }} Addones</n-button>
+  <template v-if="addones.length === 0">
+    <n-skeleton height="300px" width="100%" :sharp="false" />
+  </template>
+  <template v-else>
+    <template v-for="(item, idx) in items" :key="idx">
+      <n-data-table
+        :columns="item.columns"
+        :data="item.data"
+      />
+      <n-button @click="showNewAddOnesForm(item.rarity)" class="my-2">Add More {{ item.rarity }} Addones</n-button>
+    </template>
   </template>
   <n-modal
     v-model:show="showModal"
@@ -92,7 +97,7 @@
 
 <script setup>
 import store from '@/vuex/store';
-import { NDataTable, NButton, NModal, NForm, NFormItem, NUpload, NInput } from 'naive-ui';
+import { NDataTable, NButton, NModal, NForm, NFormItem, NUpload, NInput, NSkeleton } from 'naive-ui';
 import { computed, ref, h } from "vue";
 import { cloneDeep } from 'lodash-es';
 
