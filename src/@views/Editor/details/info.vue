@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { NDataTable, NButton, NModal, NForm, NFormItem, NInput, NSkeleton } from "naive-ui";
+import { NDataTable, NButton, NModal, NForm, NFormItem, NInput, NSkeleton, useNotification } from "naive-ui";
 import { computed, h, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { cloneDeep } from "lodash-es";
@@ -114,6 +114,7 @@ const updateOverview = () => {
     data: {"info": info.value}
   });
   disabled.value = true;
+  notify("success", "Updated Success", `Overview has updated success.`);
 }
 
 const columns = [
@@ -133,6 +134,7 @@ const columns = [
             killerID: props.characterID,
             data: {"info": info.value}
           });
+          notify("success", "Updated Success", `Information: ${row.data_key} has updated success.`);
         }
       })
     }
@@ -205,6 +207,7 @@ const deleteInfo = item => {
     killerID: props.characterID,
     data: {"info": info.value}
   });
+  notify("success", "Delete Success", `Information: ${item.data_key} has deleted success.`);
 }
 
 const addNewInfo = () => {
@@ -216,11 +219,22 @@ const addNewInfo = () => {
         data: {"info": info.value}
       });
       showAddModal.value = false;
+      notify("success", "Build Success", `New Information: ${newInfo.name} has builded success.`);
       newInfo.name = "";
       newInfo.description = "";
     }else{
       console.log(errors);
     }
   })
+}
+
+const notification = useNotification();
+const notify = (type, title, text) => {
+  notification[type]({
+    content: title,
+    meta: text,
+    duration: 2500,
+    keepAliveOnHover: true
+  });
 }
 </script>

@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { NButton } from "naive-ui";
+import { NButton, useNotification } from "naive-ui";
 import moment from "moment";
 import { computed } from "vue";
 import { useStore } from "vuex";
@@ -32,9 +32,19 @@ const build = computed(() => {
 const deleteKiller = () => {
   router.push("/");
   store.dispatch("character/DELETEROLE", props.characterID);
+  notify("success", "Delete Success", `Character has deleted success.`);
 };
 
 
 const Date = moment.unix(build.value.seconds).add(build.value.nanoseconds / 1000000, "milliseconds");
 const Fordate = Date.format("YYYY-MM-DD HH:mm:ss.SSS");
+const notification = useNotification();
+const notify = (type, title, text) => {
+  notification[type]({
+    content: title,
+    meta: text,
+    duration: 2500,
+    keepAliveOnHover: true
+  });
+}
 </script>

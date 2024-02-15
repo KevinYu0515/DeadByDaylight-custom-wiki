@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { NForm, NFormItem, NButton, NInput, NDropdown, NUpload } from "naive-ui";
+import { NForm, NFormItem, NButton, NInput, NDropdown, NUpload, useNotification } from "naive-ui";
 import { ref, reactive, computed } from "vue";
 import { Timestamp } from "@firebase/firestore";
 import { useStore } from "vuex";
@@ -128,10 +128,9 @@ const handleValidateClick = e => {
     if (!errors) {
       submitted.value = true;
       state.build = Timestamp.fromDate(new Date());
-      console.log(state.build);
       emit("addKiller", state);
+      notify("success", "Build Success", `Addones: ${state.info.name} has builded success.`);
       clearData();
-      console.log("success");
     } else {
       console.log("error", errors);
     }
@@ -159,4 +158,14 @@ const clearData = () => {
 const backToKiller = () => {
   emit("backToKiller", false);
 };
+
+const notification = useNotification();
+const notify = (type, title, text) => {
+  notification[type]({
+    content: title,
+    meta: text,
+    duration: 2500,
+    keepAliveOnHover: true
+  });
+}
 </script>

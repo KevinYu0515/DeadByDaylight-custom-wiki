@@ -97,7 +97,7 @@
 
 <script setup>
 import store from '@/vuex/store';
-import { NDataTable, NButton, NModal, NForm, NFormItem, NUpload, NInput, NSkeleton } from 'naive-ui';
+import { NDataTable, NButton, NModal, NForm, NFormItem, NUpload, NInput, NSkeleton, useNotification } from 'naive-ui';
 import { computed, ref, h } from "vue";
 import { cloneDeep } from 'lodash-es';
 
@@ -208,6 +208,7 @@ const deleteAddones = id => {
     characterID: props.characterID,
     addonesID: id
   });
+  notify("success", "Delete Success", `Addones has deleted success.`);
 }
 
 const handleValidateAddOnesForm = () => {
@@ -220,6 +221,7 @@ const handleValidateAddOnesForm = () => {
         data: chooseAddOnes.value,
       });
       showModal.value = false;
+      notify("success", "Updated Success", `Addones: ${chooseAddOnes.value.name} has updated success.`);
     } else {
       console.log(errors);
       showModal.value = true;
@@ -240,6 +242,7 @@ const addNewAddOnesForm = () => {
         data: newAddOnes.value
       });
       showAddModal.value = false;
+      notify("success", "Build Success", `Addones: ${newAddOnes.value.name} has builded success.`);
     }else{
       console.log(errors);
     }
@@ -254,4 +257,14 @@ const uploadImg = item => {
   });
   fileReader.readAsDataURL(file);
 };
+
+const notification = useNotification();
+const notify = (type, title, text) => {
+  notification[type]({
+    content: title,
+    meta: text,
+    duration: 2500,
+    keepAliveOnHover: true
+  });
+}
 </script>

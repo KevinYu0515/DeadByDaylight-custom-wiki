@@ -36,6 +36,9 @@
                                 </div>
                                 <span class="build-box" v-for="(item, idx) in build.perks" :key="idx">
                                     <img class="w-full h-full" :src="item.image" alt="" :title="item.name">
+                                    <div v-if="item.altperkname" class="alternative-perk">
+                                        <img class="w-full h-full" :src="item.altperkImage" alt="" :title="item.altperkname" />
+                                    </div>
                                 </span>
                             </div>
                         </swiper-slide>
@@ -68,7 +71,9 @@ const perks_builds = computed(() => {
                 perks: build.perks.map(item => {
                     return {
                         name: item.perkname,
-                        image: item.perkImage
+                        image: item.perkImage,
+                        altperkname: item.altperkname,
+                        altperkImage: item.altperkImage
                     }
                 })
             })

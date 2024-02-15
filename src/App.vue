@@ -1,13 +1,15 @@
 <template>
   <n-config-provider :theme="darkTheme">
-    <div class="app">
-      <router-view :key="store.state.character.data.character_id"/>
-    </div>
+    <n-notification-provider>
+      <div class="app">
+        <router-view :key="store.state.character.data.character_id"/>
+      </div>
+    </n-notification-provider>
   </n-config-provider>
 </template>
 
 <script setup>
-import { darkTheme, NConfigProvider } from 'naive-ui'
+import { darkTheme, NConfigProvider, NNotificationProvider } from 'naive-ui'
 import { onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import characterStore from "@/vuex/characterStore";

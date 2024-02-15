@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { NButton, NInput, NSkeleton } from "naive-ui"
+import { NButton, NInput, NSkeleton, useNotification } from "naive-ui"
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { cloneDeep } from "lodash-es";
@@ -49,5 +49,15 @@ const updateData = (() => {
     data: {"info": info.value}
   });
   disabled.value = true;
+  notify("success", "Updated Success", `Lore has updated success.`);
 });
+const notification = useNotification();
+const notify = (type, title, text) => {
+  notification[type]({
+    content: title,
+    meta: text,
+    duration: 2500,
+    keepAliveOnHover: true
+  });
+}
 </script>

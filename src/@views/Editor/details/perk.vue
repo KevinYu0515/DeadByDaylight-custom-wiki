@@ -119,51 +119,53 @@
     </template>
     <n-form
       ref="addPerkBuildFormRef"
-      label-placement="left"
+      label-placement="top"
       require-mark-placement="right-hanging"
       size="medium"
       label-width="auto"
       :model="newPerkBuild"
       :rules="buildrules"
     >
-      <n-form-item label="Build Name" path="buildName">
-        <n-input v-model:value="newPerkBuild.buildName" placeholder="Perk Build Name" />
-      </n-form-item>
-      <template v-for="idx in 4" :key="idx">
-        <n-form-item :label="`Perk ${idx}`" :path="`perks[${idx - 1}].perkname`">
-          <n-input v-model:value="newPerkBuild.perks[idx - 1].perkname" :placeholder="`Perk ${idx} Name`" />
-        </n-form-item>
-        <n-form-item :label="`Perk ${idx} Image`" :path="`perks[${idx - 1}].perkImage`">
-          <n-upload
-            list-type="image-card"
-            @change="uploadBuildImg"
-            @click="uploadBuildType(0, idx - 1)"
-          >
-            Upload Image
-          </n-upload>
-        </n-form-item>
-        <n-form-item label="Switch" path="switchValue">
-          <n-switch v-model:value="switchValue[idx]" />
-        </n-form-item>
-        <n-form-item v-if="switchValue[idx]" :label="`Alternative Perk ${idx}`" :path="`perks[${idx - 1}].altperkname`">
-          <n-input v-model:value="newPerkBuild.perks[idx - 1].altperkname" :placeholder="`Perk ${idx} Name`" />
-        </n-form-item>
-        <n-form-item v-if="switchValue[idx]" :label="`Alternative Perk ${idx} Image`" :path="`perks[${idx - 1}].altperkImage`">
-          <n-upload
-            list-type="image-card"
-            @change="uploadBuildImg"
-            @click="uploadBuildType(1, idx - 1)"
-          >
-            Upload Image
-          </n-upload>
-        </n-form-item>
-      </template>
+      <n-grid :span="24" :x-gap="10">
+        <n-form-item-gi :span="24" label="Build Name" path="buildName">
+          <n-input v-model:value="newPerkBuild.buildName" placeholder="Perk Build Name" />
+        </n-form-item-gi>
+        <template v-for="idx in 4" :key="idx">
+          <n-form-item-gi :span="24" :label="`[ Need Alternative Perk ${idx} ]`" path="switchValue">
+            <n-switch v-model:value="switchValue[idx]" />
+          </n-form-item-gi>
+          <n-form-item-gi :span="12" :label="`Perk ${idx}`" :path="`perks[${idx - 1}].perkname`">
+            <n-input v-model:value="newPerkBuild.perks[idx - 1].perkname" :placeholder="`Perk ${idx} Name`" />
+          </n-form-item-gi>
+          <n-form-item-gi :span="12" :label="`Perk ${idx} Image`" :path="`perks[${idx - 1}].perkImage`">
+            <n-upload
+              list-type="image-card"
+              @change="uploadBuildImg"
+              @click="uploadBuildType(0, idx - 1)"
+            >
+              Upload Image
+            </n-upload>
+          </n-form-item-gi>
+          <n-form-item-gi :span="12" v-if="switchValue[idx]" :label="`Alternative Perk ${idx}`" :path="`perks[${idx - 1}].altperkname`">
+            <n-input v-model:value="newPerkBuild.perks[idx - 1].altperkname" :placeholder="`Perk ${idx} Name`" />
+          </n-form-item-gi>
+          <n-form-item-gi :span="12" v-if="switchValue[idx]" :label="`Alternative Perk ${idx} Image`" :path="`perks[${idx - 1}].altperkImage`">
+            <n-upload
+              list-type="image-card"
+              @change="uploadBuildImg"
+              @click="uploadBuildType(1, idx - 1)"
+            >
+              Upload Image
+            </n-upload>
+          </n-form-item-gi>
+        </template>
+      </n-grid>
     </n-form>
   </n-modal>
 </template>
 
 <script setup>
-import { NDataTable, NButton, NModal, NInput, NForm, NFormItem, NUpload, NSkeleton, NSwitch } from "naive-ui";
+import { NDataTable, NButton, NModal, NInput, NForm, NFormItem, NUpload, NSkeleton, NSwitch, NGrid, NFormItemGi, useNotification } from "naive-ui";
 import { h, computed, ref } from "vue";
 import { useStore } from "vuex";
 import { cloneDeep } from "lodash-es";
@@ -173,6 +175,7 @@ const props = defineProps({
     default: ""
   }
 })
+const notification = useNotification();
 const store = useStore();
 const perkFormRef = ref(null);
 const addPerkFormRef = ref(null);
@@ -273,6 +276,7 @@ const addNewPerkBuildForm = () => {
         data: newPerkBuild.value
       });
       showAddNewPerkBuildModal.value = false;
+      notify("success", "Build Success", `Perk Build ${newPerkBuild.value.buildName} has builded success.`);
     }else{
       console.log(errors);
       showAddNewPerkBuildModal.value = true;
@@ -429,6 +433,7 @@ const addNewPerkForm = () => {
         data: newPerk.value
       });
       showAddModal.value = false;
+      notify("success", "Build Success", `Perk ${newPerk.value.name} has builded success.`);
     }else{
       console.log(errors);
     }
@@ -444,6 +449,7 @@ const deletePerk = id => {
     characterID: props.characterID,
     perkID: id
   });
+  notify("success", "Delete Success", `Perk ${choosePerk.value.name} has delete success.`);
 }
 const handleValidatePerkForm = () => {
   perkFormRef.value?.validate((errors) => {
@@ -455,9 +461,19 @@ const handleValidatePerkForm = () => {
         data: choosePerk.value,
       });
       showModal.value = false;
+      notify("success", "Update Success", `Perk ${choosePerk.value.name} has updated success.`);
     } else {
       console.log(errors);
     }
+  });
+}
+
+const notify = (type, title, text) => {
+  notification[type]({
+    content: title,
+    meta: text,
+    duration: 2500,
+    keepAliveOnHover: true
   });
 }
 </script>
