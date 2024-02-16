@@ -76,6 +76,7 @@ export default{
                 const perkBuild = [];
                 querySnapshot.forEach(doc => {
                     perkBuild.push({
+                        id: doc.id,
                         buildName: doc.data().buildName,
                         perks: doc.data().perks
                     })
@@ -153,6 +154,10 @@ export default{
 
         DELETEADDONES(context, {characterID, addonesID}){
             deleteDoc(doc(killersColRef, characterID, "addOnes", addonesID));
+        },
+
+        DELETEPERKBUILD(context, {characterID, perkBuildID}){
+            deleteDoc(doc(killersColRef, characterID, "perkBuild", perkBuildID));
         }
     }
 };

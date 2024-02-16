@@ -3,6 +3,9 @@
     <n-skeleton height="300px" width="100%" :sharp="false" />
   </template>
   <template v-else>
+    <n-divider title-placement="left">
+      Unique Perks
+    </n-divider>
     <n-data-table
       :columns="columns"
       :data="data"
@@ -12,6 +15,9 @@
     <n-button size="large" class="mt-2" v-if="isAddPerks" @click="showAddModal = true;">
       Add New Self Perk
     </n-button>
+    <n-divider title-placement="left">
+      Perk Build
+    </n-divider>
     <n-data-table
       :columns="buildcolumns"
       :data="builddata"
@@ -140,8 +146,8 @@
           <n-form-item-gi :span="12" :label="`Perk ${idx} Image`" :path="`perks[${idx - 1}].perkImage`">
             <n-upload
               list-type="image-card"
-              @change="uploadBuildImg"
-              @click="uploadBuildType(0, idx - 1)"
+              @finish="uploadBuildImg"
+              @change="uploadBuildType(0, idx - 1)"
             >
               Upload Image
             </n-upload>
@@ -152,8 +158,67 @@
           <n-form-item-gi :span="12" v-if="switchValue[idx]" :label="`Alternative Perk ${idx} Image`" :path="`perks[${idx - 1}].altperkImage`">
             <n-upload
               list-type="image-card"
-              @change="uploadBuildImg"
-              @click="uploadBuildType(1, idx - 1)"
+              @finish="uploadBuildImg"
+              @change="uploadBuildType(1, idx - 1)"
+            >
+              Upload Image
+            </n-upload>
+          </n-form-item-gi>
+        </template>
+      </n-grid>
+    </n-form>
+  </n-modal>
+  <n-modal
+    v-model:show="showEditPerkBuildModal"
+    :mask-closable="false"
+    preset="dialog"
+    positive-text="Confirm"
+    negative-text="Cancel"
+    @positive-click="editPerkBuildForm"
+    @negative-click="showEditPerkBuildModal = false"
+  >
+    <template #header>
+      <div class="mx-2">Edit Perk Build</div>
+    </template>
+    <n-form
+      ref="editPerkBuildFormRef"
+      label-placement="top"
+      require-mark-placement="right-hanging"
+      size="medium"
+      label-width="auto"
+      :model="choosePerkBuild"
+      :rules="buildrules"
+    >
+      <n-grid :span="24" :x-gap="10">
+        <n-form-item-gi :span="24" label="Build Name" path="buildName">
+          <n-input v-model:value="choosePerkBuild.buildName" placeholder="Perk Build Name" />
+        </n-form-item-gi>
+        <template v-for="idx in 4" :key="idx">
+          <n-form-item-gi :span="24" :label="`[ Need Alternative Perk ${idx} ]`" path="switchValue">
+            <n-switch v-model:value="switchValue[idx]" />
+          </n-form-item-gi>
+          <n-form-item-gi :span="12" :label="`Perk ${idx}`" :path="`perks[${idx - 1}].perkname`">
+            <n-input v-model:value="choosePerkBuild.perks[idx - 1].perkname" :placeholder="`Perk ${idx} Name`" />
+          </n-form-item-gi>
+          <n-form-item-gi :span="12" :label="`Perk ${idx} Image`" :path="`perks[${idx - 1}].perkImage`">
+            <n-upload
+              :default-file-list="fileList[idx - 1]"
+              list-type="image-card"
+              @finish="uploadBuildImg"
+              @change="uploadBuildType(0, idx - 1)"
+            >
+              Upload Image
+            </n-upload>
+          </n-form-item-gi>
+          <n-form-item-gi :span="12" v-if="switchValue[idx]" :label="`Alternative Perk ${idx}`" :path="`perks[${idx - 1}].altperkname`">
+            <n-input v-model:value="choosePerkBuild.perks[idx - 1].altperkname" :placeholder="`Perk ${idx} Name`" />
+          </n-form-item-gi>
+          <n-form-item-gi :span="12" v-if="switchValue[idx]" :label="`Alternative Perk ${idx} Image`" :path="`perks[${idx - 1}].altperkImage`">
+            <n-upload
+              :default-file-list="altfileList[idx - 1]"
+              list-type="image-card"
+              @finish="uploadBuildImg"
+              @change="uploadBuildType(1, idx - 1)"
             >
               Upload Image
             </n-upload>
@@ -165,8 +230,8 @@
 </template>
 
 <script setup>
-import { NDataTable, NButton, NModal, NInput, NForm, NFormItem, NUpload, NSkeleton, NSwitch, NGrid, NFormItemGi, useNotification } from "naive-ui";
-import { h, computed, ref } from "vue";
+import { NDivider, NDataTable, NButton, NModal, NInput, NForm, NFormItem, NUpload, NSkeleton, NSwitch, NGrid, NFormItemGi, useNotification } from "naive-ui";
+import { h, computed, ref, onUpdated } from "vue";
 import { useStore } from "vuex";
 import { cloneDeep } from "lodash-es";
 const props = defineProps({
@@ -183,6 +248,8 @@ const addPerkBuildFormRef = ref(null);
 const showModal = ref(false);
 const showAddModal = ref(false);
 const showAddNewPerkBuildModal = ref(false);
+const showEditPerkBuildModal = ref(false);
+const editPerkBuildFormRef = ref(null);
 const switchValue = ref([false, false, false, false]);
 const choosePerk = ref({
   "name": "",
@@ -262,10 +329,49 @@ const buildcolumns = [
       );
     }
   },
+  {
+    title: "Delete",
+    key: "delete",
+    rowSpan: (rowData, rowIndex) => (rowIndex % 4 === 0 ? 4 : 1),
+    render(row) {
+      return h(
+        NButton,
+        {
+          type: "error",
+          strong: true,
+          size: "small",
+          onClick: () => deletePerkBuild(row)
+        },
+        { default: () => "Delete" }
+      );
+    }
+  }
 ]
 
+const fileList = ref([])
+const altfileList = ref([])
+
 const editPerkBuild = item => {
-  console.log("edit", item);
+  fileList.value = [];
+  altfileList.value = [];
+  choosePerkBuild.value = cloneDeep(store.state.character.data.perkBuild.find(perkBuild => perkBuild.buildName === item.buildname));
+  choosePerkBuild.value.perks.forEach((perk, index) => {
+    if(perk.perkImage.length){
+      fileList.value.push([{
+        id: `${index}-a`,
+        status: "finished",
+        url: perk.perkImage
+      }])
+    }else fileList.value.push([])
+    if(perk.altperkImage.length){
+      altfileList.value.push([{
+        id: `${index}-b`,
+        status: "finished",
+        url: perk.altperkImage
+      }])
+    }else altfileList.value.push([])
+  })
+  showEditPerkBuildModal.value = true;
 }
 
 const addNewPerkBuildForm = () => {
@@ -290,6 +396,7 @@ const builddata = computed(() => {
     items.perks.forEach((item, idx2) => {
       newData.push({
         key: `${idx1}-${idx2}`,
+        id: items.id,
         buildname: items.buildName,
         perkname: item.perkname,
         altperkname: item.altperkname || "null"
@@ -300,6 +407,36 @@ const builddata = computed(() => {
 })
 
 const newPerkBuild = ref({
+  buildName: "",
+  perks: [
+    {
+      perkname: "",
+      perkImage: "",
+      altperkname: "",
+      altperkImage: "" 
+    },
+    {
+      perkname: "",
+      perkImage: "",
+      altperkname: "",
+      altperkImage: "" 
+    },
+    {
+      perkname: "",
+      perkImage: "",
+      altperkname: "",
+      altperkImage: "" 
+    },
+    {
+      perkname: "",
+      perkImage: "",
+      altperkname: "",
+      altperkImage: "" 
+    }
+  ]
+})
+
+const choosePerkBuild = ref({
   buildName: "",
   perks: [
     {
@@ -367,7 +504,9 @@ const buildrules = ref({
   ]
 })
 
-const perks = computed(() => store.state.character ? store.state.character.data.perks : [null]);
+const perks = computed(() => {
+  return store.state.character ? store.state.character.data.perks : [null]
+});
 const isAddPerks = computed(() => !perks.value || perks.value.length !== 3);
 const data = computed(() => {
   return perks.value.map(item => {
@@ -377,6 +516,10 @@ const data = computed(() => {
     }
   });
 });
+
+onUpdated(() => {
+  console.log("perk Updated");
+})
 
 const rules = {
   description: {
@@ -475,5 +618,32 @@ const notify = (type, title, text) => {
     duration: 2500,
     keepAliveOnHover: true
   });
+}
+
+const editPerkBuildForm = () => {
+  console.log(choosePerkBuild.value);
+  editPerkBuildFormRef.value?.validate((errors) => {
+    if(!errors){
+      store.dispatch("character/UPDATEDATA", {
+        killerID: props.characterID,
+        id: choosePerkBuild.value.id,
+        option: "perkBuild", 
+        data: choosePerkBuild.value
+      });
+      showEditPerkBuildModal.value = false;
+      notify("success", "Build Success", `Perk Build ${choosePerkBuild.value.buildName} has builded success.`);
+    }else{
+      console.log(errors);
+      showEditPerkBuildModal.value = true;
+    }
+  })
+}
+
+const deletePerkBuild = item => {
+  store.dispatch("character/DELETEPERKBUILD", {
+    characterID: props.characterID,
+    perkBuildID: item.id
+  })
+  notify("success", "Delete Success", `Perk Build ${item.buildname} has deleted success.`);
 }
 </script>

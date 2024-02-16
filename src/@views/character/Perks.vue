@@ -4,7 +4,13 @@
             <div class="self-perk-box" :class="{'self-perk-click': chooseItem === item}" v-for="(item, idx) in perks" :key="idx" @click="showDetails(item)">
                 <img :src="item.image" alt="">
             </div>
-            <button :class="{'click': chooseItem === 'perksBuild'}" @click="showDetails('perksBuild')">Perks Build</button>
+            <n-button
+                :disabled="chooseItem === 'perksBuild'"
+                strong
+                secondary
+                type="warning"
+                @click="showDetails('perksBuild')"
+            >Perk Build</n-button>
         </div>
         <div class="perks-content">
             <template v-if="chooseItem !== 'perksBuild'">
@@ -51,22 +57,21 @@
 
 <script setup>
 import "@/assets/scss/character/perks.scss";
+import { NButton } from "naive-ui";
 import { ref, computed, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 const props = defineProps(["character_data"]);
 const chooseItem = ref("perksBuild");
-const perks = computed(() => store.state.character ? store.state.character.data.perks : []);
+const perks = computed(() => {
+    return store.state.character ? store.state.character.data.perks : []
+});
 const perks_builds = computed(() => {
-    const perks_builds_data = [];
+    const _data = [];
     if(store.state.character){
-        const tmp_build = [];
         store.state.character.data.perkBuild.forEach((build, idx) => {
-            if(idx % 3 == 0){
-                perks_builds_data.push(tmp_build);
-                tmp_build.splice(0, tmp_build.length);
-            }
-            tmp_build.push({
+            if(idx % 3 === 0) _data.push([]);
+            _data[_data.length - 1].push({
                 name: build.buildName,
                 perks: build.perks.map(item => {
                     return {
@@ -79,7 +84,7 @@ const perks_builds = computed(() => {
             })
         })
     }
-    return perks_builds_data;
+    return _data;
 });
 
 const showDetails = item => {

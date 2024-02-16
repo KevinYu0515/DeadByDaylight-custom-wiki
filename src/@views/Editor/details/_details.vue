@@ -14,7 +14,7 @@
 
 <script setup>
 import { NTabs, NTabPane } from "naive-ui";
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, onUpdated } from "vue";
 import perksStore from "@/vuex/perksStore";
 import { useStore } from "vuex";
 import Perk from "@/@views/editor/details/perk.vue";
@@ -57,6 +57,10 @@ const tabs_navigation = [
 onBeforeMount(() => {
   if(!store.state.perks) store.registerModule("perks", perksStore);
 });
+
+onUpdated(() => {
+  console.log("details update");
+})
 </script>
 
 <style lang="scss" scoped>

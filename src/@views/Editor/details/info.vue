@@ -3,6 +3,9 @@
     <n-skeleton height="300px" width="100%" :sharp="false" />
   </template>
   <template v-else>
+    <n-divider title-placement="left">
+      Lore
+    </n-divider>
     <n-input 
       v-model:value="overview"
       placeholder="Here to type character overview"
@@ -19,6 +22,9 @@
       :disabled="disabled"
       @click="updateOverview()"
     >Save</n-button>
+    <n-divider title-placement="left">
+      Information Details
+    </n-divider>
     <n-data-table
       :columns="columns"
       :data="data"
@@ -68,7 +74,7 @@
 </template>
 
 <script setup>
-import { NDataTable, NButton, NModal, NForm, NFormItem, NInput, NSkeleton, useNotification } from "naive-ui";
+import { NDivider, NDataTable, NButton, NModal, NForm, NFormItem, NInput, NSkeleton, useNotification } from "naive-ui";
 import { computed, h, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { cloneDeep } from "lodash-es";

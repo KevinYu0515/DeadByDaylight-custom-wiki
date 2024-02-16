@@ -39,7 +39,7 @@ import all from "@/@views/editor/all/_all.vue";
 import detail from "@/@views/editor/details/_details.vue";
 import { Home as HomeIcon, LogOut as LogOutIcon, Person } from '@vicons/ionicons5'
 import { useRouter } from "vue-router";
-import { ref, onMounted, onBeforeMount, computed, h } from "vue";
+import { ref, onMounted, onBeforeMount, onUpdated, computed, h } from "vue";
 import "@/firebase";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -95,6 +95,10 @@ onBeforeMount(() => {
 onMounted(() => {
   controlIndex.value = 0;
 });
+
+onUpdated(() => {
+  console.log("control update")
+})
 
 </script>
 
